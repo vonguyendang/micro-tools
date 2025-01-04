@@ -1,0 +1,202 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    </meta>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    </meta>
+    <title>Thay Thế Từ Nhạy Cảm</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            padding: 20px;
+            margin-top: 20px;
+            border-bottom: 2px solid;
+        }
+
+        h3 {
+            font-size: 1.2em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            resize: vertical;
+            height: 200px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Toast notification styles */
+        .toast {
+            visibility: hidden;
+            min-width: 300px;
+            margin-right: 0;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            right: 30px;
+            top: 120px;
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: translateX(100%);
+            /* Ban đầu bị ẩn bên ngoài màn hình */
+        }
+
+        /* Green toast for success */
+        .toast.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Red toast for error */
+        .toast.error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Show the toast when it's triggered */
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(0);
+            /* Di chuyển vào từ bên phải */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Thay Thế Từ Nhạy Cảm</h1>
+    <div class="container">
+        <div>
+            <h3>Nội dung bài đăng</h3>
+            <textarea id="inputText" placeholder="Nhập nội dung bài đăng..."></textarea>
+            <button onclick="loadKeywordsAndReplace()">Tải Từ Khóa và Thay Thế</button>
+            <button onclick="copyText()">Copy Kết Quả</button>
+        </div>
+        <div>
+            <h3>Kết quả:</h3>
+            <textarea id="outputText" readonly=""></textarea>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Đã copy kết quả vào clipboard!</div>
+
+    <script>
+        function parseCSV(csvText) {
+            const rows = csvText.split('\n');
+            return rows.map(row => {
+                const columns = row.split(',');
+                return columns.length === 2 && columns[0].trim() && columns[1].trim() ? columns : null;
+            }).filter(row => row !== null);
+        }
+
+        const proxyUrl = 'https://api.allorigins.win/get?url=';
+
+        async function loadKeywordsAndReplace() {
+            try {
+                const freshCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGMcGQjBAmIwLrymbJEGV1QzW3vCAZpG84GKeIcGXRaislTOA0JTXAk2EpwtoKwlQnAsk6RG3a9RIw/pub?gid=0&single=true&output=csv' + '&timestamp=' + new Date().getTime();
+                const response = await fetch(proxyUrl + encodeURIComponent(freshCsvUrl), {
+                    method: 'GET',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const base64Csv = data.contents.split(',')[1];
+                const binaryCsv = atob(base64Csv);
+                const csvText = decodeURIComponent(escape(binaryCsv));
+
+                console.log("Dữ liệu CSV đã giải mã: ", csvText);
+
+                const keywords = parseCSV(csvText);
+                console.log("Các từ khóa đã parse: ", keywords);
+                replaceText(keywords);
+            } catch (error) {
+                console.error('Lỗi khi tải từ khóa:', error);
+                showToast("Lỗi khi tải từ khóa!", "error");
+            }
+        }
+
+        function replaceText(keywords) {
+            const inputText = document.getElementById('inputText').value;
+            let replacedText = inputText;
+
+            console.log("Văn bản đầu vào: ", inputText);
+
+            keywords.forEach(([sensitiveWord, replacement]) => {
+                console.log(`Thay thế từ: ${sensitiveWord} thành: ${replacement}`);
+                const safeSensitiveWord = sensitiveWord.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "\\$&");
+                const regex = new RegExp("\\b" + safeSensitiveWord + "\\b", 'gi');
+                replacedText = replacedText.replace(regex, replacement.trim());
+            });
+
+            document.getElementById('outputText').value = replacedText;
+
+            console.log("Kết quả sau khi thay thế: ", replacedText);
+        }
+
+        function copyText() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            const successfulCopy = document.execCommand('copy');
+
+            if (successfulCopy) {
+                showToast("Đã copy kết quả vào clipboard!", "success");
+            } else {
+                showToast("Lỗi sao chép!", "error");
+            }
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.remove("error", "success");
+            toast.classList.add(type);
+            toast.classList.add("show");
+
+            setTimeout(function () {
+                toast.classList.remove("show");
+            }, 5000); // Thời gian tồn tại của toast kéo dài 4 giây
+        }
+    </script>
+</body>
+
+</html>

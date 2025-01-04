@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Rút Gọn</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rút Gọn Link</h1>
+        <form id="shorten-form">
+            <input type="url" id="original-url" placeholder="Nhập URL cần rút gọn" required>
+            <button type="submit">Rút Gọn</button>
+        </form>
+        <div id="result" class="hidden">
+            <p>Link rút gọn: <a id="shortened-url" href="#" target="_blank"></a></p>
+            <input type="text" id="edit-url" placeholder="Nhập URL mới" class="hidden">
+            <button id="copy-button">Sao chép</button>
+            <button id="run-button">Run</button>
+            <button id="qr-button">Tạo mã QR</button>
+            <canvas id="qr-code" class="hidden"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

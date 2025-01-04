@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách URL Mail Tạm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        .url-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            display: none;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn {
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .copy-toast {
+            position: absolute;
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+            z-index: 9999;
+        }
+    </style>
+    <script>
+        const urls = [
+            { url: 'https://10minutesemail.net', description: 'Mail EDU, tự hủy 10 phút, khá đáng quý.' },
+            { url: 'https://nullsto.edu.pl', description: 'Mail EDU, khó qua một số bên lớn, nhưng khả năng được cho trang mới.' },
+            { url: 'https://etempmail.com', description: 'Mail EDU, tự hủy trong 20 phút, hỗ trợ mã khôi phục.' },
+            { url: 'https://imail.edu.vn', description: 'Mail EDU, giao diện tiếng Việt, có tên miền EDU Việt Nam.' },
+            { url: 'https://yopmail.com', description: 'Mail tạm thời khá xịn xò, giữ mail trong 8 ngày, không cần đăng ký, quan trọng là có thể gửi/trả lời được thư như một dịch vụ mail bình thường (khá hiếm đối với temp mail).' },
+            { url: 'https://emailnator.com', description: 'Cho phép tạo mail tạm thời có dạng xxxx@googlemail.com, xxx@gmail.com.' },
+            { url: 'https://jurymail.com', description: 'Mail 10p, có thể gia hạn, có nút t͟ự͟ ͟h͟ủ͟y tức thời, có thể khôi phục email bằng recovery key.' },
+            { url: 'https://temp-mail.org', description: 'Mail sẽ bị reset trong 24 giờ, có app trên Android.' },
+            { url: 'https://10minemail.com', description: 'Giao diện tương tự như temp-mail, nhưng lại mang phong cách 10minutemail, cũng chỉ dùng 10 phút.' },
+            { url: 'https://mail.tm', description: 'Thằng này mail khoảng 1 tuần mới reset. Cho phép custom username và đặt password để dùng riêng. Nhược điểm: chỉ có 1 domain để lựa chọn, dung lượng 40MB.' },
+            { url: 'https://temp-mail.io', description: 'Như mail tm cho phép đặt username miễn phí, cho phép chọn domain.' },
+            { url: 'https://smailpro.com', description: 'Cũng giống mấy dịch vụ trên nhưng cung cấp cho anh em mail tạm thời dưới dạng xxxxx@gmail.com.' },
+            { url: 'https://guerrillamail.com', description: 'Cho phép đặt tên tài khoản và tên miền. Sau khi kết thúc ấn nút t͟ự͟ ͟h͟ủ͟y͟ phát là tài khoản mail biết mất tức thì.' },
+            { url: 'https://emailondeck.com', description: 'Địa chỉ email ngẫu nhiên, muốn gửi đi được thì cần đăng ký tài khoản (miễn phí). Bản Pro giao dịch bằng bitcoin (ẩn danh hoàn toàn).' },
+            { url: 'https://tempmailo.com', description: 'Giao diện đơn giản, dễ dùng, không có nút tự hủy, mail tự hủy sau 2 ngày.' },
+            { url: 'https://moakt.com', description: 'Cho phép chọn tên miền và username, có nút t͟ự͟ ͟h͟ủ͟y tức thời, thời gian t͟ự͟ ͟h͟ủ͟y mặc định là 1h (có thể gia hạn), có tên miền .org.' },
+            { url: 'https://tem-mail.net', description: 'Cho phép chọn tên miền và username, có nút t͟ự͟ ͟h͟ủ͟y tức thời.' },
+            { url: 'https://inboxes.com', description: 'Đơn giản, dễ dùng, có rất nhiều domain để bạn lựa chọn.' },
+            { url: 'https://tmail.mmomekong.com', description: 'Con mail tạm thời của cộng đồng MMO Việt Nam.' },
+            { url: 'https://mail10year.com', description: 'Cho phép mail sử dụng lâu, dễ tạo, dễ duy trì.' },
+            { url: 'https://generator.email', description: 'Tạo mail tạm thời nhanh chóng, check mail nhanh.' },
+            { url: 'https://10minutemail.com', description: 'Mail tạm duy trì 10 phút.' },
+            { url: 'https://temp-mail.org/vi', description: 'TempMail là dịch vụ email tạm thời miễn phí, cho phép bạn tạo một địa chỉ email dùng một lần.' },
+            { url: 'https://mailinator.com', description: 'Mailinator cung cấp email tạm thời không cần đăng ký, phù hợp cho việc kiểm tra và nhận email nhanh chóng.' },
+            { url: 'https://www.minuteinbox.com', description: 'Mail tạm tồn tại 10 phút.' }
+        ];
+
+        function toggleDescription(id, btn) {
+            const desc = document.getElementById(id);
+            if (desc.style.display === "none" || desc.style.display === "") {
+                desc.style.display = "block";
+                btn.textContent = "Ẩn mô tả"; // Thay đổi nội dung nút ngay lập tức
+            } else {
+                desc.style.display = "none";
+                btn.textContent = "Đọc mô tả"; // Thay đổi nội dung nút ngay lập tức
+            }
+        }
+
+        function copyToClipboard(text, event) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyMessage(event);
+            });
+        }
+
+        function showCopyMessage(event) {
+            const message = document.createElement('div');
+            message.classList.add('copy-toast');
+            message.textContent = 'Đã sao chép: ' + event.target.textContent;
+
+            // Đặt vị trí thông báo tại vị trí con trỏ chuột
+            document.body.appendChild(message);
+            message.style.left = event.pageX + 'px';
+            message.style.top = event.pageY + 'px';
+
+            // Hiển thị thông báo
+            message.style.display = 'block';
+
+            // Ẩn thông báo sau 2 giây
+            setTimeout(() => {
+                message.style.display = 'none';
+                document.body.removeChild(message);
+            }, 2000);
+        }
+
+        window.onload = function () {
+            const container = document.getElementById('urls-container');
+            urls.forEach((item, index) => {
+                const urlContainer = document.createElement('div');
+                urlContainer.classList.add('url-container');
+
+                const urlLink = document.createElement('strong');
+                urlLink.textContent = `${index + 1}. ${item.url}`;
+                urlLink.onclick = (event) => copyToClipboard(item.url, event);
+
+                const btnContainer = document.createElement('div');
+                const btnDescription = document.createElement('button');
+                btnDescription.classList.add('btn');
+                btnDescription.textContent = "Đọc mô tả";
+                btnDescription.onclick = () => toggleDescription(`desc${index + 1}`, btnDescription);
+
+                const btnAccess = document.createElement('button');
+                btnAccess.classList.add('btn');
+                btnAccess.textContent = "Truy cập";
+                btnAccess.onclick = () => window.open(item.url, '_blank');
+
+                btnContainer.appendChild(btnDescription);
+                btnContainer.appendChild(btnAccess);
+
+                const description = document.createElement('div');
+                description.id = `desc${index + 1}`;
+                description.classList.add('description');
+                description.textContent = item.description;
+
+                urlContainer.appendChild(urlLink);
+                urlContainer.appendChild(btnContainer);
+                container.appendChild(urlContainer);
+                container.appendChild(description);
+            });
+        };
+    </script>
+</head>
+
+<body>
+    <h1>Danh sách URL Mail Tạm</h1>
+
+    <div id="urls-container"></div>
+
+</body>
+
+</html>

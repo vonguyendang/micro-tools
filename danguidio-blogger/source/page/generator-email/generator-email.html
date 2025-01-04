@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Alias Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background-color: #38a169;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    /* Custom switch styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 50px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      border-radius: 50px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: #4CAF50;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(14px);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+  <div class="container mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center">Email Alias Generator</h1>
+
+    <!-- Input Email và Nút Generate -->
+    <div class="flex mb-4">
+      <input type="text" id="email" placeholder="Enter your base email" class="w-5/6 px-4 py-2 border rounded-l">
+      <button onclick="generateAliases()"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-r">Generate</button>
+    </div>
+
+    <!-- Tùy Chọn "Number of aliases to generate" với Custom -->
+    <div class="flex items-center mb-4">
+      <label for="aliasCount" class="mr-4">Number of aliases to generate:</label>
+      <select id="aliasCount" class="w-24 px-2 py-1 border rounded" onchange="toggleCustomInput()">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input type="number" id="customAliasCount" min="1" max="500" placeholder="Custom"
+        class="w-24 px-2 py-1 ml-2 border rounded hidden" />
+    </div>
+
+    <!-- Tùy Chọn Dot Trick và Plus Trick -->
+    <div class="mb-4">
+      <div class="flex items-center">
+        <label class="mr-4">Dot Trick (.)</label>
+        <label class="switch">
+          <input type="checkbox" id="dotTrick" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="flex items-center">
+        <label class="mr-4">Plus Trick (+)</label>
+        <label class="switch">
+          <input type="checkbox" id="plusTrick" onchange="togglePlusTrickInput()">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Ô nhập từ thay thế khi chọn Plus Trick -->
+    <div class="mb-4" id="plusTrickInputContainer" style="display: none;">
+      <label for="plusTrickWord" class="mr-2">Word to replace 'alias' (default is 'alias'):</label>
+      <input type="text" id="plusTrickWord" class="px-2 py-1 border rounded"
+        placeholder="Enter a custom word for plus trick">
+    </div>
+
+    <!-- Dropdown chọn số lượng alias mỗi trang -->
+    <div class="mb-4">
+      <label for="perPage" class="mr-2">Show per page:</label>
+      <select id="perPage" class="border rounded px-2 py-1">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+
+    <!-- Kết Quả Alias -->
+    <div id="results" class="mt-4">
+      <h2 class="text-lg font-semibold mb-2">Generated Aliases:</h2>
+      <p id="totalAliases">Total aliases: 0</p>
+      <ul id="aliasList" class="list-decimal list-inside max-h-64 overflow-y-auto"></ul>
+    </div>
+
+    <div class="mt-4">
+      <button onclick="copyCurrentPage()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Copy
+        Current Page</button>
+      <button onclick="copyAll()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded ml-2">Copy
+        All</button>
+    </div>
+
+    <div id="pagination" class="flex justify-center mt-4 space-x-2"></div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+  </div>
+
+  <script>
+    let allAliases = [];
+    let currentPage = 1;
+
+    function showToast(message) {
+      const toastContainer = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function toggleCustomInput() {
+      const aliasCountDropdown = document.getElementById("aliasCount");
+      const customAliasCountInput = document.getElementById("customAliasCount");
+      if (aliasCountDropdown.value === "custom") {
+        customAliasCountInput.classList.remove("hidden");
+      } else {
+        customAliasCountInput.classList.add("hidden");
+      }
+    }
+
+    function togglePlusTrickInput() {
+      const plusTrickInputContainer = document.getElementById("plusTrickInputContainer");
+      if (document.getElementById("plusTrick").checked) {
+        plusTrickInputContainer.style.display = "block";
+      } else {
+        plusTrickInputContainer.style.display = "none";
+      }
+    }
+
+    function generateAliases() {
+      const email = document.getElementById("email").value.trim();
+      const aliasCountInput = document.getElementById("aliasCount").value;
+      const useDotTrick = document.getElementById("dotTrick").checked;
+      const usePlusTrick = document.getElementById("plusTrick").checked;
+      const plusTrickWord = document.getElementById("plusTrickWord").value || "alias";
+      const aliasList = document.getElementById("aliasList");
+      aliasList.innerHTML = "";
+      allAliases = [];
+
+      if (!email.includes("@")) {
+        alert("Please enter a valid email address!");
+        return;
+      }
+
+      const [baseEmail, domain] = email.split("@");
+
+      // Kiểm tra xem domain có hợp lệ không
+      if (!domain || domain.trim() === "") {
+        alert("Invalid domain part of the email address!");
+        return;
+      }
+
+      let aliasCount = 10;
+      if (aliasCountInput === "custom") {
+        aliasCount = parseInt(document.getElementById("customAliasCount").value);
+      } else {
+        aliasCount = parseInt(aliasCountInput);
+      }
+
+      // Tạo alias
+      let aliasIndex = 1; // Đảm bảo đánh số tăng dần
+      for (let i = 1; i <= aliasCount; i++) {
+        if (usePlusTrick) {
+          allAliases.push(`${baseEmail}+${plusTrickWord}${aliasIndex++}@${domain}`);
+        }
+
+        if (useDotTrick) {
+          const dotEmails = generateDotAliases(baseEmail, domain, aliasCount); // Giới hạn số alias
+          allAliases.push(...dotEmails);
+        }
+      }
+
+      // Đảm bảo không vượt quá số lượng alias mong muốn
+      allAliases = allAliases.slice(0, aliasCount);
+
+      currentPage = 1;
+      displayPage();
+      showToast(`Generated ${allAliases.length} aliases successfully!`);
+      document.getElementById("totalAliases").textContent = `Total aliases: ${allAliases.length}`;
+    }
+
+    // Hàm tạo alias với dấu chấm, giới hạn số lượng alias
+    function generateDotAliases(baseEmail, domain, limit) {
+      const [username] = baseEmail.split("@");
+
+      // Hàm đệ quy để tạo các alias với dấu chấm, nhưng chỉ giới hạn số lượng alias
+      const results = [];
+
+      // Tạo alias với dấu chấm
+      const insertDots = (str, index = 0, currentAlias = "") => {
+        if (index === str.length || results.length >= limit) {
+          if (currentAlias[currentAlias.length - 1] !== ".") { // Kiểm tra không có dấu chấm ở cuối
+            results.push(currentAlias + "@" + domain);
+          }
+          return;
+        }
+
+        // Thêm ký tự hiện tại mà không có dấu chấm
+        insertDots(str, index + 1, currentAlias + str[index]);
+
+        // Thêm ký tự hiện tại với dấu chấm
+        insertDots(str, index + 1, currentAlias + str[index] + ".");
+      };
+
+      insertDots(username);
+
+      // Chỉ trả về số lượng alias đã được giới hạn
+      return results.slice(0, limit);
+    }
+
+    function displayPage() {
+      const aliasList = document.getElementById("aliasList");
+      aliasList.innerHTML = "";
+
+      const perPage = parseInt(document.getElementById("perPage").value);
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const pageAliases = allAliases.slice(start, end);
+
+      pageAliases.forEach((alias, index) => {
+        const li = document.createElement("li");
+        li.textContent = alias;
+        li.className = "cursor-pointer hover:text-blue-500";
+        li.onclick = () => copySingleAlias(alias);
+        aliasList.appendChild(li);
+      });
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const perPage = parseInt(document.getElementById("perPage").value);
+      const totalPages = Math.ceil(allAliases.length / perPage);
+      const paginationContainer = document.getElementById("pagination");
+
+      paginationContainer.innerHTML = "";
+
+      if (totalPages > 1) {
+        // Nút "Previous" (Trở lại)
+        if (currentPage > 1) {
+          const prevButton = document.createElement("button");
+          prevButton.textContent = "<";
+          prevButton.className = `px-4 py-2 rounded bg-gray-300 hover:bg-blue-400`;
+          prevButton.onclick = () => {
+            currentPage--;
+            displayPage();
+          };
+          paginationContainer.appendChild(prevButton);
+        }
+
+        // Chỉ hiển thị tối đa 20 trang
+        const startPage = Math.max(currentPage - 10, 1); // Giới hạn số trang hiển thị
+        const endPage = Math.min(startPage + 9, totalPages); // Đảm bảo không vượt quá số trang tổng
+
+        for (let i = startPage; i <= endPage; i++) {
+          const button = document.createElement("button");
+          button.textContent = i;
+          button.className = `px-4 py-2 rounded ${i === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'} hover:bg-blue-400`;
+          button.onclick = () => {
+            currentPage = i;
+            displayPage();
+          };
+          paginationContainer.appendChild(button);
+        }
+
+        // Nút "Next" (Tiếp theo)
+        if (currentPage < totalPages) {
+          const nextButton = document.createElement("button");
+          nextButton.textContent = ">";
+          nextButton.className = `px-4 py-2 rounded bg-gray-300 hover:bg-blue-400`;
+          nextButton.onclick = () => {
+            currentPage++;
+            displayPage();
+          };
+          paginationContainer.appendChild(nextButton);
+        }
+      }
+    }
+
+
+    function copySingleAlias(alias) {
+      navigator.clipboard.writeText(alias).then(() => {
+        showToast(`Copied: ${alias}`);
+      });
+    }
+
+    function copyCurrentPage() {
+      const perPage = parseInt(document.getElementById("perPage").value);
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const pageAliases = allAliases.slice(start, end);
+
+      navigator.clipboard.writeText(pageAliases.join("\n")).then(() => {
+        showToast(`Copied ${pageAliases.length} aliases to clipboard.`);
+      });
+    }
+
+    function copyAll() {
+      navigator.clipboard.writeText(allAliases.join("\n")).then(() => {
+        showToast(`Copied ${allAliases.length} aliases to clipboard.`);
+      });
+    }
+  </script>
+
+</body>
+
+</html>

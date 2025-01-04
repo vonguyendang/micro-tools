@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'Website')">Website</button>
+            <button class="tab-button" onclick="openTab(event, 'VCard')">VCard</button>
+            <button class="tab-button" onclick="openTab(event, 'Text')">Text</button>
+            <button class="tab-button" onclick="openTab(event, 'Email')">Email</button>
+            <button class="tab-button" onclick="openTab(event, 'Facebook')">Facebook</button>
+            <button class="tab-button" onclick="openTab(event, 'Wifi')">Wifi</button>
+            <button class="tab-button" onclick="openTab(event, 'Phone')">Phone</button>
+            <button class="tab-button" onclick="openTab(event, 'SMS')">SMS</button>
+        </div>
+
+        <!-- Tiêu đề và nút thêm ảnh -->
+        <div id="logoInputContainer">
+            <h2>Add logo</h2>
+            <input type="file" id="logoInput" accept="image/*">
+            <img id="logoImage" style="display:none; width: 100px; height: 100px; margin-top: 10px;">
+            <button id="removeLogoButton" style="display:none; margin-top: 10px;">Delete logo</button>
+        </div>
+        
+        <div class="tab-content" id="Website">
+            <h2>Generate QR Code for Website</h2>
+            <input type="text" id="websiteUrl" placeholder="Enter URL (e.g., https://qrcode-gen.com)">
+            <button onclick="generateQRCode('website')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="VCard">
+            <h2>Generate QR Code for VCard</h2>
+            <h3>General Information</h3>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardFirstName" placeholder="First Name">
+                <input class="flex-item" type="text" id="vcardLastName" placeholder="Last Name">
+            </div>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardPhone" placeholder="Phone Number">
+                <input class="flex-item" type="email" id="vcardEmail" placeholder="Email">
+            </div>
+            <h3>Company Information</h3>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardCompany" placeholder="Company">
+                <input class="flex-item" type="text" id="vcardJobTitle" placeholder="Job Title">
+            </div>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardCompanyPhone" placeholder="Company Phone">
+                <input class="flex-item" type="text" id="vcardFax" placeholder="Fax">
+            </div>
+            <div class="flex-container">
+                <input class="flex-item" type="email" id="vcardCompanyEmail" placeholder="Company Email">
+                <input class="flex-item" type="text" id="vcardCompanyWebsite" placeholder="Company Website">
+            </div>
+            <h3>Company Address</h3>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardStreet" placeholder="Street">
+                <input class="flex-item" type="text" id="vcardCity" placeholder="City">
+            </div>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardState" placeholder="State">
+                <input class="flex-item" type="text" id="vcardCountry" placeholder="Country">
+            </div>
+            <div class="flex-container">
+                <input class="flex-item" type="text" id="vcardZip" placeholder="Zip Code">
+                <input class="flex-item" type="text" id="vcardPostalCode" placeholder="Postal Code">
+            </div>
+            <button onclick="generateQRCode('vcard')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="Text">
+            <h2>Generate QR Code for Text</h2>
+            <textarea id="textContent" placeholder="Enter text"></textarea>
+            <button onclick="generateQRCode('text')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="Email">
+            <h2>Generate QR Code for Email</h2>
+            <input type="email" id="emailAddress" placeholder="Email Address">
+            <input type="text" id="emailSubject" placeholder="Subject">
+            <textarea id="emailBody" placeholder="Body"></textarea>
+            <button onclick="generateQRCode('email')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="Facebook">
+            <h2>Generate QR Code for Facebook</h2>
+            <input type="text" id="facebookLink" placeholder="Facebook Link">
+            <button onclick="generateQRCode('facebook')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="Wifi">
+            <h2>Generate QR Code for Wifi</h2>
+            <input type="text" id="wifiName" placeholder="Wifi Name">
+            <input type="text" id="wifiPassword" placeholder="Wifi Password">
+            <select id="wifiEncryption">
+                <option value="nopass">No Encryption</option>
+                <option value="wep">WEP</option>
+                <option value="wpa">WPA/WPA2</option>
+            </select>
+            <button onclick="generateQRCode('wifi')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="Phone">
+            <h2>Generate QR Code for Phone</h2>
+            <input type="text" id="phoneNumber" placeholder="Phone Number (e.g., +84987654321)">
+            <button onclick="generateQRCode('phone')">Generate QR Code</button>
+        </div>
+        
+        <div class="tab-content" id="SMS">
+            <h2>Generate QR Code for SMS</h2>
+            <input type="text" id="smsPhoneNumber" placeholder="Phone Number">
+            <textarea id="smsMessage" placeholder="Message"></textarea>
+            <button onclick="generateQRCode('sms')">Generate QR Code</button>
+        </div>
+        
+        <div id="qrcode"></div>
+        <div class="download-buttons">
+            <button onclick="downloadQRCode('png')">Download PNG</button>
+            <button onclick="downloadQRCode('svg')">Download SVG</button>
+            <button onclick="downloadQRCode('html')">Download HTML</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

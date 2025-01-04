@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Po Ta To</title>
+    <!-- Đường dẫn đến các tệp CSS và JS của Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        #outputString[contentEditable="true"] {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 5px;
+            resize: both;
+            overflow: auto;
+            min-height: 50px;
+            height: 100px;
+        }
+
+        #openLink {
+            background-color: #28a745;
+            /* Màu xanh lá */
+            color: #fff;
+            /* Màu chữ trắng */
+            padding: 5px 10px;
+            /* Kích thước nút */
+            text-decoration: none;
+            /* Loại bỏ gạch chân liên kết */
+            display: inline-block;
+            /* Hiển thị như một khối trong dòng */
+        }
+    </style>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3632843240233720"
+        crossorigin="anonymous"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111745653-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-111745653-1');
+    </script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <center>
+            <h2>Xử lý Code Trial Google One</h2>
+        </center>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3632843240233720"
+            data-ad-slot="7190665743" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <br>
+        <div class="alert alert-warning" role="alert">
+            <h4>Potato có vài acc Google One 2TB 2026 giá "xx"K. <a
+                    href="https://www.facebook.com/messages/t/100064671534967" target="_blank">Múc luôn</a></h4>
+        </div>
+        <form method="post" action="index.html">
+            <div class="form-group">
+                <label for="inputString"><b>Nhập đoạn mã token:</b></label>
+                <input type="text" class="form-control" id="inputString" name="inputString" oninput="processString()">
+            </div>
+        </form>
+
+        <div id="resultContainer" style="display: none; margin-bottom: 50px;">
+            <div class="mt-3">Code gói tìm được: <b><span id="stringA"></span></b> - and code: <b><span
+                        id="stringB"></span></b></div>
+            <hr>
+
+            <div class="form-group mt-3">
+                <label for="sourceRadio"><b>Chọn code gói cần thay thế:</b></label>
+                <br>
+                <label><i>Chú ý: annual là gói NĂM, không có annual là gói THÁNG</i></label>
+                <br>
+                <div class="row" style="margin: 10px;">
+                    <div class="col-10 col-sm-2">
+                        <b><i>Code gói THÁNG</i></b>
+                        <div id="col1Container">
+                            <!-- Các radio button cho cột 1 -->
+                        </div>
+                    </div>
+                    <div class="col-10 col-sm-2">
+                        <b><i>Code gói NĂM</i></i></b>
+                        <div id="col11Container">
+                            <!-- Các radio button cho cột 2 -->
+                        </div>
+                    </div>
+                    <div class="col-10 col-sm-3">
+                        <b><i>Code trial 100GB</i></i></b>
+                        <div id="col2Container">
+                            <!-- Các radio button cho cột 2 -->
+                        </div>
+                    </div>
+                    <div class="col-10 col-sm-3">
+                        <b><i>Code trial 200GB</i></b>
+                        <div id="col3Container">
+                            <!-- Các radio button cho cột 3 -->
+                        </div>
+                    </div>
+                    <div class="col-10 col-sm-2">
+                        <b><i>Code trial 2TB</i></b>
+                        <div id="col4Container">
+                            <!-- Các radio button cho cột 3 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="replaceRadio"><b>Chọn cách thay thế:</b></label>
+                <div class="row" style="margin: 10px;">
+                    <div class="form-check col-sm-1">
+                        <input type="radio" name="replaceRadio" value="C0%" id="C0Radio" checked="true"
+                            class="form-check-input">
+                        <label class="form-check-label" for="C0Radio">C0%</label>
+                    </div>
+                    <div class="form-check col-sm-1">
+                        <input type="radio" name="replaceRadio" value="C1%" id="C1Radio" class="form-check-input">
+                        <label class="form-check-label" for="C1Radio">C1%</label>
+                    </div>
+                    <div class="form-check col-sm-1">
+                        <input type="radio" name="replaceRadio" value="C5%" id="C5Radio" class="form-check-input">
+                        <label class="form-check-label" for="C5Radio">C5%</label>
+                    </div>
+                    <div class="form-check col-sm-1">
+                        <input type="radio" name="replaceRadio" value="C6%" id="C6Radio" class="form-check-input">
+                        <label class="form-check-label" for="C6Radio">C6%</label>
+                    </div>
+                </div>
+            </div>
+            <label><i>Không cần F5 lại trang, khi bấm <b>Xử lý</b>, đoạn mã của bạn sẽ được thay thế code
+                    mới!</i></label>
+            <br>
+            <br>
+            <button type="button" class="btn btn-primary" onclick="processString1()">Xử lý</button>
+            <hr>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3632843240233720"
+                data-ad-slot="7190665743" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            <div class="mt-3" id="result" style="display: none;">
+                <label for="outputString"><b>Kết quả:</b></label>
+                <div id="outputString" contentEditable="true"></div>
+                <div class="mt-3"><a id="openLink" href="index.html#" target="_blank">Mở liên kết</a></div>
+            </div>
+        </div>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3632843240233720"
+            data-ad-slot="7190665743" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+    </div>
+    <script>
+        var _0x518ce1 = _0x468f; function _0x34c8() { var _0x55dd31 = ['6520eAIsnN', 'outputString', 'input[name=\x22sourceRadio\x22]:checked', '2tb.ai', 'match', 'getElementById', 'form-check-label', 'label', 'replace', 'exec', '200gb.annual', '100gb.annual.3months_eft', '100gb.3months_eft', '200gb', 'display', '100gb.2months_eft', 'block', '711YMnLAu', 'href', '9smuiPP', 'value', '2809600zgzVlh', 'textContent', 'querySelector', 'Không\x20thay\x20đổi', 'stringA', 'type', 'push', '7740528AsEGXV', '2tb.1month_eft', 'resultContainer', '100gb.9months_eft', '100gb.annual', '200gb.1year_eft', 'includes', '109834JIDLHU', '2tb.ai.2months_eft', '100gb.annual.1month_eft', 'Vui\x20lòng\x20chọn\x20một\x20cách\x20thay\x20thế.', 'style', 'checked', 'startsWith', '5tb.annual', '200gb.annual.3months_eft', 'Vui\x20lòng\x20chọn\x20một\x20code\x20gói\x20để\x20thay\x20thế.', 'createElement', 'col2Container', 'stringB', '2tb', 'none', 'form-check-input\x20form-check-inline', '2tb.ai.1month_eft', '100gb.annual.1year_eft', '592820VOItTf', 'col1', 'className', 'col11Container', 'col4', 'sourceRadio', '100gb', '200gb.3months_eft', '41744oDzWCS', '11BUEFGK', 'col4Container', 'result', '2tb.6months_eft', '200gb.1month_eft', 'input', 'name', '2tb.3months_eft', '18NFQFZR', 'test', 'appendChild', 'eft', 'col3', '30tb', '168CCZXeA', '100gb.1year_eft', '20tb', 'col2', '10tb', '2020010cWQfBN', 'openLink']; _0x34c8 = function () { return _0x55dd31; }; return _0x34c8(); } (function (_0x179ba4, _0x18c0cf) { var _0x3996fa = _0x468f, _0x241da5 = _0x179ba4(); while (!![]) { try { var _0x3d201e = -parseInt(_0x3996fa(0x204)) / 0x1 + -parseInt(_0x3996fa(0x1e1)) / 0x2 * (parseInt(_0x3996fa(0x1f2)) / 0x3) + parseInt(_0x3996fa(0x1f6)) / 0x4 + parseInt(_0x3996fa(0x216)) / 0x5 * (-parseInt(_0x3996fa(0x1d4)) / 0x6) + -parseInt(_0x3996fa(0x1da)) / 0x7 * (-parseInt(_0x3996fa(0x21e)) / 0x8) + parseInt(_0x3996fa(0x1f4)) / 0x9 * (parseInt(_0x3996fa(0x1df)) / 0xa) + -parseInt(_0x3996fa(0x21f)) / 0xb * (-parseInt(_0x3996fa(0x1fd)) / 0xc); if (_0x3d201e === _0x18c0cf) break; else _0x241da5['push'](_0x241da5['shift']()); } catch (_0x54c7c9) { _0x241da5['push'](_0x241da5['shift']()); } } }(_0x34c8, 0x6a933)); var inputString, matches, stringA, sources = [_0x518ce1(0x1f9), _0x518ce1(0x21c), _0x518ce1(0x201), '200gb', _0x518ce1(0x1eb), _0x518ce1(0x211), '2tb.annual', _0x518ce1(0x1e4), '5tb', _0x518ce1(0x20b), _0x518ce1(0x1de), _0x518ce1(0x1dc), _0x518ce1(0x1d9), '100gb.1month_eft', _0x518ce1(0x1f0), _0x518ce1(0x1ed), _0x518ce1(0x200), _0x518ce1(0x1db), _0x518ce1(0x206), _0x518ce1(0x1ec), _0x518ce1(0x215), _0x518ce1(0x1d0), _0x518ce1(0x21d), _0x518ce1(0x202), '200gb.annual.1month_eft', _0x518ce1(0x20c), _0x518ce1(0x214), _0x518ce1(0x205), _0x518ce1(0x1fe), _0x518ce1(0x1d3), _0x518ce1(0x1cf), '2tb.annual.1month_eft', '2tb.annual.3months_eft'], containers = { 'col1': document[_0x518ce1(0x1e6)]('col1Container'), 'col11': document[_0x518ce1(0x1e6)](_0x518ce1(0x219)), 'col2': document[_0x518ce1(0x1e6)](_0x518ce1(0x20f)), 'col3': document[_0x518ce1(0x1e6)]('col3Container'), 'col4': document['getElementById'](_0x518ce1(0x220)) }, regexPattern = /^https:\/\/tokenized\.play\.google\.com\/eacquire\/.*?(.*)%3Ag1\.(.*?)%22%2C21%5D/; sources['forEach'](_0x38f9ce => { var _0x369189 = _0x518ce1, _0x34a33d = document[_0x369189(0x20e)](_0x369189(0x1d1)); _0x34a33d[_0x369189(0x1fb)] = 'radio', _0x34a33d[_0x369189(0x1d2)] = _0x369189(0x21b), _0x34a33d[_0x369189(0x1f5)] = _0x38f9ce, _0x34a33d['id'] = _0x38f9ce['replace'](/\s+/g, ''), _0x34a33d[_0x369189(0x218)] = _0x369189(0x213); if (_0x38f9ce === 'Không\x20thay\x20đổi') _0x34a33d[_0x369189(0x209)] = !![]; var _0x58628b = document[_0x369189(0x20e)](_0x369189(0x1e8)); _0x58628b[_0x369189(0x218)] = _0x369189(0x1e7), _0x58628b['htmlFor'] = _0x34a33d['id'], _0x58628b[_0x369189(0x1f7)] = _0x38f9ce; var _0x5804ee; if (_0x38f9ce[_0x369189(0x203)](_0x369189(0x1d7))) _0x5804ee = _0x38f9ce[_0x369189(0x20a)](_0x369189(0x21c)) ? containers[_0x369189(0x1dd)] : _0x38f9ce['startsWith'](_0x369189(0x1ee)) ? containers[_0x369189(0x1d8)] : _0x38f9ce[_0x369189(0x20a)](_0x369189(0x211)) ? containers[_0x369189(0x21a)] : containers[_0x369189(0x217)]; else _0x38f9ce[_0x369189(0x203)]('annual') ? _0x5804ee = containers['col11'] : _0x5804ee = containers[_0x369189(0x217)]; _0x5804ee[_0x369189(0x1d6)](_0x34a33d), _0x5804ee[_0x369189(0x1d6)](_0x58628b), _0x5804ee[_0x369189(0x1d6)](document[_0x369189(0x20e)]('br')); }); function _0x468f(_0x47fce, _0x5aa6d1) { var _0x34c883 = _0x34c8(); return _0x468f = function (_0x468fd7, _0x3e15e1) { _0x468fd7 = _0x468fd7 - 0x1ce; var _0x22c9c9 = _0x34c883[_0x468fd7]; return _0x22c9c9; }, _0x468f(_0x47fce, _0x5aa6d1); } function processString() { var _0x190d42 = _0x518ce1; inputString = document[_0x190d42(0x1e6)]('inputString')[_0x190d42(0x1f5)]; if (regexPattern[_0x190d42(0x1d5)](inputString)) { matches = inputString[_0x190d42(0x1e5)](regexPattern), stringA = matches[0x2]; var _0x4109b5 = [], _0x4150ad = /C(.)%/g, _0xc2b16; while ((_0xc2b16 = _0x4150ad[_0x190d42(0x1ea)](inputString)) !== null) { _0x4109b5[_0x190d42(0x1fc)](_0xc2b16[0x1]); } document['getElementById'](_0x190d42(0x1fa))[_0x190d42(0x1f7)] = stringA, document[_0x190d42(0x1e6)](_0x190d42(0x210))[_0x190d42(0x1f7)] = 'C' + _0x4109b5[0x0] + '%', document['getElementById'](_0x190d42(0x1ff))[_0x190d42(0x208)][_0x190d42(0x1ef)] = _0x190d42(0x1f1); } else document['getElementById'](_0x190d42(0x1ff))[_0x190d42(0x208)][_0x190d42(0x1ef)] = _0x190d42(0x212), alert('Đoạn\x20mã\x20không\x20hợp\x20lệ.'); } function processString1() { var _0xf4908 = _0x518ce1; if (regexPattern[_0xf4908(0x1d5)](inputString)) { var _0x4526db = document[_0xf4908(0x1f8)]('input[name=\x22replaceRadio\x22]:checked'); if (_0x4526db) { var _0x4eb7e5 = document[_0xf4908(0x1f8)](_0xf4908(0x1e3)); if (_0x4eb7e5) { var _0x546eec = _0x4526db['value'], _0x517122 = inputString['replace'](/C[56]%/g, _0x546eec), _0x1b622c = _0x4eb7e5[_0xf4908(0x1f5)], _0x4813f4 = _0x1b622c !== _0xf4908(0x1f9) ? _0x517122[_0xf4908(0x1e9)](stringA, _0x1b622c) : _0x517122; document[_0xf4908(0x1e6)](_0xf4908(0x1e2))['textContent'] = _0x4813f4, document[_0xf4908(0x1e6)](_0xf4908(0x1e0))[_0xf4908(0x1f3)] = _0x4813f4, document[_0xf4908(0x1e6)](_0xf4908(0x1ce))[_0xf4908(0x208)]['display'] = _0xf4908(0x1f1); } else document[_0xf4908(0x1e6)](_0xf4908(0x1ce))[_0xf4908(0x208)][_0xf4908(0x1ef)] = _0xf4908(0x212), alert(_0xf4908(0x20d)); } else document[_0xf4908(0x1e6)](_0xf4908(0x1ce))[_0xf4908(0x208)][_0xf4908(0x1ef)] = 'none', alert(_0xf4908(0x207)); } else document['getElementById'](_0xf4908(0x1ff))[_0xf4908(0x208)][_0xf4908(0x1ef)] = 'none', alert('Đoạn\x20mã\x20không\x20hợp\x20lệ.'); }
+    </script>
+</body>
+
+</html>

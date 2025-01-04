@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Giá Cổ Phiếu Ngày Giao Dịch Không Hưởng Quyền</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px; /* Thêm padding để tránh bị che */
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            width: 450px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .inline {
+            display: flex;
+            justify-content: space-between;
+        }
+        .inline div {
+            width: 48%;
+        }
+        input {
+            padding: 12px;
+            font-size: 16px;
+            width: calc(100% - 24px);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        button {
+            padding: 14px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            color: #4caf50;
+            background-color: #e8f5e9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        .result.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Đảm bảo container có thể cuộn được khi chiều cao màn hình nhỏ */
+        @media (max-height: 700px) {
+            .container {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            body {
+                align-items: flex-start;
+            }
+            h1 {
+                font-size: 24px; /* Giảm kích thước tiêu đề */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tính Giá Cổ Phiếu Ngày GDKHQ</h1>
+        <label for="P">Giá cổ phiếu (đóng cửa) liền trước ngày GDKHQ:</label>
+        <input type="number" id="P" step="0.01">
+
+        <label for="Pa">Giá cổ phiếu phát hành thêm:</label>
+        <input type="number" id="Pa" step="0.01">
+
+        <label for="sohuuPHT">Tỷ lệ cổ phiếu phát hành thêm:</label>
+        <div class="inline">
+            <div>
+                <input type="number" id="sohuuPHT" step="1" placeholder="Sở hữu">
+            </div>
+            .<br>
+            .
+            <div>
+                <input type="number" id="quyenPHT" step="1" placeholder="Quyền mua">
+            </div>
+        </div>
+
+        <label for="sohuuTM">Tỷ lệ cổ tức bằng tiền mặt:</label>
+        <div class="inline">
+            <div>
+                <input type="number" id="sohuuTM" step="1" placeholder="Sở hữu">
+            </div>
+            .<br>
+            .
+            <div>
+                <input type="number" id="quyenTM" step="0.01" placeholder="Số tiền">
+            </div>
+        </div>
+
+        <label for="sohuuCP">Tỷ lệ cổ tức bằng cổ phiếu:</label>
+        <div class="inline">
+            <div>
+                <input type="number" id="sohuuCP" step="1" placeholder="Sở hữu">
+            </div>
+            .<br>
+            .
+            <div>
+                <input type="number" id="quyenCP" step="1" placeholder="Số cổ phiếu">
+            </div>
+        </div>
+
+        <button onclick="calculatePrice()">Tính Toán</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            let P = parseFloat(document.getElementById('P').value) || 0;
+            let Pa = parseFloat(document.getElementById('Pa').value) || 0;
+            let sohuuPHT = parseFloat(document.getElementById('sohuuPHT').value) || 0;
+            let quyenPHT = parseFloat(document.getElementById('quyenPHT').value) || 0;
+            let sohuuTM = parseFloat(document.getElementById('sohuuTM').value) || 0;
+            let quyenTM = parseFloat(document.getElementById('quyenTM').value) || 0;
+            let sohuuCP = parseFloat(document.getElementById('sohuuCP').value) || 0;
+            let quyenCP = parseFloat(document.getElementById('quyenCP').value) || 0;
+
+            let a = sohuuPHT > 0 && quyenPHT > 0 ? quyenPHT / sohuuPHT : 0;
+            let C = sohuuTM > 0 && quyenTM > 0 ? quyenTM / sohuuTM : 0;
+            let B = sohuuCP > 0 && quyenCP > 0 ? quyenCP / sohuuCP : 0;
+            let P_prime = (P + (Pa * a) - C) / (1 + a + B);
+
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerText = `Giá cổ phiếu vào ngày GDKHQ: ${P_prime.toFixed(2)} VND`;
+            resultDiv.classList.add('show');
+        }
+    </script>
+</body>
+</html>
