@@ -102,7 +102,7 @@
             resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tính toán...';
             try {
 
-                const [response1, response2, response3, response4] = await Promise.all([
+                const [response1, response2, response3, response4, response5] = await Promise.all([
                     fetch(`https://restv2.fireant.vn/symbols/${stockCode}/fundamental`, {
                         headers: {
                             'accept': 'application/json',
@@ -121,20 +121,32 @@
                             'authorization': apiKey
                         }
                     }),
-                    fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json')])
+                    fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json'),
 
-                if (!response1.ok || !response2.ok || !response3.ok || !response4.ok) {
+                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/profile`, {
+                        headers: {
+                            'accept': 'application/json',
+                            'authorization': apiKey
+                        }
+                    }),
+                ])
+
+                if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok) {
                     throw new Error('Lỗi khi lấy dữ liệu, vui lòng thử lại.');
                 }
 
-                const [stockData, financialDataQuarter, financialDataYear, bonds] = await Promise.all([
+                const [stockData, financialDataQuarter, financialDataYear, bonds, stockProfile] = await Promise.all([
                     response1.json(),
                     response2.json(),
                     response3.json(),
-                    response4.json()
+                    response4.json(),
+                    response5.json()
                 ]);
 
                 // Lấy thông tin cổ phiếu
+                const stockExchange = stockProfile.exchange;
+
+                const stockName = stockProfile.companyName;
 
                 const marketPrice = stockData.marketCap / stockData.sharesOutstanding;
 
@@ -201,7 +213,8 @@
 
 
                 //Nhận định
-                let marketPriceComment = '';
+                let marketPriceComment = `Sàn ${stockExchange} | ${stockName}`;
+
 
                 let avgEPSComment = '';
                 if (avgEPS >= 3000) {
@@ -209,7 +222,7 @@
                 } else if (avgEPS >= 1500 && avgEPS < 3000) {
                     avgEPSComment = `Tốt, cho thấy công ty đang hoạt động hiệu quả và sử dụng vốn hợp lý để tạo ra lợi nhuận cho cổ đông.`;
                 } else if (avgEPS >= 500 && avgEPS < 1500) {
-                    avgEPSComment = `Xấu, chưa thật sự ổn định, cần xem xét thêm các yếu tố như ngành nghề kinh doanh, giai đoạn phát triển của công ty, và kế hoạch tái đầu tư.`;
+                    avgEPSComment = `Trung bình, chưa thật sự ổn định, cần xem xét thêm các yếu tố như ngành nghề kinh doanh, giai đoạn phát triển của công ty, và kế hoạch tái đầu tư.`;
                 } else {
                     avgEPSComment = `Cực xấu, cho thấy công ty đang gặp khó khăn trong việc tạo ra lợi nhuận cho cổ đông hoặc sử dụng vốn không hiệu quả.`;
                 }
