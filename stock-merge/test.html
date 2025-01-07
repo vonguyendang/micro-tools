@@ -468,12 +468,12 @@
 
                 let floatingShareRatioComment = '';
 
-                if (floatingShareRatio < 0.1) {
-                    floatingShareRatioComment = "Cổ phiếu ít cổ phần thả nổi, giá cổ phiếu ổn định.";
-                } else if (floatingShareRatio >= 0.1 && floatingShareRatio < 0.2) {
-                    floatingShareRatioComment = "Cổ phiếu có mức cổ phần thả nổi trung bình, giá cổ phiếu có thể biến động.";
+                if (floatingShareRatio < 0.2) {
+                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi thấp, cung hạn chế, thanh khoản không ổn định, giá biến động cao.";
+                } else if (floatingShareRatio >= 0.2 && floatingShareRatio < 0.6) {
+                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi trung bình, cân bằng cung - cầu, thanh khoản vừa phải, không gây biến động quá lớn.";
                 } else {
-                    floatingShareRatioComment = "Cổ phiếu có mức cổ phần thả nổi cao, giá cổ phiếu biến động mạnh.";
+                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi cao, cung dồi dào, khả năng hấp thụ lớn, ít bị thao túng, giá cổ phiếu phản ánh sát thực trạng thị trường.";
                 }
 
                 let avgROAComment = '';
@@ -482,9 +482,9 @@
                 } else if (avgROA >= 0.05 && avgROA < 0.1) {
                     avgROAComment = `Tốt, công ty có khả năng sinh lời ổn định từ vốn chủ sở hữu, nhưng chưa vượt trội.`;
                 } else if (avgROA >= 0 && avgROA < 0.05) {
-                    avgROAComment = `Xấu, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
+                    avgROAComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
                 } else {
-                    avgROAComment = `Cực xấu, công ty không sinh lời từ vốn chủ sở hữu.`;
+                    avgROAComment = `Xấu, công ty không sinh lời từ vốn chủ sở hữu.`;
                 }
 
                 let avgROEComment = '';
@@ -493,9 +493,9 @@
                 } else if (avgROE >= 0.10 && avgROE < 0.15) {
                     avgROEComment = `Tốt, công ty có khả năng sinh lời từ tổng tài sản, chưa vượt trội.`;
                 } else if (avgROE >= 0 && avgROE < 0.10) {
-                    avgROEComment = `Xấu, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
+                    avgROEComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
                 } else {
-                    avgROEComment = `Cực xấu, công ty không sinh lời từ tổng tài sản.`;
+                    avgROEComment = `Xấu, công ty không sinh lời từ tổng tài sản.`;
                 }
                 let avgSalePerShareComment = '';
 
