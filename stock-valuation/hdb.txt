@@ -1344,3 +1344,111 @@ curl 'https://restv2.fireant.vn/symbols/HPG/profile' \
     "otherOwnership": 0.7831,
     "isListed": true
 }
+
+
+
+curl 'https://iboard-query.ssi.com.vn/v2/stock/HDB' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.61.615.373 Safari/537.36'
+
+Phản hồi
+  {
+    "code": "SUCCESS",
+    "message": "Call API /v2/stock/HDB successful",
+    "data": {
+        "sn": "hose:1386", 
+        "ap": 24256.35,             ==> GIÁ TRUNG BÌNH
+        "b1": 24200,
+        "b1v": 35300,
+        "b2": 24150,
+        "b2v": 64900,
+        "b3": 24100,
+        "b3v": 85800,
+        "c": 26200,                 => GIÁ TRẦN
+        "cpe": [],
+        "cs": "",
+        "cwt": " ",
+        "e": "hose",                => Sàn HOSE
+        "ep": 0,
+        "er": "",
+        "f": 22800,                 => GIÁ SÀN
+        "h": 24550,                 => GIÁ CAO NHẤT
+        "ig": [
+            "VN30",
+            "VNALL",
+            "VNFIN",
+            "VNDIAMOND",
+            "VNFINLEAD",
+            "VNFINSELECT",
+            "VNSI",
+            "VNX50",
+            "VN100",
+            "VNXALL"
+        ],
+        "isd": "0",
+        "isn": "",
+        "l": 24100,                 => GIÁ THẤP NHẤT
+        "ls": 3510142254,
+        "ltd": "",
+        "ltu": 1736236246754,
+        "lv": 86265,
+        "md": "",
+        "mp": 24250,                => GIÁ CỔ PHIẾU HIỆN TẠI
+        "mtv": 209247445000,
+        "o": 24550,                 => GIÁ MỞ CỬA
+        "o1": 24250,
+        "o1v": 65400,
+        "o2": 24300,
+        "o2v": 58400,
+        "o3": 24350,
+        "o3v": 59000,
+        "pat": 1,
+        "pcp": 24500,
+        "r": 24500,                 => GIÁ THAM CHIẾU
+        "sen": "NHTM CP PHAT TRIEN TPHCM",
+        "ss": "HDB",
+        "st": "s",
+        "ts": "",
+        "tsh": 86265,
+        "tu": 100,
+        "us": "",
+        "os": "PRE",
+        "s": "PRE",
+        "ce": "Ho Chi Minh City Development Joint Stock Commercial Bank",
+        "cv": "Ngân hàng Thương mại Cổ phần Phát Triển Thành phố Hồ Chí Minh",
+        "mcp": 85628987934000,
+        "so": 3495060732,
+        "bfq": 1337250,
+        "rfq": 84733406,
+        "sfq": 1632800,
+        "cp": -1.02,                   => BIẾN ĐỘNG % TRONG PHIÊN
+        "mv": 52970,
+        "pc": -250,                    => BIẾN ĐỘNG TIỀN TRONG PHIÊN
+        "lmp": 24200,
+        "lmv": 10,
+        "lpc": -300,
+        "lpcp": -1.22,
+        "mtq": 8626500,                 ==> Tổng KL
+        "sbv": 3385600,
+        "sv": 8626500,
+        "o_b1": 24350,
+        "o_b1v": 40,
+        "o_b2": 24300,
+        "o_b2v": 10,
+        "o_b3": 24250,
+        "o_b3v": 61,
+        "o_mp": 0,
+        "o_mv": 0,
+        "o_o1": 24500,
+        "o_o1v": 99,
+        "o_o2": 24600,
+        "o_o2v": 38,
+        "o_o3": 24800,
+        "o_o3v": 10,
+        "ssv": 4690200,
+        "ptq": 1871000,
+        "ptv": 46022500000,
+        "suv": 550700,
+        "psp": true
+    }
+}

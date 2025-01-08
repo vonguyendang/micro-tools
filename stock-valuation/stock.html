@@ -95,6 +95,18 @@
     </div>
 
     <script>
+        function getFilterDate() {
+            let date = new Date()
+            let fromDate = new Date(date.getFullYear(), 0, 1);  // 0 = Tháng 1
+            let toDate = new Date(date.getFullYear() + 10, 0, 1);
+            // Trả về mảng với từ khóa định dạng YYYY-MM-DD
+            return [
+                        fromDate.toISOString().split('T')[0],  // Ngày đầu tiên của năm hiện tại
+                        toDate.toISOString().split('T')[0]     // Ngày đầu tiên của năm sau 10 năm
+                    ];
+        }
+        
+
         async function fetchStockData() {
             const stockCode = document.getElementById('stockCode').value.toUpperCase();
             const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg'; // Thay thế bằng API key của bạn
@@ -102,7 +114,7 @@
             resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tính toán...';
             try {
 
-                const [response1, response2, response3, response4, response5] = await Promise.all([
+                const [response1, response2, response3, response4, response5, response6] = await Promise.all([
                     fetch(`https://restv2.fireant.vn/symbols/${stockCode}/fundamental`, {
                         headers: {
                             'accept': 'application/json',
@@ -123,39 +135,59 @@
                     }),
                     fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json'),
 
-                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/profile`, {
+                    fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/v2/stock/${stockCode}`, {
+                        headers: {
+                            'accept': 'application/json',
+                        }
+                    }),
+                    fetch(`https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${getFilterDate()[0]}&endDate=${getFilterDate()[1]}&offset=0&limit=20`, {
                         headers: {
                             'accept': 'application/json',
                             'authorization': apiKey
                         }
+
                     }),
                 ])
 
-                if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok) {
+                if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok || !response6.ok) {
                     throw new Error('Lỗi khi lấy dữ liệu, vui lòng thử lại.');
                 }
 
-                const [stockData, financialDataQuarter, financialDataYear, bonds, stockProfile] = await Promise.all([
+                const [stockData, financialDataQuarter, financialDataYear, bonds, stockTransaction, dividendEvents] = await Promise.all([
                     response1.json(),
                     response2.json(),
                     response3.json(),
                     response4.json(),
-                    response5.json()
+                    response5.json(),
+                    response6.json()
                 ]);
 
-                // Lấy thông tin cổ phiếu
-                const stockExchange = stockProfile.exchange;
+                // Lấy thông tin giao dịch cổ phiếu
+                const stockExchange = stockTransaction.data.e.toUpperCase();
+                const stockNameVi = stockTransaction.data.cv.toUpperCase();
+                const stockNameEn = stockTransaction.data.ce.toUpperCase();
+                const averagePrice = formatNumber(stockTransaction.data.ap);
+                const ceilingPrice = formatNumber(stockTransaction.data.c);
+                const floorPrice = formatNumber(stockTransaction.data.f);
+                const highestPrice = formatNumber(stockTransaction.data.h);
+                const lowestPrice = formatNumber(stockTransaction.data.l);
+                const marketPrice = stockTransaction.data.mp;
+                const openingPrice = formatNumber(stockTransaction.data.o);
+                const referencePrice = formatNumber(stockTransaction.data.r);
+                const priceChange = formatNumber(stockTransaction.data.pc);
+                const percentageChange = formatNumber(stockTransaction.data.cp, 2);
+                const totalVolume = formatNumber(stockTransaction.data.mtq);
 
-                const stockName = stockProfile.companyName;
-
-                const marketPrice = stockData.marketCap / stockData.sharesOutstanding;
+                let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice);
+                let openingPriceClass = getPriceClass(openingPrice, referencePrice);
+                let priceChangeClass = getPriceClass(priceChange, 0);
+                let averagePriceClass = getPriceClass(averagePrice, referencePrice);
+                let highestPriceClass = getPriceClass(highestPrice, referencePrice);
+                let lowestPriceClass = getPriceClass(lowestPrice, referencePrice);
 
                 const betaStock = stockData.beta;
-
                 const floatingShareRatio = stockData.freeShares / stockData.sharesOutstanding;
-
                 // Lấy thông tin tài chính 4 quý
-
 
                 // Tính toán các chỉ số trung bình
                 let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
@@ -213,7 +245,7 @@
 
 
                 //Nhận định
-                let marketPriceComment = `Sàn ${stockExchange} | ${stockName}`;
+                let marketPriceComment = `Sàn ${stockExchange} | Mã ${stockCode} | ${stockNameEn}`;
 
 
                 let avgEPSComment = '';
@@ -310,9 +342,9 @@
                 let avgBookValuePerShareComment = '';
 
                 if (avgBookValuePerShare > marketPrice) {
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${(avgBookValuePerShare/marketPrice - 1).toFixed(4)*100}%, có thể là cơ hội đầu tư.`;
+                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgBookValuePerShare < marketPrice) {
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${(1 - avgBookValuePerShare/marketPrice).toFixed(4)*100}%, cần cẩn trọng trước khi đầu tư.`;
+                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else {
                     avgBookValuePerShareComment = 'Cổ phiếu có thị giá tương đương với giá trị sổ sách.';
                 }
@@ -351,43 +383,23 @@
                 }
                 
                 let avgPriceComment = '';
-                
+
                 if (avgPrice > marketPrice) {
-                    avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${100*(avgPrice/marketPrice - 1).toFixed(2)}%, có thể là cơ hội đầu tư.`;
+                    avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgPrice < marketPrice) {
-                    avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${100*(1 -avgPrice/marketPrice).toFixed(2)}%, cần cẩn trọng trước khi đầu tư.`;
+                    avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else if (isNaN(avgPrice)) {
                     avgPriceComment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
-                }else {
+                } else {
                     avgPriceComment = 'Cổ phiếu được định giá tương đương với giá thị trường.';
                 }
 
-
-                // resultDiv.innerHTML = `
-                //                 <p><i class="fas fa-dollar-sign icon"></i> Giá thị trường: <strong>${marketPrice.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Lợi nhuận trên mỗi cổ phiếu (EPS trung bình 4 quý): <strong>${avgEPS.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên lợi nhuận (PE trung bình 4 quý): <strong>${avgPE.toFixed(2)} lần</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên giá trị sổ sách (PB trung bình 4 quý): <strong>${avgPB.toFixed(2)} lần</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên doanh thu (PS trung bình 4 quý: <strong>${avgPS.toFixed(2)} lần</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Hệ số rủi ro thị trường (Beta): <strong>${betaStock.toFixed(2)} lần</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỉ lệ cổ phiếu thả nổi (FSR): <strong>${(floatingShareRatio * 100).toFixed(2)} %</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên vốn chủ sở hữu(4 quý): <strong>${(avgROA * 100).toFixed(2)} %</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên tổng tài sản (4 quý): <strong>${(avgROE * 100).toFixed(2)} % </strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Doanh thu trên mỗi cổ phiếu (SPS trung bình 4 quý): <strong>${avgSalePerShare.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Giá trị sổ sách trên mỗi cổ phiếu (BVPS trung bình 4 quý): <strong>${avgBookValuePerShare.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-chart-bar icon"></i> Giá trị sổ sách hữu hình trên mỗi cổ phiếu (TBVPS trung bình 4 quý): <strong>${avgTangibleBookValuePerShare.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo P/E và EPS <strong>${price1.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo P/S và SPS:  <strong>${price2.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 1: <strong>${price3.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 2: <strong>${price4.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 3: <strong>${price5.toFixed(2)} VNĐ</strong></p>
-                //                 <p><i class="fas fa-coins icon"></i> Định giá trung bình: <strong>${avgPrice.toFixed(2)} VNĐ</strong></p>
-                //             `;
                 resultDiv.innerHTML = `
                                         <style>
                                             table {
                                                 width: 100%;
                                                 border-collapse: collapse;
+                                                font-size: 14px;
                                             }
 
                                             table, th, td {
@@ -410,10 +422,99 @@
                                             th.center {
                                                 text-align: center;
                                             }
+                                            #center {
+                                                text-align: center !important;
+                                            }
+
+                                            .hidden-border {
+                                                border-collapse: collapse;
+                                               /* border: none; */
+                                                width: 100%;
+                                                margin: 20px 0;
+                                            }
+                                            .hidden-border td {
+                                                border: none;
+                                                padding: 8px;
+                                                text-align: center;
+                                                font-weight: bold;
+                                                font-size: 14px;
+                                            }
+
+                                            /* Màu sắc cho giá trị */
+                                            .price-up {
+                                                color: green; /* Giá tăng */
+                                            }
+                                            .price-down {
+                                                color: red;   /* Giá giảm */
+                                            }
+                                            .ceiling-price {
+                                                color: purple; /* Giá trần */
+                                            }
+                                            .reference-price {
+                                                color: goldenrod; /* Giá tham chiếu */
+                                            }
+                                            .floor-price {
+                                                color: blue;   /* Giá sàn */
+                                            }
                                         </style>
-                                        
+                                        <table class="hidden-border">
+                                             <tbody>
+                                                 <tr>
+                                                <th colspan="5" class="center">THÔNG TIN GIAO DỊCH HÔM NAY</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mã <br>${stockCode}</td>
+                                                    <td>Sàn <br>${stockExchange}</td>
+                                                    <td colspan="3">Tên doanh nghiệp <br>${stockNameVi}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class=${marketPriceClass}>Giá hiện tại <br>${formatNumber(marketPrice)}</td>
+                                                    <td class=${priceChangeClass}>${priceChange} đ<br>
+                                                        ${percentageChange} %
+                                                    </td>
+                                                    <td class="ceiling-price">Giá trần <br>${ceilingPrice}</td>
+                                                    <td class="reference-price">Giá tham chiếu <br>${referencePrice}</td>
+                                                    <td class="floor-price">Giá sàn <br>${floorPrice}</td>
+                                                </tr>
+                                                <br>
+                                                 <tr>
+                                                    <td class=${openingPriceClass}>Mở cửa <br>${openingPrice}</td>
+                                                    <td class=${averagePriceClass}>Trung bình <br>${averagePrice}</td>
+                                                    <td class=${lowestPriceClass}>Thấp nhất <br>${lowestPrice}</td>
+                                                    <td class=${highestPriceClass}>Cao nhất <br>${highestPrice}</td>
+                                                    <td>Tổng KL <br>${totalVolume}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                         <table>
                                             <thead>
+                                                <tr>
+                                                    <th colspan="4" class="center">SỰ KIỆN CỔ TỨC TRONG NĂM</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="center">Ngày GDKHQ</th>
+                                                    <th class="center">Sự kiện</th>
+                                                    <th class="center">Ngày ĐKCC</th>
+                                                    <th class="center">Ngày thực hiện</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${dividendEvents.map(event => `
+                                                    <tr>
+                                                        <td id="center">${formatDate(event.recordDate)}</td>
+                                                        <td id="center">${event.title}</td>
+                                                        <td id="center">${formatDate(event.registrationDate)}</td>
+                                                        <td id="center">${formatDate(event.executionDate)}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                        <table>
+                                            <thead>
+                                                 <tr>
+                                                <th colspan="3" class="center">ĐÁNH GIÁ CỔ PHIẾU</th>
+                                                </tr>
                                                 <tr>
                                                     <th class="center">Chỉ số</th>
                                                     <th class="center">Giá trị</th>
@@ -423,92 +524,92 @@
                                             <tbody>
                                                 <tr>
                                                     <td><i class="fas fa-dollar-sign icon"></i> Giá thị trường</td>
-                                                    <td class="value">${marketPrice.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(marketPrice)} đ</td>
                                                     <td>${marketPriceComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Lợi nhuận trên mỗi cổ phiếu (EPS trung bình 4 quý)</td>
-                                                    <td class="value">${avgEPS.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(avgEPS)} đ</td>
                                                     <td>${avgEPSComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên lợi nhuận (PE trung bình 4 quý)</td>
-                                                    <td class="value">${avgPE.toFixed(2)} lần</td>
+                                                    <td class="value">${formatNumber(avgPE,2)} lần</td>
                                                     <td>${avgPEComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên giá trị sổ sách (PB trung bình 4 quý)</td>
-                                                    <td class="value">${avgPB.toFixed(2)} lần</td>
+                                                    <td class="value">${formatNumber(avgPB,2)} lần</td>
                                                     <td>${avgPBComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ lệ giá trên doanh thu (PS trung bình 4 quý)</td>
-                                                    <td class="value">${avgPS.toFixed(2)} lần</td>
+                                                    <td class="value">${formatNumber(avgPS,2)} lần</td>
                                                     <td>${avgPSComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Hệ số rủi ro thị trường (Beta)</td>
-                                                    <td class="value">${betaStock.toFixed(2)} lần</td>
+                                                    <td class="value">${formatNumber(betaStock,2)} lần</td>
                                                     <td>${betaStockComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỉ lệ cổ phiếu thả nổi (FSR)</td>
-                                                    <td class="value">${(floatingShareRatio * 100).toFixed(2)} %</td>
+                                                    <td class="value">${formatNumber(floatingShareRatio*100)} %</td>
                                                     <td>${floatingShareRatioComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên vốn chủ sở hữu (4 quý)</td>
-                                                    <td class="value">${(avgROA * 100).toFixed(2)} %</td>
+                                                    <td class="value">${formatNumber(avgROA,2)} %</td>
                                                     <td>${avgROAComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên tổng tài sản (4 quý)</td>
-                                                    <td class="value">${(avgROE * 100).toFixed(2)} %</td>
+                                                    <td class="value">${formatNumber(avgROE,2)} %</td>
                                                     <td>${avgROEComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Doanh thu trên mỗi cổ phiếu (SPS trung bình 4 quý)</td>
-                                                    <td class="value">${avgSalePerShare.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(avgSalePerShare)} đ</td>
                                                     <td>${avgSalePerShareComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Giá trị sổ sách trên mỗi cổ phiếu (BVPS trung bình 4 quý)</td>
-                                                    <td class="value">${avgBookValuePerShare.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(avgBookValuePerShare)} đ</td>
                                                     <td>${avgBookValuePerShareComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Giá trị sổ sách hữu hình trên mỗi cổ phiếu (TBVPS trung bình 4 quý)</td>
-                                                    <td class="value">${avgTangibleBookValuePerShare.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(avgTangibleBookValuePerShare)} đ</td>
                                                     <td>${avgTangibleBookValuePerShareComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo P/E và EPS</td>
-                                                    <td class="value">${price1.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(price1)} đ</td>
                                                     <td>${price1Comment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo P/S và SPS</td>
-                                                    <td class="value">${price2.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(price2)} đ</td>
                                                     <td>${price2Comment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 1</td>
-                                                    <td class="value">${price3.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(price3)} đ</td>
                                                     <td>${price3Comment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 2</td>
-                                                    <td class="value">${price4.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(price4)} đ</td>
                                                     <td>${price4Comment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá cổ phiếu theo Braham 3</td>
-                                                    <td class="value">${price5.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(price5)} đ</td>
                                                     <td>${price5Comment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá trung bình</td>
-                                                    <td class="value">${avgPrice.toFixed(0)} đ</td>
+                                                    <td class="value">${formatNumber(avgPrice)} đ</td>
                                                     <td>${avgPriceComment}</td>
                                                 </tr>
                                             </tbody>
@@ -519,6 +620,36 @@
                 resultDiv.innerHTML = `<p style="color: red;"><i class="fas fa-exclamation-circle"></i> ${error.message}</p>`;
             }
         }
+
+        // Hàm xác định class dựa trên so sánh giá
+        function getPriceClass(currentPrice, referencePrice) {
+            if (currentPrice > referencePrice) {
+                return 'price-up';   // Giá tăng
+            } else if (currentPrice < referencePrice) {
+                return 'price-down'; // Giá giảm
+            } else {
+                return 'reference-price'; // Giá ổn định
+            }
+        }
+
+        // Hàm làm tròn và định dạng số
+        function formatNumber(num, decimal = 0) {
+            return Number(num.toFixed(decimal)).toLocaleString('de-DE');
+        }
+
+        function formatDate(inputDate) {
+            // Chuyển chuỗi thành đối tượng Date
+            let dateObj = new Date(inputDate);
+        
+            // Lấy ngày, tháng, năm
+            let day = String(dateObj.getDate()).padStart(2, '0'); // Đảm bảo ngày có 2 chữ số
+            let month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0, cộng 1 để có tháng đúng
+            let year = dateObj.getFullYear();
+        
+            // Tạo chuỗi ngày theo định dạng dd/mm/yyyy
+            return `${day}/${month}/${year}`;
+        }
+
     </script>
 
 </body>
