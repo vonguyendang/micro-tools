@@ -342,7 +342,7 @@
                 ])
 
                 if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok || !response6.ok) {
-                    throw new Error('Lỗi khi lấy dữ liệu, vui lòng thử lại.');
+                    throw new Error(`Mã cổ phiếu ${stockCode} không tồn tại ! Vui lòng kiểm tra lại.`);
                 }
 
                 const [stockData, financialDataQuarter, financialDataYear, bonds, stockTransaction, dividendEvents] = await Promise.all([
@@ -407,7 +407,6 @@
                 const avgBookValuePerShare = totalBookValuePerShare / financialDataQuarter.length;
                 const avgTangibleBookValuePerShare = totalTangibleBookValuePerShare / financialDataQuarter.length;
 
-
                 const price1 = avgPE * avgEPS;
                 const price2 = avgPS * avgSalePerShare;
 
@@ -434,86 +433,123 @@
                 //Định giá trung bình
 
                 const avgPrice = (price1 + price1 + price3 * 0.5 + price4 * 0.3 + price5 * 0.2) / 3
-
+        
+                // Thể hiện đánh giá bằng số sao sáng màu vàng
+                const totalStars = 10;
+                let achievedStars = 0;
 
                 //Nhận định
                 let marketPriceComment = `Sàn ${stockExchange} | Mã ${stockCode} | ${stockNameEn}`;
 
 
                 let avgEPSComment = '';
-                if (avgEPS >= 3000) {
-                    avgEPSComment = `Cực tốt, khả năng duy trì ổn định hoặc tăng trưởng qua các kỳ. Cho thấy công ty có tiềm năng lớn và khả năng sinh lời mạnh mẽ.`;
-                } else if (avgEPS >= 1500 && avgEPS < 3000) {
-                    avgEPSComment = `Tốt, cho thấy công ty đang hoạt động hiệu quả và sử dụng vốn hợp lý để tạo ra lợi nhuận cho cổ đông.`;
-                } else if (avgEPS >= 500 && avgEPS < 1500) {
-                    avgEPSComment = `Trung bình, chưa thật sự ổn định, cần xem xét thêm các yếu tố như ngành nghề kinh doanh, giai đoạn phát triển của công ty, và kế hoạch tái đầu tư.`;
-                } else {
-                    avgEPSComment = `Cực xấu, cho thấy công ty đang gặp khó khăn trong việc tạo ra lợi nhuận cho cổ đông hoặc sử dụng vốn không hiệu quả.`;
+                if (avgEPS >= 5000) {
+                    achievedStars += 1;
+                    avgEPSComment = `Khả năng duy trì ổn định hoặc tăng trưởng qua các kỳ. Cho thấy công ty có tiềm năng lớn và khả năng sinh lời mạnh mẽ.`;
+                } else if (avgEPS >= 3000 && avgEPS < 5000) {
+                    achievedStars += 0.75;
+                    avgEPSComment = `Công ty đang hoạt động hiệu quả và sử dụng vốn hợp lý để tạo ra lợi nhuận đáng kể, thu hút NĐT.`;
+                } else if (avgEPS >= 1000 && avgEPS < 3000) {
+                    achievedStars += 0.5;
+                    avgEPSComment = `Khả năng sinh lời ổn định với biên lợi nhuận không quá cao, có thể duy trì hoạt động`;
+                } else if (avgEPS >= 0 && avgEPS < 1000) {
+                    achievedStars += 0.25;
+                    avgEPSComment = `Có thể đang trong giai đoạn đầu phát triển hoặc hoạt động kinh doanh chưa đạt hiệu quả cao.`;
+                }else {
+                    avgEPSComment = `Công ty đang gặp khó khăn trong việc tạo ra lợi nhuận cho cổ đông hoặc sử dụng vốn không hiệu quả.`;
                 }
 
                 let avgPEComment = '';
-                if (avgPE < 10) {
-                    avgPEComment = `Thấp, cổ phiếu được định giá thấp hơn giá trị thực, có thể là cơ hội đầu tư.`;
+                if (avgPE < 5) {
+                    achievedStars += 0.5;
+                    avgPEComment = `Doanh nghiệp đang bị định giá thấp hoặc có rủi ro lớn. Lợi nhuận cao nhưng không bền vững, hoặc NĐT không kỳ vọng vào sự tăng trưởng của DN.`;
+                } else if (avgPE >= 5 && avgPE < 10) {
+                    achievedStars += 1;
+                    avgPEComment = `Doanh nghiệp đang hoạt động hiệu quả và bị thị trường đánh giá thấp. Cơ hội tìm kiếm cổ phiếu giá trị.`;
                 } else if (avgPE >= 10 && avgPE < 20) {
-                    avgPEComment = `Trung bình, là mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
+                    achievedStars += 0.75;
+                    avgPEComment = `Phản ánh mức định giá hợp lý, phổ biến ở các doanh nghiệp ổn định với tiềm năng tăng trưởng vừa phải.`;
                 } else if (avgPE >= 20 && avgPE < 30) {
-                    avgPEComment = `Cao, thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao`;
+                    achievedStars += 0.25;
+                    avgPEComment = `Thể hiện sự kỳ vọng lớn từ NĐT về tăng trưởng lợi nhuận trong tương lai. Thường thấy ở các công ty hàng đầu hoặc ngành công nghệ`;
                 } else {
-                    avgPEComment = `Rất cao, cổ phiếu được định giá cao hơn giá trị thực, cần cẩn trọng trước khi đầu tư.`;
+                    avgPEComment = `NĐT kỳ vọng cực lớn vào tương lai hoặc lợi nhuận hiện tại quá thấp so với giá cổ phiếu. Cần thận trọng vì có nguy cơ bong bóng tài sản.`;
                 }
 
                 let avgPBComment = '';
                 if (avgPB < 1) {
-                    avgPBComment = `Thấp, cổ phiếu được định giá thấp hơn giá trị sổ sách, có thể là cơ hội đầu tư.`;
+                    achievedStars += 1;
+                    avgPBComment = `Cổ phiếu có thị giá thấp hơn giá trị sổ sách, có thể là cơ hội đầu tư.`;
                 } else if (avgPB >= 1 && avgPB < 2) {
-                    avgPBComment = `Trung bình, là mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
+                    achievedStars += 0.75;
+                    avgPBComment = `Mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
                 } else if (avgPB >= 2 && avgPB < 3) {
-                    avgPBComment = `Cao, thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao.`;
+                    achievedStars += 0.5;
+                    avgPBComment = `Thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao.`;
+                } else if (avgPB >= 3 && avgPB < 5) {
+                    achievedStars += 0.25;
+                    avgPBComment = `NĐT sẵn sàng trả giá cao vì kỳ vọng lớn vào triển vọng phát triển, tài sản ngầm.`;
                 } else {
-                    avgPBComment = `Rất cao, cổ phiếu được định giá quá cao so với giá trị sổ sách, cần cẩn trọng trước khi đầu tư.`;
+                    avgPBComment = `Cổ phiếu được định giá rất cao so với giá trị sổ sách, cần cẩn trọng trước khi đầu tư.`;
                 }
 
                 let avgPSComment = '';
                 if (avgPS < 1) {
-                    avgPSComment = `Thấp, cổ phiếu được định giá thấp hơn doanh thu, có thể là cơ hội đầu tư.`;
+                    achievedStars += 1;
+                    avgPSComment = `Doanh nghiệp có thể đang bị định giá thấp, đây thường là cơ hội đầu tư hấp dẫn.`;
                 } else if (avgPS >= 1 && avgPS < 2) {
-                    avgPSComment = `Trung bình, là mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
-                } else if (avgPS >= 2 && avgPS < 3) {
-                    avgPSComment = `Cao, thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao.`;
+                    achievedStars += 0.75;
+                    avgPSComment = `Doanh nghiệp được định giá hợp lý hoặc hơi thấp so với doanh thu. Đây là mức phù hợp để xem xét đầu tư.`;
+                } else if (avgPS >= 2 && avgPS < 4) {
+                    achievedStars += 0.5;
+                    avgPSComment = `Doanh nghiệp được định giá tương đối cân bằng so với doanh thu. Nhà đầu tư cần phân tích thêm các yếu tố khác.`;
+                } else if (avgPS >= 4 && avgPS < 6) {
+                    achievedStars += 0.25;
+                    avgPSComment = `Doanh nghiệp có thể đang bị định giá cao hơn thực tế, Cẩn thận xem xét trước khi đầu tư.`;
                 } else {
-                    avgPSComment = `Rất cao, cổ phiếu được định giá quá cao so với doanh thu, cần cẩn trọng trước khi đầu tư.`;
+                    avgPSComment = `Doanh nghiệp bị định giá quá cao so với doanh thu thực tế, tiềm ẩn rủi ro lớn, cần cẩn trọng trước khi đầu tư.`;
                 }
 
                 let betaStockComment = '';
                 if (betaStock === 1) {
-                    betaStockComment = "Chứng khoán có mức biến động tương đương với thị trường.";
+                    achievedStars += 0.75;
+                    betaStockComment = "Giá cổ phiếu có mức biến động tương đương với thị trường.";
                 } else if (betaStock > 0 && betaStock < 1) {
-                    betaStockComment = "Chứng khoán ít biến động hơn thị trường, rủi ro thấp hơn.";
+                    achievedStars += 0.5;
+                    betaStockComment = "Giá cổ phiếu biến động thấp hơn so với thị trường chung, phù hợp với nhà đầu tư tìm kiếm sự ổn định.";
                 } else if (betaStock > 1) {
-                    betaStockComment = "Chứng khoán biến động mạnh hơn thị trường, tiềm năng sinh lời cao nhưng đi kèm rủi ro lớn.";
+                    achievedStars += 1;
+                    betaStockComment = "Giá cổ phiếu biến động mạnh hơn so với thị trường, tiềm năng sinh lời cao nhưng cũng đi kèm rủi ro lớn.";
                 } else if (betaStock === 0) {
-                    betaStockComment = "Chứng khoán không liên quan đến sự biến động của thị trường.";
+                    achievedStars += 0.25;
+                    betaStockComment = "Giá cổ phiếu không có mối liên hệ với biến động của thị trường, tức là hoàn toàn độc lập với thị trường.";
                 } else {
-                    betaStockComment = "Chứng khoán di chuyển ngược chiều với thị trường.";
+                    betaStockComment = "Giá chứng khoán thường tăng khi thị trường giảm và ngược lại.";
                 }
 
 
                 let floatingShareRatioComment = '';
 
                 if (floatingShareRatio < 0.2) {
+                    achievedStars += 0.5;
                     floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi thấp, cung hạn chế, thanh khoản không ổn định, giá biến động cao.";
                 } else if (floatingShareRatio >= 0.2 && floatingShareRatio < 0.6) {
+                    achievedStars += 1;
                     floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi trung bình, cân bằng cung - cầu, thanh khoản vừa phải, không gây biến động quá lớn.";
                 } else {
+                    achievedStars += 0.5;
                     floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi cao, cung dồi dào, khả năng hấp thụ lớn, ít bị thao túng, giá cổ phiếu phản ánh sát thực trạng thị trường.";
                 }
 
                 let avgROAComment = '';
                 if (avgROA >= 0.1) {
+                    achievedStars += 1;
                     avgROAComment = `Cực tốt, công ty có khả năng sinh lời cao, hiệu quả lợi nhuận tốt từ vốn chủ sở hữu.`;
                 } else if (avgROA >= 0.05 && avgROA < 0.1) {
+                    achievedStars += 0.5;
                     avgROAComment = `Tốt, công ty có khả năng sinh lời ổn định từ vốn chủ sở hữu, nhưng chưa vượt trội.`;
                 } else if (avgROA >= 0 && avgROA < 0.05) {
+                    achievedStars += 0.25;
                     avgROAComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
                 } else {
                     avgROAComment = `Xấu, công ty không sinh lời từ vốn chủ sở hữu.`;
@@ -521,10 +557,13 @@
 
                 let avgROEComment = '';
                 if (avgROE >= 0.15) {
+                    achievedStars += 1;
                     avgROEComment = `Cực tốt, công ty có khả năng sinh lời cao từ tổng tài sản.`;
                 } else if (avgROE >= 0.10 && avgROE < 0.15) {
+                    achievedStars += 0.5;
                     avgROEComment = `Tốt, công ty có khả năng sinh lời từ tổng tài sản, chưa vượt trội.`;
                 } else if (avgROE >= 0 && avgROE < 0.10) {
+                    achievedStars += 0.25;
                     avgROEComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
                 } else {
                     avgROEComment = `Xấu, công ty không sinh lời từ tổng tài sản.`;
@@ -534,10 +573,13 @@
                 let avgBookValuePerShareComment = '';
 
                 if (avgBookValuePerShare > marketPrice) {
+                    achievedStars += 1;
                     avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgBookValuePerShare < marketPrice) {
+                    achievedStars += 0.25;
                     avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else {
+                    achievedStars += 0.5;
                     avgBookValuePerShareComment = 'Cổ phiếu có thị giá tương đương với giá trị sổ sách.';
                 }
 
@@ -555,21 +597,21 @@
 
                 let price3Comment = '';
                 if (isNaN(price3)) {
-                    price3Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    price3Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
                 } else if (price3 < 0) {
                     price3Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
                 }
 
                 let price4Comment = '';
                 if (isNaN(price4)) {
-                    price4Comment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
+                    price4Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
                 } else if (price4 < 0) {
                     price4Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
                 }
 
                 let price5Comment = '';
                 if (isNaN(price5)) {
-                    price5Comment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
+                    price5Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
                 } else if (price5 < 0) {
                     price5Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
                 }
@@ -577,12 +619,15 @@
                 let avgPriceComment = '';
 
                 if (avgPrice > marketPrice) {
+                    achievedStars += 1;
                     avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgPrice < marketPrice) {
+                    achievedStars += 0.25;
                     avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else if (isNaN(avgPrice)) {
                     avgPriceComment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
                 } else {
+                    achievedStars += 0.5;
                     avgPriceComment = 'Cổ phiếu được định giá tương đương với giá thị trường.';
                 }
 
@@ -648,6 +693,11 @@
                                             .floor-price {
                                                 color: blue;   /* Giá sàn */
                                             }
+
+                                            #star-rating {
+                                                color: goldenrod;
+                                                font-size: 20px;
+                                            }
                                         </style>
                                         <table class="hidden-border">
                                              <tbody>
@@ -705,7 +755,9 @@
                                         <table>
                                             <thead>
                                                  <tr>
-                                                <th colspan="3" class="center">ĐÁNH GIÁ CỔ PHIẾU</th>
+                                                    <th class="center">ĐÁNH GIÁ CỔ PHIẾU</th>
+                                                    <th class="center">${achievedStars}/${totalStars}</th>
+                                                    <th class="center" id="star-rating">${generateStarRating(achievedStars, totalStars)}</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="center">Chỉ số</th>
@@ -751,12 +803,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên vốn chủ sở hữu (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROA,2)} %</td>
+                                                    <td class="value">${formatNumber(avgROA*100)} %</td>
                                                     <td>${avgROAComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên tổng tài sản (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROE,2)} %</td>
+                                                    <td class="value">${formatNumber(avgROE*100)} %</td>
                                                     <td>${avgROEComment}</td>
                                                 </tr>
                                                 <tr>
@@ -812,6 +864,7 @@
                 resultDiv.innerHTML = `<p style="color: red;"><i class="fas fa-exclamation-circle"></i> ${error.message}</p>`;
             }
         }
+       
 
         function calculatePrice() {
             let P = parseFloat(document.getElementById('P').value) || 0;
@@ -846,8 +899,12 @@
 
         // Hàm làm tròn và định dạng số
         function formatNumber(num, decimal = 0) {
+            if (typeof num !== 'number' || isNaN(num)) {
+               return 0;
+            }
             return Number(num.toFixed(decimal)).toLocaleString('de-DE');
         }
+
 
         function formatDate(inputDate) {
             // Chuyển chuỗi thành đối tượng Date
@@ -861,6 +918,22 @@
             // Tạo chuỗi ngày theo định dạng dd/mm/yyyy
             return `${day}/${month}/${year}`;
         }
+
+        // Hàm cập nhật số sao đánh giá cổ phiếu
+        function generateStarRating(rating, total) {
+            let stars = '';
+            for (let i = 0; i < Math.floor(rating); i++) {
+                stars += '&nbsp;<i class="fa-solid fa-star"></i>';
+            }
+            if (rating % 1 !== 0) {
+                stars += '&nbsp;<i class="fa-solid fa-star-half-stroke"></i>';
+            }
+            for (let i = Math.ceil(rating); i < total; i++) {
+                stars += '&nbsp;<i class="fa-regular fa-star"></i>';
+            }
+            return stars;
+        }
+        
     </script>
 
 </body>
