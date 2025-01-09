@@ -288,15 +288,22 @@
         }
 
         function getFilterDate() {
-            let date = new Date()
-            let fromDate = new Date(date.getFullYear(), 0, 1);  // 0 = Tháng 1
-            let toDate = new Date(date.getFullYear() + 10, 0, 1);
-            // Trả về mảng với từ khóa định dạng YYYY-MM-DD
+            let date = new Date();
+            let fromDate = new Date(date.getFullYear() - 1, 0, 1); // Ngày đầu tiên của năm trước
+            let toDate = new Date(date.getFullYear() + 1, 11, 31); // Ngày cuối cùng của năm sau
+        
+            function formatDateToISO(date) {
+                const offsetInMs = date.getTimezoneOffset() * 60 * 1000; // Lấy chênh lệch múi giờ tính bằng milliseconds
+                const localDate = new Date(date.getTime() - offsetInMs); // Điều chỉnh giờ về UTC gốc
+                return localDate.toISOString().split('T')[0]; // Trích xuất phần ngày
+            }
+        
             return [
-                        fromDate.toISOString().split('T')[0],  // Ngày đầu tiên của năm hiện tại
-                        toDate.toISOString().split('T')[0]     // Ngày đầu tiên của năm sau 10 năm
-                    ];
+                formatDateToISO(fromDate),
+                formatDateToISO(toDate)
+            ];
         }
+        
         
 
         async function fetchStockData() {
@@ -731,7 +738,7 @@
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th colspan="4" class="center">SỰ KIỆN CỔ TỨC TRONG NĂM</th>
+                                                    <th colspan="4" class="center">SỰ KIỆN CỔ TỨC TỪ ${formatDate(getFilterDate()[0])} ĐẾN ${formatDate(getFilterDate()[1])}</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="center">Ngày GDKHQ</th>
