@@ -680,7 +680,7 @@
                                             table {
                                                 width: 100%;
                                                 border-collapse: collapse;
-                                                font-size: 14px;
+                                                font-size: 13px;
                                             }
 
                                             table, th, td {
@@ -718,7 +718,7 @@
                                                 padding: 8px;
                                                 text-align: center;
                                                 font-weight: bold;
-                                                font-size: 14px;
+                                                font-size: 13px;
                                             }
 
                                             /* Màu sắc cho giá trị */
@@ -740,7 +740,7 @@
 
                                             #star-rating {
                                                 color: goldenrod;
-                                                font-size: 20px;
+                                                font-size: 18px;
                                             }
                                         </style>
                                         <table class="hidden-border">
@@ -768,7 +768,7 @@
                                                     <td class=${averagePriceClass}>Trung bình <br>${averagePrice}</td>
                                                     <td class=${lowestPriceClass}>Thấp nhất <br>${lowestPrice}</td>
                                                     <td class=${highestPriceClass}>Cao nhất <br>${highestPrice}</td>
-                                                    <td>Tổng KL <br>${formatNumber(totalVolume)}</td>
+                                                    <td class=${marketPriceClass}>Tổng KL <br>${formatNumber(totalVolume/1000,1)}K</td>
                                                 </tr>
                                             </tbody>
                                             <tbody>
@@ -777,15 +777,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td class=${marketPriceClass}>Tổng khối lượng</td>
-                                                    <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume)} ~ ${percentBuyVolume}%</td>
-                                                    <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume)} ~ ${percentSellVolume}%</td>
+                                                    <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume/1000,1)}K ~ ${percentBuyVolume}%</td>
+                                                    <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume/1000,1)}K ~ ${percentSellVolume}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume)}</td>
-                                                    <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume)} ~ ${percentForeignBuyVolume}%</td>
-                                                    <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume)} ~ ${percentInternalBuyVolume}%</td>
-                                                    <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume)} ~ ${percentForeignSellVolume}%</td>
-                                                    <td class="price-down">Trong nước <br>${formatNumber(totalInternalSellVolume)} ~ ${percentInternalSellVolume}%</td>
+                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume/1000,1)}K</td>
+                                                    <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume/1000,1)}K ~ ${percentForeignBuyVolume}%</td>
+                                                    <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume/1000,1)}K ~ ${percentInternalBuyVolume}%</td>
+                                                    <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume/1000,1)}K ~ ${percentForeignSellVolume}%</td>
+                                                    <td class="price-down">Trong nước <br>${formatNumber(totalInternalSellVolume/1000,1)}K ~ ${percentInternalSellVolume}%</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -797,7 +797,7 @@
                                                 <tr>
                                                     <th class="center">Ngày GDKHQ</th>
                                                     <th class="center">Sự kiện</th>
-                                                    <th class="center">Ngày ĐKCC</th>
+                                                    <!-- <th class="center">Ngày ĐKCC</th> -->
                                                     <th class="center">Ngày thực hiện</th>
                                                 </tr>
                                             </thead>
@@ -806,7 +806,7 @@
                                                     <tr>
                                                         <td id="center">${formatDate(event.recordDate)}</td>
                                                         <td id="center">${event.title}</td>
-                                                        <td id="center">${formatDate(event.registrationDate)}</td>
+                                                        <!-- <td id="center">${formatDate(event.registrationDate)}</td> -->
                                                         <td id="center">${formatDate(event.executionDate)}</td>
                                                     </tr>
                                                 `).join('')}
