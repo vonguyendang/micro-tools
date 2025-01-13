@@ -105,7 +105,9 @@
         }
 
         .result {
+            /*
             margin-top: 30px;
+            */
             font-size: 14px;
         }
 
@@ -393,8 +395,20 @@
                 const referencePrice = formatPrice(data.r);
                 const priceChange = formatPrice(data.pc);
                 const percentageChange = formatNumber(data.cp ?? 0, 2);
-                const totalVolume = formatPrice(data.mtq);
-
+                const totalVolume = data.mtq;
+                const totalBuyVolume = data.sbv ?? 0;
+                const totalSellVolume = data.ssv ?? 0;
+                const totalForeignBuyVolume = data.bfq ?? 0;
+                const totalInternalBuyVolume = totalBuyVolume - totalForeignBuyVolume;
+                const totalForeignSellVolume = data.sfq ?? 0;
+                const totalInternalSellVolume = totalSellVolume - totalForeignSellVolume;
+                const percentBuyVolume = formatNumber((totalBuyVolume/totalVolume)*100, 1);
+                const percentSellVolume = formatNumber((totalSellVolume/totalVolume)*100, 1);
+                const percentForeignBuyVolume = formatNumber((totalForeignBuyVolume/totalBuyVolume)*100, 1);
+                const percentInternalBuyVolume = formatNumber((totalInternalBuyVolume/totalBuyVolume)*100, 1);
+                const percentForeignSellVolume = formatNumber((totalForeignSellVolume/totalSellVolume)*100, 1);
+                const percentInternalSellVolume = formatNumber((totalInternalSellVolume/totalSellVolume)*100, 1);
+                
                 let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice);
                 let openingPriceClass = getPriceClass(openingPrice, referencePrice);
                 let priceChangeClass = getPriceClass(priceChange, 0);
@@ -599,10 +613,10 @@
 
                 if (avgBookValuePerShare > marketPrice) {
                     achievedStars += 1;
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
+                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100,1)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgBookValuePerShare < marketPrice) {
                     achievedStars += 0.25;
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
+                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100,1)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else {
                     achievedStars += 0.5;
                     avgBookValuePerShareComment = 'Cổ phiếu có thị giá tương đương với giá trị sổ sách.';
@@ -650,10 +664,10 @@
 
                 if (avgPrice > marketPrice) {
                     achievedStars += 1;
-                    avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100)}%, có thể là cơ hội đầu tư.`;
+                    avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100,1)}%, có thể là cơ hội đầu tư.`;
                 } else if (avgPrice < marketPrice) {
                     achievedStars += 0.25;
-                    avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100)}%, cần cẩn trọng trước khi đầu tư.`;
+                    avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100,1)}%, cần cẩn trọng trước khi đầu tư.`;
                 } else if (isNaN(avgPrice)) {
                     avgPriceComment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
                 } else {
@@ -731,8 +745,8 @@
                                         </style>
                                         <table class="hidden-border">
                                              <tbody>
-                                                 <tr>
-                                                <th colspan="5" class="center">THÔNG TIN GIAO DỊCH HÔM NAY</th>
+                                                <tr>
+                                                    <th colspan="5" class="center">THÔNG TIN GIÁ GIAO DỊCH HÔM NAY</th>
                                                 </tr>
                                                 <tr>
                                                     <td>Mã <br>${stockCode}</td>
@@ -754,7 +768,24 @@
                                                     <td class=${averagePriceClass}>Trung bình <br>${averagePrice}</td>
                                                     <td class=${lowestPriceClass}>Thấp nhất <br>${lowestPrice}</td>
                                                     <td class=${highestPriceClass}>Cao nhất <br>${highestPrice}</td>
-                                                    <td>Tổng KL <br>${totalVolume}</td>
+                                                    <td>Tổng KL <br>${formatNumber(totalVolume)}</td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody>
+                                                <tr>
+                                                    <th colspan="5" class="center">THÔNG TIN KHỐI LƯỢNG GIAO DỊCH HÔM NAY</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class=${marketPriceClass}>Tổng khối lượng</td>
+                                                    <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume)} ~ ${percentBuyVolume}%</td>
+                                                    <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume)} ~ ${percentSellVolume}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume)}</td>
+                                                    <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume)} ~ ${percentForeignBuyVolume}%</td>
+                                                    <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume)} ~ ${percentInternalBuyVolume}%</td>
+                                                    <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume)} ~ ${percentForeignSellVolume}%</td>
+                                                    <td class="price-down">Trong nước <br>${formatNumber(totalInternalSellVolume)} ~ ${percentInternalSellVolume}%</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -828,17 +859,17 @@
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỉ lệ cổ phiếu thả nổi (FSR)</td>
-                                                    <td class="value">${formatNumber(floatingShareRatio * 100)} %</td>
+                                                    <td class="value">${formatNumber(floatingShareRatio * 100,1)} %</td>
                                                     <td>${floatingShareRatioComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên vốn chủ sở hữu (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROA * 100)} %</td>
+                                                    <td class="value">${formatNumber(avgROA * 100,1)} %</td>
                                                     <td>${avgROAComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên tổng tài sản (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROE * 100)} %</td>
+                                                    <td class="value">${formatNumber(avgROE * 100,1)} %</td>
                                                     <td>${avgROEComment}</td>
                                                 </tr>
                                                 <tr>
