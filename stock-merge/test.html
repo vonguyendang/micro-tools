@@ -100,6 +100,25 @@
             margin-right: auto;
         }
 
+        /* CSS để căn chỉnh các nút nằm ngang và cách nhau */
+        .button-container {
+            display: flex;
+            /* Sử dụng flexbox để các nút nằm ngang */
+            gap: 10px;
+            /* Khoảng cách giữa các nút */
+            margin-top: 10px;
+            /* Khoảng cách phía trên */
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            /* Thêm padding để nút đẹp hơn */
+            font-size: 16px;
+            /* Cỡ chữ */
+            cursor: pointer;
+            /* Hiển thị con trỏ khi di chuột qua */
+        }
+
         button:hover {
             background-color: #16689e;
         }
@@ -223,7 +242,11 @@
         <h1><i class="fas fa-chart-line"></i> Định Giá Cổ Phiếu</h1>
         <label for="stockCode">Mã cổ phiếu:</label>
         <input type="text" id="stockCode" placeholder="Nhập mã cổ phiếu...">
-        <button onclick="fetchStockData()"><i class="fas fa-calculator"></i> Tính toán</button>
+        <div class="button-container">
+            <button onclick="fetchStockData()"><i class="fas fa-calculator"></i> Tính toán</button>
+            <button onclick="openFireant()"><i class="fas fa-external-link-alt"></i> Fireant</button>
+            <button onclick="openVietstock()"><i class="fas fa-external-link-alt"></i> Vietstock</button>
+        </div>
 
         <div class="result" id="resultValuation"></div>
     </div>
@@ -291,7 +314,7 @@
 
         function getFilterDate() {
             let date = new Date();
-            let fromDate = new Date(date.getFullYear() - 1, 0, 1); // Ngày đầu tiên của năm trước
+            let fromDate = new Date(date.getFullYear() - 3, 0, 1); // Ngày đầu tiên của năm trước
             let toDate = new Date(date.getFullYear() + 1, 11, 31); // Ngày cuối cùng của năm sau
 
             function formatDateToISO(date) {
@@ -306,376 +329,376 @@
             ];
         }
 
-
-
         async function fetchStockData() {
-            const stockCode = document.getElementById('stockCode').value.toUpperCase();
-            const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg'; // Thay thế bằng API key của bạn
-            const resultDiv = document.getElementById('resultValuation');
-            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tính toán...';
-            try {
+            const code = document.getElementById('stockCode').value;
+            if (code) {
+                const stockCode = code.toUpperCase();
+                const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg'; // Thay thế bằng API key của bạn
+                const resultDiv = document.getElementById('resultValuation');
+                resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tính toán...';
+                try {
 
-                const [response1, response2, response3, response4, response5, response6, response7] = await Promise.all([
-                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/fundamental`, {
-                        headers: {
-                            'accept': 'application/json',
-                            'authorization': apiKey
-                        }
-                    }),
-                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`, {
-                        headers: {
-                            'accept': 'application/json',
-                            'authorization': apiKey
-                        }
-                    }),
-                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`, {
-                        headers: {
-                            'accept': 'application/json',
-                            'authorization': apiKey
-                        }
-                    }),
-                    fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json'),
+                    const [response1, response2, response3, response4, response5, response6, response7] = await Promise.all([
+                        fetch(`https://restv2.fireant.vn/symbols/${stockCode}/fundamental`, {
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': apiKey
+                            }
+                        }),
+                        fetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`, {
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': apiKey
+                            }
+                        }),
+                        fetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`, {
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': apiKey
+                            }
+                        }),
+                        fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json'),
 
-                    fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/v2/stock/${stockCode}`, {
-                        headers: {
-                            'accept': 'application/json',
-                        }
-                    }),
-                    fetch(`https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${getFilterDate()[0]}&endDate=${getFilterDate()[1]}&offset=0&limit=20`, {
-                        headers: {
-                            'accept': 'application/json',
-                            'authorization': apiKey
-                        }
-                    }),
-                    fetch(`https://restv2.fireant.vn/symbols/${stockCode}/profile`, {
-                        headers: {
-                            'accept': 'application/json',
-                            'authorization': apiKey
-                        }
-                    }),
-                ])
+                        fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/v2/stock/${stockCode}`, {
+                            headers: {
+                                'accept': 'application/json',
+                            }
+                        }),
+                        fetch(`https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${getFilterDate()[0]}&endDate=${getFilterDate()[1]}&offset=0&limit=20`, {
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': apiKey
+                            }
+                        }),
+                        fetch(`https://restv2.fireant.vn/symbols/${stockCode}/profile`, {
+                            headers: {
+                                'accept': 'application/json',
+                                'authorization': apiKey
+                            }
+                        }),
+                    ])
 
-                if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok || !response6.ok || !response7.ok) {
-                    throw new Error(`Mã cổ phiếu ${stockCode} không tồn tại ! Vui lòng kiểm tra lại.`);
-                }
+                    if (!response1.ok || !response2.ok || !response3.ok || !response4.ok || !response5.ok || !response6.ok || !response7.ok) {
+                        throw new Error(`Mã cổ phiếu ${stockCode} không tồn tại ! Vui lòng kiểm tra lại.`);
+                    }
 
-                const [stockData, financialDataQuarter, financialDataYear, bonds, stockTransaction, dividendEvents, stockProfile] = await Promise.all([
-                    response1.json(),
-                    response2.json(),
-                    response3.json(),
-                    response4.json(),
-                    response5.json(),
-                    response6.json(),
-                    response7.json()
-                ]);
+                    const [stockData, financialDataQuarter, financialDataYear, bonds, stockTransaction, dividendEvents, stockProfile] = await Promise.all([
+                        response1.json(),
+                        response2.json(),
+                        response3.json(),
+                        response4.json(),
+                        response5.json(),
+                        response6.json(),
+                        response7.json()
+                    ]);
 
-                // Lấy thông tin giao dịch cổ phiếu
-                // Gán dữ liệu từ stockTransaction.data hoặc object rỗng nếu data là null/undefined
-                const data = stockTransaction.data || {};
+                    // Lấy thông tin giao dịch cổ phiếu
+                    // Gán dữ liệu từ stockTransaction.data hoặc object rỗng nếu data là null/undefined
+                    const data = stockTransaction.data || {};
 
-                // Lấy mã sàn giao dịch, ưu tiên từ data.e, nếu không có thì lấy từ stockProfile.exchange và viết hoa
-                const stockExchange = (data.e ?? stockProfile.exchange).toUpperCase();
+                    // Lấy mã sàn giao dịch, ưu tiên từ data.e, nếu không có thì lấy từ stockProfile.exchange và viết hoa
+                    const stockExchange = (data.e ?? stockProfile.exchange).toUpperCase();
 
-                // Lấy tên công ty tiếng Việt, ưu tiên từ data.cv, nếu không có thì lấy từ stockProfile.companyName và viết hoa
-                const stockNameVi = (data.cv ?? stockProfile.companyName).toUpperCase();
+                    // Lấy tên công ty tiếng Việt, ưu tiên từ data.cv, nếu không có thì lấy từ stockProfile.companyName và viết hoa
+                    const stockNameVi = (data.cv ?? stockProfile.companyName).toUpperCase();
 
-                // Lấy tên công ty tiếng Anh, ưu tiên từ data.ce, nếu không có thì lấy từ stockProfile.internationalName và viết hoa
-                const stockNameEn = (data.ce ?? stockProfile.internationalName).toUpperCase();
+                    // Lấy tên công ty tiếng Anh, ưu tiên từ data.ce, nếu không có thì lấy từ stockProfile.internationalName và viết hoa
+                    const stockNameEn = (data.ce ?? stockProfile.internationalName).toUpperCase();
 
-                // Hàm rút gọn để định dạng giá trị, nếu giá trị null/undefined thì trả về 0
-                const formatPrice = (value) => formatNumber(value ?? 0);
-                
-                const averagePrice = formatPrice(data.ap);
-                const ceilingPrice = formatPrice(data.c);
-                const floorPrice = formatPrice(data.f);
-                const highestPrice = formatPrice(data.h);
-                const lowestPrice = formatPrice(data.l);
-                const marketPrice = data.mp ?? stockData.marketCap/stockData.sharesOutstanding;
-                const openingPrice = formatPrice(data.o);
-                const referencePrice = formatPrice(data.r);
-                const priceChange = formatPrice(data.pc);
-                const percentageChange = formatNumber(data.cp ?? 0, 2);
-                const totalVolume = data.mtq;
-                const totalBuyVolume = data.sbv ?? 0;
-                const totalSellVolume = data.ssv ?? 0;
-                const totalForeignBuyVolume = data.bfq ?? 0;
-                const totalInternalBuyVolume = totalBuyVolume - totalForeignBuyVolume;
-                const totalForeignSellVolume = data.sfq ?? 0;
-                const totalInternalSellVolume = totalSellVolume - totalForeignSellVolume;
-                const percentBuyVolume = formatNumber((totalBuyVolume/totalVolume)*100, 1);
-                const percentSellVolume = formatNumber((totalSellVolume/totalVolume)*100, 1);
-                const percentForeignBuyVolume = formatNumber((totalForeignBuyVolume/totalBuyVolume)*100, 1);
-                const percentInternalBuyVolume = formatNumber((totalInternalBuyVolume/totalBuyVolume)*100, 1);
-                const percentForeignSellVolume = formatNumber((totalForeignSellVolume/totalSellVolume)*100, 1);
-                const percentInternalSellVolume = formatNumber((totalInternalSellVolume/totalSellVolume)*100, 1);
-                
-                let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice);
-                let openingPriceClass = getPriceClass(openingPrice, referencePrice);
-                let priceChangeClass = getPriceClass(priceChange, 0);
-                let averagePriceClass = getPriceClass(averagePrice, referencePrice);
-                let highestPriceClass = getPriceClass(highestPrice, referencePrice);
-                let lowestPriceClass = getPriceClass(lowestPrice, referencePrice);
+                    // Hàm rút gọn để định dạng giá trị, nếu giá trị null/undefined thì trả về 0
+                    const formatPrice = (value) => formatNumber(value ?? 0);
 
-                const betaStock = stockData.beta;
-                const floatingShareRatio = stockData.freeShares / stockData.sharesOutstanding;
-                // Lấy thông tin tài chính 4 quý
+                    const averagePrice = formatPrice(data.ap);
+                    const ceilingPrice = formatPrice(data.c);
+                    const floorPrice = formatPrice(data.f);
+                    const highestPrice = formatPrice(data.h);
+                    const lowestPrice = formatPrice(data.l);
+                    const marketPrice = data.mp ?? stockData.marketCap / stockData.sharesOutstanding;
+                    const openingPrice = formatPrice(data.o);
+                    const referencePrice = formatPrice(data.r);
+                    const priceChange = formatPrice(data.pc);
+                    const percentageChange = formatNumber(data.cp ?? 0, 2);
+                    const totalVolume = data.mtq;
+                    const totalBuyVolume = data.sbv ?? 0;
+                    const totalSellVolume = data.ssv ?? 0;
+                    const totalForeignBuyVolume = data.bfq ?? 0;
+                    const totalInternalBuyVolume = totalBuyVolume - totalForeignBuyVolume;
+                    const totalForeignSellVolume = data.sfq ?? 0;
+                    const totalInternalSellVolume = totalSellVolume - totalForeignSellVolume;
+                    const percentBuyVolume = formatNumber((totalBuyVolume / totalVolume) * 100, 1);
+                    const percentSellVolume = formatNumber((totalSellVolume / totalVolume) * 100, 1);
+                    const percentForeignBuyVolume = formatNumber((totalForeignBuyVolume / totalBuyVolume) * 100, 1);
+                    const percentInternalBuyVolume = formatNumber((totalInternalBuyVolume / totalBuyVolume) * 100, 1);
+                    const percentForeignSellVolume = formatNumber((totalForeignSellVolume / totalSellVolume) * 100, 1);
+                    const percentInternalSellVolume = formatNumber((totalInternalSellVolume / totalSellVolume) * 100, 1);
 
-                // Tính toán các chỉ số trung bình
-                let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
+                    let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice);
+                    let openingPriceClass = getPriceClass(openingPrice, referencePrice);
+                    let priceChangeClass = getPriceClass(priceChange, 0);
+                    let averagePriceClass = getPriceClass(averagePrice, referencePrice);
+                    let highestPriceClass = getPriceClass(highestPrice, referencePrice);
+                    let lowestPriceClass = getPriceClass(lowestPrice, referencePrice);
 
-                financialDataQuarter.forEach(data => {
-                    totalEPS += data.financialValues.BasicEPS;
-                    totalPE += data.financialValues.PE;
-                    totalPB += data.financialValues.PB;
-                    totalPS += data.financialValues.PS
-                    totalROA += data.financialValues.ROA;
-                    totalROE += data.financialValues.ROE;
-                    totalSalePerShare += data.financialValues.SalePerShare;
-                    totalBookValuePerShare += data.financialValues.BookValuePerShare;
-                    totalTangibleBookValuePerShare += data.financialValues.TangibleBookValuePerShare;
+                    const betaStock = stockData.beta;
+                    const floatingShareRatio = stockData.freeShares / stockData.sharesOutstanding;
+                    // Lấy thông tin tài chính 4 quý
 
-                });
+                    // Tính toán các chỉ số trung bình
+                    let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
 
-                const avgEPS = totalEPS / financialDataQuarter.length;
-                const avgPE = totalPE / financialDataQuarter.length;
-                const avgPB = totalPB / financialDataQuarter.length;
-                const avgPS = totalPS / financialDataQuarter.length;
-                const avgROA = totalROA / financialDataQuarter.length;
-                const avgROE = totalROE / financialDataQuarter.length;
-                const avgSalePerShare = totalSalePerShare / financialDataQuarter.length;
-                const avgBookValuePerShare = totalBookValuePerShare / financialDataQuarter.length;
-                const avgTangibleBookValuePerShare = totalTangibleBookValuePerShare / financialDataQuarter.length;
+                    financialDataQuarter.forEach(data => {
+                        totalEPS += data.financialValues.BasicEPS;
+                        totalPE += data.financialValues.PE;
+                        totalPB += data.financialValues.PB;
+                        totalPS += data.financialValues.PS
+                        totalROA += data.financialValues.ROA;
+                        totalROE += data.financialValues.ROE;
+                        totalSalePerShare += data.financialValues.SalePerShare;
+                        totalBookValuePerShare += data.financialValues.BookValuePerShare;
+                        totalTangibleBookValuePerShare += data.financialValues.TangibleBookValuePerShare;
 
-                const price1 = avgPE * avgEPS;
-                const price2 = avgPS * avgSalePerShare;
-                const price6 = avgPB * avgBookValuePerShare;
+                    });
 
+                    const avgEPS = totalEPS / financialDataQuarter.length;
+                    const avgPE = totalPE / financialDataQuarter.length;
+                    const avgPB = totalPB / financialDataQuarter.length;
+                    const avgPS = totalPS / financialDataQuarter.length;
+                    const avgROA = totalROA / financialDataQuarter.length;
+                    const avgROE = totalROE / financialDataQuarter.length;
+                    const avgSalePerShare = totalSalePerShare / financialDataQuarter.length;
+                    const avgBookValuePerShare = totalBookValuePerShare / financialDataQuarter.length;
+                    const avgTangibleBookValuePerShare = totalTangibleBookValuePerShare / financialDataQuarter.length;
 
-                const g = Math.pow((financialDataYear[0].financialValues.BasicEPS / financialDataYear[4].financialValues.BasicEPS), 1 / 5) - 1
-                //Công thức điều chỉnh của Benjamin Graham: (V = EPS × (8.5 +s 2g) × (4.4 / y))
-                //V = EPS × (8.5 + 2g)
-                // V = EPS × (8.5 + 2g) × (4.4 / y)
-                // V = √(22.5 × EPS × BVPS)
-
-                //Lãi suất trái phiếu chính phủ kỳ hạn 10 năm + 0.5%.
-
-                const y10 = bonds.current[5][1];
-                //ưu tiên 50%
-                const price3 = avgEPS * (6.5 + 2 * g) * (3.5 / (y10 + 0.5));
-                //ưu tiên 30%
-                const price4 = avgEPS * (6.5 + 2 * g);
-                //ưu tiên 20%
-                const price5 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
+                    const price1 = avgPE * avgEPS;
+                    const price2 = avgPS * avgSalePerShare;
+                    const price6 = avgPB * avgBookValuePerShare;
 
 
+                    const g = Math.pow((financialDataYear[0].financialValues.BasicEPS / financialDataYear[4].financialValues.BasicEPS), 1 / 5) - 1
+                    //Công thức điều chỉnh của Benjamin Graham: (V = EPS × (8.5 +s 2g) × (4.4 / y))
+                    //V = EPS × (8.5 + 2g)
+                    // V = EPS × (8.5 + 2g) × (4.4 / y)
+                    // V = √(22.5 × EPS × BVPS)
 
-                //Định giá trung bình
+                    //Lãi suất trái phiếu chính phủ kỳ hạn 10 năm + 0.5%.
 
-                const avgPrice = (price1 + price2 + price6 + price3 * 0.5 + price4 * 0.3 + price5 * 0.2) / 4
-
-                // Thể hiện đánh giá bằng số sao sáng màu vàng
-                const totalStars = 10;
-                let achievedStars = 0;
-
-                //Nhận định
-                let marketPriceComment = `Sàn ${stockExchange} | Mã ${stockCode} | ${stockNameEn}`;
-
-
-                let avgEPSComment = '';
-                if (avgEPS >= 5000) {
-                    achievedStars += 1;
-                    avgEPSComment = `Khả năng duy trì ổn định hoặc tăng trưởng qua các kỳ. Cho thấy công ty có tiềm năng lớn và khả năng sinh lời mạnh mẽ.`;
-                } else if (avgEPS >= 3000 && avgEPS < 5000) {
-                    achievedStars += 0.75;
-                    avgEPSComment = `Công ty đang hoạt động hiệu quả và sử dụng vốn hợp lý để tạo ra lợi nhuận đáng kể, thu hút NĐT.`;
-                } else if (avgEPS >= 1000 && avgEPS < 3000) {
-                    achievedStars += 0.5;
-                    avgEPSComment = `Khả năng sinh lời ổn định với biên lợi nhuận không quá cao, có thể duy trì hoạt động`;
-                } else if (avgEPS >= 0 && avgEPS < 1000) {
-                    achievedStars += 0.25;
-                    avgEPSComment = `Có thể đang trong giai đoạn đầu phát triển hoặc hoạt động kinh doanh chưa đạt hiệu quả cao.`;
-                } else {
-                    avgEPSComment = `Công ty đang gặp khó khăn trong việc tạo ra lợi nhuận cho cổ đông hoặc sử dụng vốn không hiệu quả.`;
-                }
-
-                let avgPEComment = '';
-                if (avgPE < 5) {
-                    achievedStars += 0.5;
-                    avgPEComment = `Doanh nghiệp đang bị định giá thấp hoặc có rủi ro lớn. Lợi nhuận cao nhưng không bền vững, hoặc NĐT không kỳ vọng vào sự tăng trưởng của DN.`;
-                } else if (avgPE >= 5 && avgPE < 10) {
-                    achievedStars += 1;
-                    avgPEComment = `Doanh nghiệp đang hoạt động hiệu quả và bị thị trường đánh giá thấp. Cơ hội tìm kiếm cổ phiếu giá trị.`;
-                } else if (avgPE >= 10 && avgPE < 20) {
-                    achievedStars += 0.75;
-                    avgPEComment = `Phản ánh mức định giá hợp lý, phổ biến ở các doanh nghiệp ổn định với tiềm năng tăng trưởng vừa phải.`;
-                } else if (avgPE >= 20 && avgPE < 30) {
-                    achievedStars += 0.25;
-                    avgPEComment = `Thể hiện sự kỳ vọng lớn từ NĐT về tăng trưởng lợi nhuận trong tương lai. Thường thấy ở các công ty hàng đầu hoặc ngành công nghệ`;
-                } else {
-                    avgPEComment = `NĐT kỳ vọng cực lớn vào tương lai hoặc lợi nhuận hiện tại quá thấp so với giá cổ phiếu. Cần thận trọng vì có nguy cơ bong bóng tài sản.`;
-                }
-
-                let avgPBComment = '';
-                if (avgPB < 1) {
-                    achievedStars += 1;
-                    avgPBComment = `Cổ phiếu có thị giá thấp hơn giá trị sổ sách, có thể là cơ hội đầu tư.`;
-                } else if (avgPB >= 1 && avgPB < 2) {
-                    achievedStars += 0.75;
-                    avgPBComment = `Mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
-                } else if (avgPB >= 2 && avgPB < 3) {
-                    achievedStars += 0.5;
-                    avgPBComment = `Thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao.`;
-                } else if (avgPB >= 3 && avgPB < 5) {
-                    achievedStars += 0.25;
-                    avgPBComment = `NĐT sẵn sàng trả giá cao vì kỳ vọng lớn vào triển vọng phát triển, tài sản ngầm.`;
-                } else {
-                    avgPBComment = `Cổ phiếu được định giá rất cao so với giá trị sổ sách, cần cẩn trọng trước khi đầu tư.`;
-                }
-
-                let avgPSComment = '';
-                if (avgPS < 1) {
-                    achievedStars += 1;
-                    avgPSComment = `Doanh nghiệp có thể đang bị định giá thấp, đây thường là cơ hội đầu tư hấp dẫn.`;
-                } else if (avgPS >= 1 && avgPS < 2) {
-                    achievedStars += 0.75;
-                    avgPSComment = `Doanh nghiệp được định giá hợp lý hoặc hơi thấp so với doanh thu. Đây là mức phù hợp để xem xét đầu tư.`;
-                } else if (avgPS >= 2 && avgPS < 4) {
-                    achievedStars += 0.5;
-                    avgPSComment = `Doanh nghiệp được định giá tương đối cân bằng so với doanh thu. Nhà đầu tư cần phân tích thêm các yếu tố khác.`;
-                } else if (avgPS >= 4 && avgPS < 6) {
-                    achievedStars += 0.25;
-                    avgPSComment = `Doanh nghiệp có thể đang bị định giá cao hơn thực tế, Cẩn thận xem xét trước khi đầu tư.`;
-                } else {
-                    avgPSComment = `Doanh nghiệp bị định giá quá cao so với doanh thu thực tế, tiềm ẩn rủi ro lớn, cần cẩn trọng trước khi đầu tư.`;
-                }
-
-                let betaStockComment = '';
-                if (betaStock === 1) {
-                    achievedStars += 0.75;
-                    betaStockComment = "Giá cổ phiếu có mức biến động tương đương với thị trường.";
-                } else if (betaStock > 0 && betaStock < 1) {
-                    achievedStars += 0.5;
-                    betaStockComment = "Giá cổ phiếu biến động thấp hơn so với thị trường chung, phù hợp với nhà đầu tư tìm kiếm sự ổn định.";
-                } else if (betaStock > 1) {
-                    achievedStars += 1;
-                    betaStockComment = "Giá cổ phiếu biến động mạnh hơn so với thị trường, tiềm năng sinh lời cao nhưng cũng đi kèm rủi ro lớn.";
-                } else if (betaStock === 0) {
-                    achievedStars += 0.25;
-                    betaStockComment = "Giá cổ phiếu không có mối liên hệ với biến động của thị trường, tức là hoàn toàn độc lập với thị trường.";
-                } else {
-                    betaStockComment = "Giá chứng khoán thường tăng khi thị trường giảm và ngược lại.";
-                }
+                    const y10 = bonds.current[5][1];
+                    //ưu tiên 50%
+                    const price3 = avgEPS * (6.5 + 2 * g) * (3.5 / (y10 + 0.5));
+                    //ưu tiên 30%
+                    const price4 = avgEPS * (6.5 + 2 * g);
+                    //ưu tiên 20%
+                    const price5 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
 
 
-                let floatingShareRatioComment = '';
 
-                if (floatingShareRatio < 0.2) {
-                    achievedStars += 0.5;
-                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi thấp, cung hạn chế, thanh khoản không ổn định, giá biến động cao.";
-                } else if (floatingShareRatio >= 0.2 && floatingShareRatio < 0.6) {
-                    achievedStars += 1;
-                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi trung bình, cân bằng cung - cầu, thanh khoản vừa phải, không gây biến động quá lớn.";
-                } else {
-                    achievedStars += 0.5;
-                    floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi cao, cung dồi dào, khả năng hấp thụ lớn, ít bị thao túng, giá cổ phiếu phản ánh sát thực trạng thị trường.";
-                }
+                    //Định giá trung bình
 
-                let avgROAComment = '';
-                if (avgROA >= 0.1) {
-                    achievedStars += 1;
-                    avgROAComment = `Cực tốt, công ty có khả năng sinh lời cao, hiệu quả lợi nhuận tốt từ vốn chủ sở hữu.`;
-                } else if (avgROA >= 0.05 && avgROA < 0.1) {
-                    achievedStars += 0.5;
-                    avgROAComment = `Tốt, công ty có khả năng sinh lời ổn định từ vốn chủ sở hữu, nhưng chưa vượt trội.`;
-                } else if (avgROA >= 0 && avgROA < 0.05) {
-                    achievedStars += 0.25;
-                    avgROAComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
-                } else {
-                    avgROAComment = `Xấu, công ty không sinh lời từ vốn chủ sở hữu.`;
-                }
+                    const avgPrice = (price1 + price2 + price6 + price3 * 0.5 + price4 * 0.3 + price5 * 0.2) / 4
 
-                let avgROEComment = '';
-                if (avgROE >= 0.15) {
-                    achievedStars += 1;
-                    avgROEComment = `Cực tốt, công ty có khả năng sinh lời cao từ tổng tài sản.`;
-                } else if (avgROE >= 0.10 && avgROE < 0.15) {
-                    achievedStars += 0.5;
-                    avgROEComment = `Tốt, công ty có khả năng sinh lời từ tổng tài sản, chưa vượt trội.`;
-                } else if (avgROE >= 0 && avgROE < 0.10) {
-                    achievedStars += 0.25;
-                    avgROEComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
-                } else {
-                    avgROEComment = `Xấu, công ty không sinh lời từ tổng tài sản.`;
-                }
-                let avgSalePerShareComment = '';
+                    // Thể hiện đánh giá bằng số sao sáng màu vàng
+                    const totalStars = 10;
+                    let achievedStars = 0;
 
-                let avgBookValuePerShareComment = '';
+                    //Nhận định
+                    let marketPriceComment = `Sàn ${stockExchange} | Mã ${stockCode} | ${stockNameEn}`;
 
-                if (avgBookValuePerShare > marketPrice) {
-                    achievedStars += 1;
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100,1)}%, có thể là cơ hội đầu tư.`;
-                } else if (avgBookValuePerShare < marketPrice) {
-                    achievedStars += 0.25;
-                    avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100,1)}%, cần cẩn trọng trước khi đầu tư.`;
-                } else {
-                    achievedStars += 0.5;
-                    avgBookValuePerShareComment = 'Cổ phiếu có thị giá tương đương với giá trị sổ sách.';
-                }
 
-                let avgTangibleBookValuePerShareComment = '';
+                    let avgEPSComment = '';
+                    if (avgEPS >= 5000) {
+                        achievedStars += 1;
+                        avgEPSComment = `Khả năng duy trì ổn định hoặc tăng trưởng qua các kỳ. Cho thấy công ty có tiềm năng lớn và khả năng sinh lời mạnh mẽ.`;
+                    } else if (avgEPS >= 3000 && avgEPS < 5000) {
+                        achievedStars += 0.75;
+                        avgEPSComment = `Công ty đang hoạt động hiệu quả và sử dụng vốn hợp lý để tạo ra lợi nhuận đáng kể, thu hút NĐT.`;
+                    } else if (avgEPS >= 1000 && avgEPS < 3000) {
+                        achievedStars += 0.5;
+                        avgEPSComment = `Khả năng sinh lời ổn định với biên lợi nhuận không quá cao, có thể duy trì hoạt động`;
+                    } else if (avgEPS >= 0 && avgEPS < 1000) {
+                        achievedStars += 0.25;
+                        avgEPSComment = `Có thể đang trong giai đoạn đầu phát triển hoặc hoạt động kinh doanh chưa đạt hiệu quả cao.`;
+                    } else {
+                        avgEPSComment = `Công ty đang gặp khó khăn trong việc tạo ra lợi nhuận cho cổ đông hoặc sử dụng vốn không hiệu quả.`;
+                    }
 
-                let price1Comment = '';
-                if (price1 < 0) {
-                    price1Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
+                    let avgPEComment = '';
+                    if (avgPE < 5) {
+                        achievedStars += 0.5;
+                        avgPEComment = `Doanh nghiệp đang bị định giá thấp hoặc có rủi ro lớn. Lợi nhuận cao nhưng không bền vững, hoặc NĐT không kỳ vọng vào sự tăng trưởng của DN.`;
+                    } else if (avgPE >= 5 && avgPE < 10) {
+                        achievedStars += 1;
+                        avgPEComment = `Doanh nghiệp đang hoạt động hiệu quả và bị thị trường đánh giá thấp. Cơ hội tìm kiếm cổ phiếu giá trị.`;
+                    } else if (avgPE >= 10 && avgPE < 20) {
+                        achievedStars += 0.75;
+                        avgPEComment = `Phản ánh mức định giá hợp lý, phổ biến ở các doanh nghiệp ổn định với tiềm năng tăng trưởng vừa phải.`;
+                    } else if (avgPE >= 20 && avgPE < 30) {
+                        achievedStars += 0.25;
+                        avgPEComment = `Thể hiện sự kỳ vọng lớn từ NĐT về tăng trưởng lợi nhuận trong tương lai. Thường thấy ở các công ty hàng đầu hoặc ngành công nghệ`;
+                    } else {
+                        avgPEComment = `NĐT kỳ vọng cực lớn vào tương lai hoặc lợi nhuận hiện tại quá thấp so với giá cổ phiếu. Cần thận trọng vì có nguy cơ bong bóng tài sản.`;
+                    }
 
-                let price2Comment = '';
-                if (price2 < 0) {
-                    price2Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
+                    let avgPBComment = '';
+                    if (avgPB < 1) {
+                        achievedStars += 1;
+                        avgPBComment = `Cổ phiếu có thị giá thấp hơn giá trị sổ sách, có thể là cơ hội đầu tư.`;
+                    } else if (avgPB >= 1 && avgPB < 2) {
+                        achievedStars += 0.75;
+                        avgPBComment = `Mức hợp lý đối với hầu hết các ngành ổn định và không có tăng trưởng đột biến.`;
+                    } else if (avgPB >= 2 && avgPB < 3) {
+                        achievedStars += 0.5;
+                        avgPBComment = `Thường phản ánh kỳ vọng tăng trưởng cao trong tương lai hoặc thị trường đang định giá quá cao.`;
+                    } else if (avgPB >= 3 && avgPB < 5) {
+                        achievedStars += 0.25;
+                        avgPBComment = `NĐT sẵn sàng trả giá cao vì kỳ vọng lớn vào triển vọng phát triển, tài sản ngầm.`;
+                    } else {
+                        avgPBComment = `Cổ phiếu được định giá rất cao so với giá trị sổ sách, cần cẩn trọng trước khi đầu tư.`;
+                    }
 
-                let price6Comment = '';
-                if (price6 < 0) {
-                    price6Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
+                    let avgPSComment = '';
+                    if (avgPS < 1) {
+                        achievedStars += 1;
+                        avgPSComment = `Doanh nghiệp có thể đang bị định giá thấp, đây thường là cơ hội đầu tư hấp dẫn.`;
+                    } else if (avgPS >= 1 && avgPS < 2) {
+                        achievedStars += 0.75;
+                        avgPSComment = `Doanh nghiệp được định giá hợp lý hoặc hơi thấp so với doanh thu. Đây là mức phù hợp để xem xét đầu tư.`;
+                    } else if (avgPS >= 2 && avgPS < 4) {
+                        achievedStars += 0.5;
+                        avgPSComment = `Doanh nghiệp được định giá tương đối cân bằng so với doanh thu. Nhà đầu tư cần phân tích thêm các yếu tố khác.`;
+                    } else if (avgPS >= 4 && avgPS < 6) {
+                        achievedStars += 0.25;
+                        avgPSComment = `Doanh nghiệp có thể đang bị định giá cao hơn thực tế, Cẩn thận xem xét trước khi đầu tư.`;
+                    } else {
+                        avgPSComment = `Doanh nghiệp bị định giá quá cao so với doanh thu thực tế, tiềm ẩn rủi ro lớn, cần cẩn trọng trước khi đầu tư.`;
+                    }
 
-                let price3Comment = '';
-                if (isNaN(price3)) {
-                    price3Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
-                } else if (price3 < 0) {
-                    price3Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
+                    let betaStockComment = '';
+                    if (betaStock === 1) {
+                        achievedStars += 0.75;
+                        betaStockComment = "Giá cổ phiếu có mức biến động tương đương với thị trường.";
+                    } else if (betaStock > 0 && betaStock < 1) {
+                        achievedStars += 0.5;
+                        betaStockComment = "Giá cổ phiếu biến động thấp hơn so với thị trường chung, phù hợp với nhà đầu tư tìm kiếm sự ổn định.";
+                    } else if (betaStock > 1) {
+                        achievedStars += 1;
+                        betaStockComment = "Giá cổ phiếu biến động mạnh hơn so với thị trường, tiềm năng sinh lời cao nhưng cũng đi kèm rủi ro lớn.";
+                    } else if (betaStock === 0) {
+                        achievedStars += 0.25;
+                        betaStockComment = "Giá cổ phiếu không có mối liên hệ với biến động của thị trường, tức là hoàn toàn độc lập với thị trường.";
+                    } else {
+                        betaStockComment = "Giá chứng khoán thường tăng khi thị trường giảm và ngược lại.";
+                    }
 
-                let price4Comment = '';
-                if (isNaN(price4)) {
-                    price4Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
-                } else if (price4 < 0) {
-                    price4Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
 
-                let price5Comment = '';
-                if (isNaN(price5)) {
-                    price5Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
-                } else if (price5 < 0) {
-                    price5Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
-                }
+                    let floatingShareRatioComment = '';
 
-                let avgPriceComment = '';
+                    if (floatingShareRatio < 0.2) {
+                        achievedStars += 0.5;
+                        floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi thấp, cung hạn chế, thanh khoản không ổn định, giá biến động cao.";
+                    } else if (floatingShareRatio >= 0.2 && floatingShareRatio < 0.6) {
+                        achievedStars += 1;
+                        floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi trung bình, cân bằng cung - cầu, thanh khoản vừa phải, không gây biến động quá lớn.";
+                    } else {
+                        achievedStars += 0.5;
+                        floatingShareRatioComment = "Cổ phiếu có tỷ lệ thả nổi cao, cung dồi dào, khả năng hấp thụ lớn, ít bị thao túng, giá cổ phiếu phản ánh sát thực trạng thị trường.";
+                    }
 
-                if (avgPrice > marketPrice) {
-                    achievedStars += 1;
-                    avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100,1)}%, có thể là cơ hội đầu tư.`;
-                } else if (avgPrice < marketPrice) {
-                    achievedStars += 0.25;
-                    avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100,1)}%, cần cẩn trọng trước khi đầu tư.`;
-                } else if (isNaN(avgPrice)) {
-                    avgPriceComment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
-                } else {
-                    achievedStars += 0.5;
-                    avgPriceComment = 'Cổ phiếu được định giá tương đương với giá thị trường.';
-                }
+                    let avgROAComment = '';
+                    if (avgROA >= 0.1) {
+                        achievedStars += 1;
+                        avgROAComment = `Cực tốt, công ty có khả năng sinh lời cao, hiệu quả lợi nhuận tốt từ vốn chủ sở hữu.`;
+                    } else if (avgROA >= 0.05 && avgROA < 0.1) {
+                        achievedStars += 0.5;
+                        avgROAComment = `Tốt, công ty có khả năng sinh lời ổn định từ vốn chủ sở hữu, nhưng chưa vượt trội.`;
+                    } else if (avgROA >= 0 && avgROA < 0.05) {
+                        achievedStars += 0.25;
+                        avgROAComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
+                    } else {
+                        avgROAComment = `Xấu, công ty không sinh lời từ vốn chủ sở hữu.`;
+                    }
 
-                resultDiv.innerHTML = `
+                    let avgROEComment = '';
+                    if (avgROE >= 0.15) {
+                        achievedStars += 1;
+                        avgROEComment = `Cực tốt, công ty có khả năng sinh lời cao từ tổng tài sản.`;
+                    } else if (avgROE >= 0.10 && avgROE < 0.15) {
+                        achievedStars += 0.5;
+                        avgROEComment = `Tốt, công ty có khả năng sinh lời từ tổng tài sản, chưa vượt trội.`;
+                    } else if (avgROE >= 0 && avgROE < 0.10) {
+                        achievedStars += 0.25;
+                        avgROEComment = `Trung bình, công ty chưa sử dụng vốn hiệu quả để sinh lời.`;
+                    } else {
+                        avgROEComment = `Xấu, công ty không sinh lời từ tổng tài sản.`;
+                    }
+                    let avgSalePerShareComment = '';
+
+                    let avgBookValuePerShareComment = '';
+
+                    if (avgBookValuePerShare > marketPrice) {
+                        achievedStars += 1;
+                        avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách cao hơn thị giá ${formatNumber((avgBookValuePerShare / marketPrice - 1) * 100, 1)}%, có thể là cơ hội đầu tư.`;
+                    } else if (avgBookValuePerShare < marketPrice) {
+                        achievedStars += 0.25;
+                        avgBookValuePerShareComment = `Cổ phiếu có giá trị sổ sách thấp hơn thị giá ${formatNumber((1 - avgBookValuePerShare / marketPrice) * 100, 1)}%, cần cẩn trọng trước khi đầu tư.`;
+                    } else {
+                        achievedStars += 0.5;
+                        avgBookValuePerShareComment = 'Cổ phiếu có thị giá tương đương với giá trị sổ sách.';
+                    }
+
+                    let avgTangibleBookValuePerShareComment = '';
+
+                    let price1Comment = '';
+                    if (price1 < 0) {
+                        price1Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let price2Comment = '';
+                    if (price2 < 0) {
+                        price2Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let price6Comment = '';
+                    if (price6 < 0) {
+                        price6Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let price3Comment = '';
+                    if (isNaN(price3)) {
+                        price3Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
+                    } else if (price3 < 0) {
+                        price3Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let price4Comment = '';
+                    if (isNaN(price4)) {
+                        price4Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
+                    } else if (price4 < 0) {
+                        price4Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let price5Comment = '';
+                    if (isNaN(price5)) {
+                        price5Comment = 'Không thể đưa ra định giá, không nên đầu tư.';
+                    } else if (price5 < 0) {
+                        price5Comment = 'Cổ phiếu quá xấu không nên đầu tư.';
+                    }
+
+                    let avgPriceComment = '';
+
+                    if (avgPrice > marketPrice) {
+                        achievedStars += 1;
+                        avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100, 1)}%, có thể là cơ hội đầu tư.`;
+                    } else if (avgPrice < marketPrice) {
+                        achievedStars += 0.25;
+                        avgPriceComment = `Cổ phiếu được định giá thấp hơn giá thị trường ${formatNumber((1 - avgPrice / marketPrice) * 100, 1)}%, cần cẩn trọng trước khi đầu tư.`;
+                    } else if (isNaN(avgPrice)) {
+                        avgPriceComment = 'Cổ phiếu quá xấu không thể đưa ra định giá, không nên đầu tư.';
+                    } else {
+                        achievedStars += 0.5;
+                        avgPriceComment = 'Cổ phiếu được định giá tương đương với giá thị trường.';
+                    }
+
+                    resultDiv.innerHTML = `
                                         <style>
                                             table {
                                                 width: 100%;
@@ -768,7 +791,7 @@
                                                     <td class=${averagePriceClass}>Trung bình <br>${averagePrice}</td>
                                                     <td class=${lowestPriceClass}>Thấp nhất <br>${lowestPrice}</td>
                                                     <td class=${highestPriceClass}>Cao nhất <br>${highestPrice}</td>
-                                                    <td class=${marketPriceClass}>Tổng KL <br>${formatNumber(totalVolume/1000,1)}K</td>
+                                                    <td class=${marketPriceClass}>Tổng KL <br>${formatNumber(totalVolume / 1000, 1)}K</td>
                                                 </tr>
                                             </tbody>
                                             <tbody>
@@ -777,15 +800,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td class=${marketPriceClass}>Tổng khối lượng</td>
-                                                    <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume/1000,1)}K ~ ${percentBuyVolume}%</td>
-                                                    <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume/1000,1)}K ~ ${percentSellVolume}%</td>
+                                                    <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume / 1000, 1)}K ~ ${percentBuyVolume}%</td>
+                                                    <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume / 1000, 1)}K ~ ${percentSellVolume}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume/1000,1)}K</td>
-                                                    <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume/1000,1)}K ~ ${percentForeignBuyVolume}%</td>
-                                                    <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume/1000,1)}K ~ ${percentInternalBuyVolume}%</td>
-                                                    <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume/1000,1)}K ~ ${percentForeignSellVolume}%</td>
-                                                    <td class="price-down">Trong nước <br>${formatNumber(totalInternalSellVolume/1000,1)}K ~ ${percentInternalSellVolume}%</td>
+                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume / 1000, 1)}K</td>
+                                                    <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume / 1000, 1)}K ~ ${percentForeignBuyVolume}%</td>
+                                                    <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume / 1000, 1)}K ~ ${percentInternalBuyVolume}%</td>
+                                                    <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume / 1000, 1)}K ~ ${percentForeignSellVolume}%</td>
+                                                    <td class="price-down">Trong nước <br>${formatNumber(totalInternalSellVolume / 1000, 1)}K ~ ${percentInternalSellVolume}%</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -859,17 +882,17 @@
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỉ lệ cổ phiếu thả nổi (FSR)</td>
-                                                    <td class="value">${formatNumber(floatingShareRatio * 100,1)} %</td>
+                                                    <td class="value">${formatNumber(floatingShareRatio * 100, 1)} %</td>
                                                     <td>${floatingShareRatioComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên vốn chủ sở hữu (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROA * 100,1)} %</td>
+                                                    <td class="value">${formatNumber(avgROA * 100, 1)} %</td>
                                                     <td>${avgROAComment}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-chart-bar icon"></i> Tỷ suất lợi nhuận trên tổng tài sản (4 quý)</td>
-                                                    <td class="value">${formatNumber(avgROE * 100,1)} %</td>
+                                                    <td class="value">${formatNumber(avgROE * 100, 1)} %</td>
                                                     <td>${avgROEComment}</td>
                                                 </tr>
                                                 <tr>
@@ -926,11 +949,33 @@
                                         </table>
                                     `;
 
-            } catch (error) {
-                resultDiv.innerHTML = `<p style="color: red;"><i class="fas fa-exclamation-circle"></i> ${error.message}</p>`;
+                } catch (error) {
+                    resultDiv.innerHTML = `<p style="color: red;"><i class="fas fa-exclamation-circle"></i> ${error.message}</p>`;
+                }
+            } else {
+                alert("Vui lòng nhập mã cổ phiếu trước khi tính toán.");
             }
         }
 
+        function openFireant() {
+            const stockCode = document.getElementById('stockCode').value;
+            if (stockCode) {
+                const upperCaseStockCode = stockCode.toUpperCase(); // Chuyển thành chữ in hoa
+                window.open(`https://fireant.vn/dashboard/content/symbols/${upperCaseStockCode}`, '_blank');
+            } else {
+                alert("Vui lòng nhập mã cổ phiếu trước khi mở Fireant.");
+            }
+        }
+
+        function openVietstock() {
+            const stockCode = document.getElementById('stockCode').value;
+            if (stockCode) {
+                const upperCaseStockCode = stockCode.toUpperCase(); // Chuyển thành chữ in hoa
+                window.open(`https://finance.vietstock.vn/${upperCaseStockCode}/tin-tuc-su-kien.htm`, '_blank');
+            } else {
+                alert("Vui lòng nhập mã cổ phiếu trước khi mở Vietstock.");
+            }
+        }
 
         function calculatePrice() {
             let P = parseFloat(document.getElementById('P').value) || 0;
