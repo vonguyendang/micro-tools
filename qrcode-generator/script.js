@@ -91,12 +91,12 @@ function generateQRCode(type) {
 
     // Vẽ mã QR lên canvas với kích thước 900x900 ở giữa
     var qrCanvas = qrcodeContainer.querySelector("canvas");
-    context.drawImage(qrCanvas, 150, 150, 900, 900);
+    context.drawImage(qrCanvas, 50, 50, 1100, 1100);
 
     // Nếu có logo, vẽ logo lên mã QR
     var logoImage = document.getElementById("logoImage");
     if (logoImage.src) {
-        var logoSize = 250; // Tăng kích thước của logo
+        var logoSize = 350; // Tăng kích thước của logo
         var logoX = (canvas.width - logoSize) / 2;
         var logoY = (canvas.height - logoSize) / 2;
         context.drawImage(logoImage, logoX, logoY, logoSize, logoSize);

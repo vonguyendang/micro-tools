@@ -244,8 +244,8 @@
         <input type="text" id="stockCode" placeholder="Nhập mã cổ phiếu...">
         <div class="button-container">
             <button onclick="fetchStockData()"><i class="fas fa-calculator"></i> Tính toán</button>
-            <button onclick="openFireant()"><i class="fas fa-external-link-alt"></i> Fireant</button>
-            <button onclick="openVietstock()"><i class="fas fa-external-link-alt"></i> Vietstock</button>
+            <!-- <button onclick="openFireant()"><i class="fas fa-external-link-alt"></i> Fireant</button>
+            <button onclick="openVietstock()"><i class="fas fa-external-link-alt"></i> Vietstock</button> -->
         </div>
 
         <div class="result" id="resultValuation"></div>
@@ -314,7 +314,7 @@
 
         function getFilterDate() {
             let date = new Date();
-            let fromDate = new Date(date.getFullYear() - 3, 0, 1); // Ngày đầu tiên của năm trước
+            let fromDate = new Date(date.getFullYear() - 10, 0, 1); // Ngày đầu tiên của năm trước
             let toDate = new Date(date.getFullYear() + 1, 11, 31); // Ngày cuối cùng của năm sau
 
             function formatDateToISO(date) {
@@ -769,6 +769,17 @@
                                         <table class="hidden-border">
                                              <tbody>
                                                 <tr>
+                                                    <th colspan="5" class="center">NGUỒN THAM KHẢO THÊM VỀ ${stockNameVi}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" class="center">
+                                                        <div class="button-container">
+                                                            <button onclick="openFireant('${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
+                                                            <button onclick="openVietstock('${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
+                                                            <button onclick="openTradingView('${stockExchange}','${stockCode}')"><i class="fas fa-external-link-alt"></i> TradingView</button>
+                                                         </div>
+                                                    </td>
+                                                <tr>
                                                     <th colspan="5" class="center">THÔNG TIN GIÁ GIAO DỊCH HÔM NAY</th>
                                                 </tr>
                                                 <tr>
@@ -957,26 +968,19 @@
             }
         }
 
-        function openFireant() {
-            const stockCode = document.getElementById('stockCode').value;
-            if (stockCode) {
-                const upperCaseStockCode = stockCode.toUpperCase(); // Chuyển thành chữ in hoa
-                window.open(`https://fireant.vn/ma-chung-khoan/${upperCaseStockCode}`, '_blank');
-            } else {
-                alert("Vui lòng nhập mã cổ phiếu trước khi mở Fireant.");
-            }
+        function openFireant(code) {
+        window.open(`https://fireant.vn/ma-chung-khoan/${code}`, '_blank');
+
         }
 
-        function openVietstock() {
-            const stockCode = document.getElementById('stockCode').value;
-            if (stockCode) {
-                const upperCaseStockCode = stockCode.toUpperCase(); // Chuyển thành chữ in hoa
-                window.open(`https://finance.vietstock.vn/${upperCaseStockCode}/tin-tuc-su-kien.htm`, '_blank');
-            } else {
-                alert("Vui lòng nhập mã cổ phiếu trước khi mở Vietstock.");
-            }
+        function openVietstock(code) {
+            window.open(`https://finance.vietstock.vn/${code}/tin-moi-nhat.htm`, '_blank');
         }
 
+        function openTradingView(exchange,code) {
+            window.open(`https://vn.tradingview.com/chart/DOCUSDqL/?symbol=${exchange}:${code}`, '_blank');
+
+        }
         function calculatePrice() {
             let P = parseFloat(document.getElementById('P').value) || 0;
             let Pa = parseFloat(document.getElementById('Pa').value) || 0;
