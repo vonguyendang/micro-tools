@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Tools - Tách/Gộp PDF</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-file-pdf"></i> PDF Tools v1.0 by DangVo</h1>
+        <div class="header-actions">
+            <button id="refresh-btn" class="btn refresh-btn" title="Làm mới trang">
+                <i class="fas fa-sync-alt"></i> Làm mới
+            </button>
+        </div>
+        <div class="intro">
+            <p>Chào mừng bạn đến với công cụ Tách/Gộp PDF.</p>
+            <p>Bạn có thể dễ dàng gộp nhiều file PDF thành một file duy nhất hoặc tách một file PDF thành nhiều file nhỏ hơn.</p>
+            <p>Hãy chọn một trong hai chức năng bên dưới để bắt đầu!</p>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="merge">Gộp PDF</button>
+            <button class="tab-btn" data-tab="split">Tách PDF</button>
+        </div>
+    
+        <!-- Tab Gộp PDF -->
+        <div id="merge" class="tab-content active">
+            <div class="upload-area" id="merge-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Kéo thả file PDF vào đây hoặc click để chọn</p>
+                <input type="file" id="merge-input" accept=".pdf" multiple>
+            </div>
+            
+            <div class="file-list" id="merge-file-list">
+                <h3>File đã chọn:</h3>
+                <ul id="merge-files"></ul>
+            </div>
+            <div class="merge-options" id="merge-options" style="display: none;">
+                <label for="merge-filename">Tên file kết quả:</label>
+                <input type="text" id="merge-filename" placeholder="Nhập tên file không chứa *.pdf (không bắt buộc)">
+            </div>
+            <div class="actions">
+                <button id="preview-merge" class="btn" disabled><i class="fas fa-eye"></i> Xem trước</button>
+                <button id="merge-btn" class="btn" disabled><i class="fas fa-object-group"></i> Gộp PDF</button>
+            </div>
+        </div>
+        
+        <!-- Tab Tách PDF -->
+        <div id="split" class="tab-content">
+            <div class="upload-area" id="split-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Kéo thả file PDF vào đây hoặc click để chọn</p>
+                <input type="file" id="split-input" accept=".pdf">
+            </div>
+            
+            <div class="file-list" id="split-file-list" style="display:none;">
+                <h3>File đã chọn: <span id="split-file-name"></span></h3>
+                <div class="split-options">
+                    <label for="split-range">Trang cần tách (ví dụ: 1-2,3):</label>
+                    <input type="text" id="split-range" placeholder="Nhập các trang cần tách">
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button id="preview-split" class="btn" disabled><i class="fas fa-eye"></i> Xem trước</button>
+                <button id="split-btn" class="btn" disabled><i class="fas fa-cut"></i> Tách PDF</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>PDF Preview</h2>
+            <div class="preview-tabs" id="preview-tabs"></div>
+            <div id="pdf-preview-container">
+                <div class="preview-page-info"></div>
+                <div id="pdf-preview"></div>
+            </div>
+            <div class="modal-actions">
+                <button id="download-btn" class="btn"><i class="fas fa-download"></i> Tải file hiện tại</button>
+                <button id="download-all-btn" class="btn"><i class="fas fa-file-archive"></i> Tải tất cả (ZIP)</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

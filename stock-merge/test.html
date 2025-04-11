@@ -432,12 +432,11 @@
                     const percentForeignSellVolume = formatNumber((totalForeignSellVolume / totalSellVolume) * 100, 1);
                     const percentInternalSellVolume = formatNumber((totalInternalSellVolume / totalSellVolume) * 100, 1);
 
-                    let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice);
-                    let openingPriceClass = getPriceClass(openingPrice, referencePrice);
-                    let priceChangeClass = getPriceClass(priceChange, 0);
-                    let averagePriceClass = getPriceClass(averagePrice, referencePrice);
-                    let highestPriceClass = getPriceClass(highestPrice, referencePrice);
-                    let lowestPriceClass = getPriceClass(lowestPrice, referencePrice);
+                    let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice, ceilingPrice, floorPrice);
+                    let openingPriceClass = getPriceClass(openingPrice, referencePrice, ceilingPrice, floorPrice);
+                    let averagePriceClass = getPriceClass(averagePrice, referencePrice, ceilingPrice, floorPrice);
+                    let highestPriceClass = getPriceClass(highestPrice, referencePrice, ceilingPrice, floorPrice);
+                    let lowestPriceClass = getPriceClass(lowestPrice, referencePrice, ceilingPrice, floorPrice);
 
                     const betaStock = stockData.beta;
                     const floatingShareRatio = stockData.freeShares / stockData.sharesOutstanding;
@@ -789,7 +788,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class=${marketPriceClass}>Giá hiện tại <br>${formatNumber(marketPrice)}</td>
-                                                    <td class=${priceChangeClass}>${priceChange} đ<br>
+                                                    <td class=${marketPriceClass}>${priceChange} đ<br>
                                                         ${percentageChange} %
                                                     </td>
                                                     <td class="ceiling-price">Giá trần <br>${ceilingPrice}</td>
@@ -802,7 +801,7 @@
                                                     <td class=${averagePriceClass}>Trung bình <br>${averagePrice}</td>
                                                     <td class=${lowestPriceClass}>Thấp nhất <br>${lowestPrice}</td>
                                                     <td class=${highestPriceClass}>Cao nhất <br>${highestPrice}</td>
-                                                    <td class=${marketPriceClass}>Tổng KL <br>${formatNumber(totalVolume / 1000, 1)}K</td>
+                                                    <td class=${averagePriceClass}>Tổng KL <br>${formatNumber(totalVolume / 1000, 1)}K</td>
                                                 </tr>
                                             </tbody>
                                             <tbody>
@@ -810,12 +809,12 @@
                                                     <th colspan="5" class="center">THÔNG TIN KHỐI LƯỢNG GIAO DỊCH HÔM NAY</th>
                                                 </tr>
                                                 <tr>
-                                                    <td class=${marketPriceClass}>Tổng khối lượng</td>
+                                                    <td class=${averagePriceClass}>Tổng khối lượng</td>
                                                     <td colspan="2" class="price-up">Khối lượng Mua<br>${formatNumber(totalBuyVolume / 1000, 1)}K ~ ${percentBuyVolume}%</td>
                                                     <td colspan="2" class="price-down">Khối lượng Bán<br>${formatNumber(totalSellVolume / 1000, 1)}K ~ ${percentSellVolume}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class=${marketPriceClass}>${formatNumber(totalVolume / 1000, 1)}K</td>
+                                                    <td class=${averagePriceClass}>${formatNumber(totalVolume / 1000, 1)}K</td>
                                                     <td class="price-up">Nước ngoài <br>${formatNumber(totalForeignBuyVolume / 1000, 1)}K ~ ${percentForeignBuyVolume}%</td>
                                                     <td class="price-up">Trong nước <br>${formatNumber(totalInternalBuyVolume / 1000, 1)}K ~ ${percentInternalBuyVolume}%</td>
                                                     <td class="price-down">Nước ngoài <br>${formatNumber(totalForeignSellVolume / 1000, 1)}K ~ ${percentForeignSellVolume}%</td>
@@ -1002,13 +1001,17 @@
         }
 
         // Hàm xác định class dựa trên so sánh giá
-        function getPriceClass(currentPrice, referencePrice) {
-            if (currentPrice > referencePrice) {
-                return 'price-up';   // Giá tăng
+        function getPriceClass(currentPrice, referencePrice, ceilingPrice, floorPrice) {
+            if (currentPrice === ceilingPrice) {
+                return 'ceiling-price'; // Giá trần (ưu tiên kiểm tra trước)
+            } else if (currentPrice === floorPrice) {
+                return 'floor-price';   // Giá sàn (ưu tiên kiểm tra trước)
+            } else if (currentPrice > referencePrice) {
+                return 'price-up';      // Giá tăng
             } else if (currentPrice < referencePrice) {
-                return 'price-down'; // Giá giảm
+                return 'price-down';    // Giá giảm
             } else {
-                return 'reference-price'; // Giá ổn định
+                return 'reference-price'; // Giá tham chiếu (currentPrice === referencePrice)
             }
         }
 
