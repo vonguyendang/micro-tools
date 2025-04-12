@@ -129,7 +129,7 @@ function changeLanguage(lang) {
 
 // Hàm helper để lấy bản dịch theo nested path
 function getNestedTranslation(lang, path) {
-    console.log(`getNestedTranslation called with lang: ${lang}, path: ${path}`); // Thêm log
+    // console.log(`getNestedTranslation called with lang: ${lang}, path: ${path}`); // Thêm log
     return path.split('.').reduce((obj, key) => obj?.[key], translations[lang]);
 }
 
