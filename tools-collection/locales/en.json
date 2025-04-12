@@ -1,0 +1,59 @@
+{
+    "nav": {
+        "tools": "My Tools",
+        "about": "About Me",
+        "contact": "Contact"
+    },
+    "hero": {
+        "title": "Crafting Digital Solutions",
+        "subtitle": "A collection of tools designed to simplify development workflows and enhance productivity",
+        "button": "Explore Tools"
+    },
+    "tools": {
+        "title": "My Tool Collection",
+        "subtitle": "Click on any tool to explore it"
+    },
+    "about": {
+        "title": "About The Developer",
+        "text1": "I'm passionate about creating efficient, user-friendly tools that solve real problems. Each tool in my collection was built to address specific challenges I encountered in my development journey.",
+        "text2": "My philosophy is simple: build tools that I would want to use myself, with clean interfaces and intuitive functionality."
+    },
+    "footer": {
+        "text": "Quality tools for developers, by a developer.",
+        "connect": "Connect With Me"
+    },
+    "copyright": "© 2023 Designed and developed by DangVo. All rights reserved.",
+    "tool": {
+        "code_formatter": {
+            "name": "Code Formatter",
+            "desc": "A powerful tool to format your code in multiple languages with customizable options."
+        },
+        "api_tester": {
+            "name": "API Tester",
+            "desc": "Test your REST APIs with this intuitive interface that supports all HTTP methods."
+        },
+        "color_palette": {
+            "name": "Color Palette Generator",
+            "desc": "Generate beautiful color palettes with perfect contrast ratios for your designs."
+        },
+        "db_visualizer": {
+            "name": "Database Visualizer",
+            "desc": "Visualize your database schema and relationships in an interactive diagram."
+        },
+        "markdown_editor": {
+            "name": "Markdown Editor",
+            "desc": "A live preview markdown editor with export to HTML and PDF functionality."
+        },
+        "password_generator": {
+            "name": "Password Generator",
+            "desc": "Generate secure passwords with customizable length and character sets."
+        },
+        "pdf": {
+            "name": "PDF Split/Merge",
+            "desc": "Split or merge multiple PDF files into a single file."
+        }
+    },
+    "search": {
+    "placeholder": "Search tools..."
+  }
+}

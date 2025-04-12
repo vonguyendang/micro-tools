@@ -1,0 +1,59 @@
+{
+    "nav": {
+        "tools": "Công Cụ Của Tôi",
+        "about": "Giới Thiệu",
+        "contact": "Liên Hệ"
+    },
+    "hero": {
+        "title": "Tạo Ra Giải Pháp Kỹ Thuật Số",
+        "subtitle": "Bộ sưu tập các công cụ được thiết kế để đơn giản hóa quy trình phát triển và nâng cao năng suất",
+        "button": "Khám Phá Công Cụ"
+    },
+    "tools": {
+        "title": "Bộ Sưu Tập Công Cụ",
+        "subtitle": "Nhấp vào bất kỳ công cụ nào để khám phá"
+    },
+    "about": {
+        "title": "Về Nhà Phát Triển",
+        "text1": "Tôi đam mê tạo ra các công cụ hiệu quả, thân thiện với người dùng để giải quyết các vấn đề thực tế. Mỗi công cụ trong bộ sưu tập được xây dựng để giải quyết các thách thức cụ thể trong quá trình phát triển.",
+        "text2": "Triết lý của tôi rất đơn giản: xây dựng những công cụ mà chính tôi muốn sử dụng, với giao diện sạch sẽ và chức năng trực quan."
+    },
+    "footer": {
+        "text": "Công cụ chất lượng cho lập trình viên, bởi một lập trình viên.",
+        "connect": "Kết Nối Với Tôi"
+    },
+    "copyright": "© 2023 Được thiết kế và phát triển bởi DangVo. Đã đăng ký bản quyền.",
+    "tool": {
+        "code_formatter": {
+            "name": "Định Dạng Mã Nguồn",
+            "desc": "Công cụ mạnh mẽ để định dạng mã nguồn nhiều ngôn ngữ với tùy chọn tùy chỉnh."
+        },
+        "api_tester": {
+            "name": "Kiểm Thử API",
+            "desc": "Kiểm thử REST API với giao diện trực quan hỗ trợ tất cả phương thức HTTP."
+        },
+        "color_palette": {
+            "name": "Tạo Bảng Màu",
+            "desc": "Tạo bảng màu đẹp với tỷ lệ tương phản hoàn hảo cho thiết kế của bạn."
+        },
+        "db_visualizer": {
+            "name": "Trực Quan Hóa CSDL",
+            "desc": "Hiển thị sơ đồ cơ sở dữ liệu và các mối quan hệ trong biểu đồ tương tác."
+        },
+        "markdown_editor": {
+            "name": "Trình Soạn Markdown",
+            "desc": "Trình soạn markdown có xem trước trực tiếp với chức năng xuất ra HTML và PDF."
+        },
+        "password_generator": {
+            "name": "Tạo Mật Khẩu",
+            "desc": "Tạo mật khẩu an toàn với độ dài và bộ ký tự có thể tùy chỉnh."
+        },
+        "pdf": {
+            "name": "Tách/gộp PDF",
+            "desc": "Tách hoặc gộp nhiều file PDF thành một file duy nhất."
+        }
+    },
+    "search": {
+    "placeholder": "Tìm kiếm công cụ..."
+  }
+}

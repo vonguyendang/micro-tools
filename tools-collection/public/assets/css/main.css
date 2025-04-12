@@ -1,0 +1,117 @@
+/* File main.css */
+
+/* Import các component */
+@import './components/header.css';
+@import './components/hero.css';
+@import './components/tools.css';
+@import './components/about.css';
+@import './components/footer.css';
+@import './components/pagination.css';
+@import './components/language-selector.css';
+
+/* Biến và style chung */
+:root {
+    --primary-color: #6c63ff;
+    --primary-dark: #564fd8;
+    --secondary-color: #ff6584;
+    --dark-color: #2d2d32;
+    --light-color: #f8f9fa;
+    --gray-color: #6c757d;
+    --light-gray: #e9ecef;
+    --transition: all 0.3s ease;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    overflow-x: hidden;
+    position: relative;
+    cursor: url(https://cur.cursors-4u.net/symbols/sym-1/sym61.cur), auto !important;
+}
+
+
+
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.05) 0%, rgba(255, 101, 132, 0.05) 100%);
+    z-index: -1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .hero .container,
+    .about-section .container {
+        flex-direction: column;
+    }
+    
+    .hero-content,
+    .about-content {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .section-title {
+        font-size: 30px;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .nav {
+        gap: 15px;
+    }
+    
+    .hero {
+        padding: 150px 0 80px;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+    }
+    
+    .section-title {
+        font-size: 26px;
+    }
+}

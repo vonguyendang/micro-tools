@@ -1,0 +1,16 @@
+{
+    "name": "tools-collection",
+    "version": "1.0.0",
+    "description": "A collection of developer tools",
+    "scripts": {
+      "start": "serve public",
+      "build": "echo 'Build process would go here'",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "serve": "^14.0.0"
+    }
+  }

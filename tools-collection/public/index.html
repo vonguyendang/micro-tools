@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTools Collection</title>
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Dev<span>Tools</span></h1>
+            <nav class="nav">
+                <a href="#tools" class="nav-link" data-translate="nav.tools">My Tools</a>
+                <a href="#about" class="nav-link" data-translate="nav.about">About Me</a>
+                <a href="#contact" class="nav-link" data-translate="nav.contact">Contact</a>
+
+                <div class="language-selector">
+                    <button class="language-btn" id="languageBtn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLanguage">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <a href="#" data-lang="en">English</a>
+                        <a href="#" data-lang="vi">Tiếng Việt</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title" data-translate="hero.title">Crafting Digital Solutions</h2>
+                    <p class="hero-subtitle" data-translate="hero.subtitle">A collection of tools designed to simplify development workflows and enhance productivity</p>
+                    <a href="#tools" class="cta-button" data-translate="hero.button">Explore Tools</a>
+                </div>
+                <div class="hero-image">
+                    <img src="./assets/images/developer.jpg" alt="Developer Illustration">
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="tools-section">
+            <div class="container">
+                <h2 class="section-title" data-translate="tools.title">My Tool Collection</h2>
+                <p class="section-subtitle" data-translate="tools.subtitle">Click on any tool to explore it</p>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search tool..." data-translate="search.placeholder">
+                
+                <div class="tools-grid"></div>
+                
+                <div class="pagination" id="pagination">
+                    <button class="pagination-btn" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="page-numbers" id="pageNumbers"></div>
+                    <button class="pagination-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <h2 class="section-title" data-translate="about.title">About The Developer</h2>
+                    <p class="about-text" data-translate="about.text1">I'm passionate about creating efficient, user-friendly tools that solve real problems. Each tool in my collection was built to address specific challenges I encountered in my development journey.</p>
+                    <p class="about-text" data-translate="about.text2">My philosophy is simple: build tools that I would want to use myself, with clean interfaces and intuitive functionality.</p>
+                    <div class="skills">
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">UI/UX</span>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="./assets/images/about-developer.jpg" alt="Developer Meditating">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3 class="logo">Dev<span>Tools</span></h3>
+                    <p class="footer-text" data-translate="footer.text">Quality tools for developers, by a developer.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 class="footer-title" data-translate="footer.connect">Connect With Me</h4>
+                    <div class="social-links">
+                        <a href="https://www.github.com/vodang2702" class="social-link" data-url="https://www.github.com/vodang2702"><i class="fab fa-github"></i></a>
+                        <a href="https://www.facebook.com/vodang2702" class="social-link" data-url="https://www.facebook.com/vodang2702"><i class="fab fa-facebook"></i></a>
+                        <a href="https://twitter.com/vodang2702" class="social-link" data-url="https://twitter.com/vodang2702"><i class="fab fa-twitter"></i></a>
+                        <a href="https://dev.to/vonguyendang" class="social-link" data-url="https://dev.to/vonguyendang"><i class="fab fa-dev"></i></a>
+                    </div>
+                    <p class="footer-email">vndang.contact@gmail.com</p>
+                </div>
+                <!-- <div class="support-links">
+                    <a href="https://buymeacoffee.com/dangvo" target="_blank" rel="noopener noreferrer" class="bmc-button">
+                        <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee">
+                        Buy me a coffee
+                    </a>
+                    <a href="https://me.momo.vn/dangvo" target="_blank" rel="noopener noreferrer" class="momo-qr-link">
+                        <div class="momo-qr-code">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-SkvfxjUqQcrr4NineXL-CiGK0e1mRFVm3hf0S8PEGrkxk2pcNkwsdhF4sbg43BMtcGaAvMlb7zK6ImNThHn3iSkEKvLcjsYM9GHZA03CKV40RD79Sfkkz1aks08zSd-ApRrmbYYEu6BumfqNjnjCtuo9w5Se99Fz8cAnTDDP4AOYKGiINDtoVgaXijE/s1600/z6151920004864_6227b14c432cc4bb308e2b09c35b0809.jpg" alt="MOMO QR Code">
+                        </div>
+                    </a>
+                </div> -->
+                <div class="footer-donation">
+                    <a href="https://me.momo.vn/dangvo" target="_blank" rel="noopener noreferrer" class="momo-qr-link">
+                        <div class="momo-qr-code">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-SkvfxjUqQcrr4NineXL-CiGK0e1mRFVm3hf0S8PEGrkxk2pcNkwsdhF4sbg43BMtcGaAvMlb7zK6ImNThHn3iSkEKvLcjsYM9GHZA03CKV40RD79Sfkkz1aks08zSd-ApRrmbYYEu6BumfqNjnjCtuo9w5Se99Fz8cAnTDDP4AOYKGiINDtoVgaXijE/s1600/z6151920004864_6227b14c432cc4bb308e2b09c35b0809.jpg" alt="MOMO QR Code">
+                        </div>
+                    </a>
+                    <a href="https://buymeacoffee.com/dangvo" target="_blank" rel="noopener noreferrer" class="bmc-button">
+                        <div class="buy-me-a-coffee">
+                            <img src="./assets/images/bmc-button.png" alt="Buy me a coffee">
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright" data-translate="copyright">© 2025 My Developer Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/main.js" type="module"></script>
+</body>
+</html>

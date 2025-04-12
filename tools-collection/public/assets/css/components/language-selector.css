@@ -1,0 +1,59 @@
+/* File language-selectior.css */
+/* Language Selector Styles */
+.language-selector {
+    position: relative;
+    margin-left: 20px;
+}
+
+.language-btn {
+    background: none;
+    border: none;
+    color: var(--dark-color);
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.language-btn:hover {
+    background-color: rgba(108, 99, 255, 0.1);
+}
+
+.language-btn i {
+    font-size: 14px;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 10px 0;
+    min-width: 150px;
+    z-index: 1000;
+    display: none;
+}
+
+.language-dropdown.show {
+    display: block;
+}
+
+.language-dropdown a {
+    display: block;
+    padding: 8px 20px;
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.language-dropdown a:hover {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+}
