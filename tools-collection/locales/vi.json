@@ -24,6 +24,30 @@
     },
     "copyright": "© 2023 Được thiết kế và phát triển bởi DangVo. Đã đăng ký bản quyền.",
     "tool": {
+        "pdf": {
+            "name": "Tách/gộp PDF",
+            "desc": "Tách hoặc gộp nhiều file PDF thành một file duy nhất."
+        },
+        "qr": {
+            "name": "Tạo QR Code",
+            "desc": "Tạo mã QR cho bất kỳ URL hoặc văn bản nào."
+        },
+        "stock": {
+            "name": "Phân tính, đánh giá cổ phiếu",
+            "desc": "Phân tích, đánh giá cổ phiếu dựa trên thông số tài chính và dự đoán giá cổ phiếu vào ngày giao dịch không hưởng quyền."
+        },
+        "mini_url_shortenner": {
+            "name": "Rút gọn URL mini",
+            "desc": "Rút gọn URL dài thành một liên kết ngắn gọn và dễ nhớ."
+        },
+        "url_shortenner": {
+            "name": "Rút gọn URL và QR Code",
+            "desc": "Rút gọn URL dài thành một liên kết ngắn gọn và dễ nhớ. Tạo mã QR cho liên kết đã rút gọn. Quản lý liên kết đã rút gọn của bạn."
+        },
+        "google_one_trick": {
+            "name": "Google One Trick",
+            "desc": "Giúp đăng ký tất cả gói Google One miễn phí."
+        },
         "code_formatter": {
             "name": "Định Dạng Mã Nguồn",
             "desc": "Công cụ mạnh mẽ để định dạng mã nguồn nhiều ngôn ngữ với tùy chọn tùy chỉnh."
@@ -48,9 +72,81 @@
             "name": "Tạo Mật Khẩu",
             "desc": "Tạo mật khẩu an toàn với độ dài và bộ ký tự có thể tùy chỉnh."
         },
-        "pdf": {
-            "name": "Tách/gộp PDF",
-            "desc": "Tách hoặc gộp nhiều file PDF thành một file duy nhất."
+        "cv_online": {
+            "name": "Tạo CV Online nhiều mẫu",
+            "desc": "Tạo hồ sơ xin việc chuyên nghiệp trực tuyến với nhiều mẫu."
+        },
+        "platzi_fake_api": {
+            "name": "Platzi Fake Store API",
+            "desc": "API giả cho các sản phẩm thương mại điện tử từ Platzi."
+        },
+        "software_testing_tools": {
+            "name": "Công Cụ & Tài Nguyên Kiểm Thử Phần Mềm",
+            "desc": "Danh sách chọn lọc các công cụ và tài nguyên kiểm thử phần mềm hữu ích."
+        },
+        "sql_visualizer": {
+            "name": "SQL Visualizer",
+            "desc": "Trực quan hóa các truy vấn SQL của bạn dưới dạng sơ đồ động."
+        },
+        "fake_store_api": {
+            "name": "Fake Store API",
+            "desc": "API REST trực tuyến miễn phí cho dữ liệu giả, tuyệt vời cho việc kiểm thử và tạo mẫu."
+        },
+        "dangvo_docs": {
+            "name": "Tài Liệu Hướng Dẫn của DangVo",
+            "desc": "Bộ sưu tập các tài liệu và hướng dẫn hữu ích được viết bởi DangVo."
+        },
+        "netflix_dangvo": {
+            "name": "Xem Phim Online của DangVo",
+            "desc": "Xem phim trực tuyến trên nền tảng của DangVo."
+        },
+        "bbc_news": {
+            "name": "Tin Tức BBC",
+            "desc": "Xem tin tức mới nhất từ BBC cho người Việt không bị chặn."
+        },
+        "kafe_stories": {
+            "name": "9kafe - Truyện Hay",
+            "desc": "Kho truyện và tiểu thuyết hay."
+        },
+        "random_profile": {
+            "name": "Tạo Hồ Sơ Cá Nhân Ngẫu Nhiên (Việt Nam)",
+            "desc": "Tạo hồ sơ cá nhân ngẫu nhiên cho người Việt Nam."
+        },
+        "edu_temp_mail": {
+            "name": "Email Tạm Thời Giáo Dục",
+            "desc": "Nhận địa chỉ email tạm thời với tên miền giáo dục."
+        },
+        "online_alarm": {
+            "name": "Đồng Hồ Báo Thức Online",
+            "desc": "Thiết lập đồng hồ báo thức trực tuyến ngay trên trình duyệt của bạn."
+        },
+        "email_alias_generator": {
+            "name": "Trình Tạo Email Alias",
+            "desc": "Tạo các alias email tạm thời."
+        },
+        "url_extractor": {
+            "name": "Trích Xuất URL",
+            "desc": "Trích xuất các URL từ bình luận và bài đăng trên mạng xã hội."
+        },
+        "random_name_generator": {
+            "name": "Trình Tạo Tên Ngẫu Nhiên (Việt Nam)",
+            "desc": "Tạo tên người Việt Nam ngẫu nhiên."
+        },
+        "temp_email_list": {
+            "name": "Danh Sách Website Tạo Email Tạm Thời",
+            "desc": "Danh sách các nhà cung cấp email tạm thời miễn phí và uy tín."
+        },
+        "sensitive_word_replacer": {
+            "name": "Thay Thế Từ Nhạy Cảm cho Facebook",
+            "desc": "Thay thế các từ nhạy cảm khi đăng bài trên Facebook."
+        },
+        "professional_cv": {
+            "name": "Công Cụ Tạo CV Chuyên Nghiệp",
+            "desc": "Tạo CV chuyên nghiệp, chuẩn quốc tế."
+        },
+        "dang_guidio_blog": {
+            "name": "Blog cá nhân của DangVo",
+            "desc": "Blog hướng dẫn và chia sẻ kiến thức về lập trình và công nghệ."
         }
     },
     "search": {

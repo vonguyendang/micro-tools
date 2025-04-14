@@ -188,25 +188,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 // Gọi displayTools lần đầu khi trang tải
 displayTools(currentPage, localStorage.getItem('language') || 'en');
-
-function openFacebook(event) {
-event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-// Thực hiện hành động khác, ví dụ: mở liên kết trong một cửa sổ mới
-window.open('https://www.facebook.com/vodang2702', '_blank');
-}
-
-function openGithub(event) {
-event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-// Thực hiện hành động khác, ví dụ: mở liên kết trong một cửa sổ mới
-window.open('https://github.com/vonguyendang', '_blank');
-}
-function openTwitter(event) {
-event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-// Thực hiện hành động khác, ví dụ: mở liên kết trong một cửa sổ mới
-window.open('https://twitter.com/vodang2702', '_blank');
-}
-function openDev(event) {
-event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-// Thực hiện hành động khác, ví dụ: mở liên kết trong một cửa sổ mới
-window.open('https://dev.to/vonguyendang', '_blank');
-}

@@ -24,6 +24,30 @@
     },
     "copyright": "© 2023 Designed and developed by DangVo. All rights reserved.",
     "tool": {
+        "pdf": {
+            "name": "PDF Split/Merge",
+            "desc": "Split or merge multiple PDF files into a single file."
+        },
+        "qr": {
+            "name": "QR Code Generator",
+            "desc": "Generate QR codes for any URL or text."
+        },
+        "stock": {
+            "name": "Stock Analysis & Prediction",
+            "desc": "Analyze and predict stock prices based on financial metrics and forecast the ex-dividend date."
+        },
+        "mini_url_shortenner": {
+            "name": "Mini URL Shortener",
+            "desc": "Shorten long URLs into a concise and memorable link."
+        },
+        "url_shortenner": {
+            "name": "URL Shortener & QR Code",
+            "desc": "Shorten long URLs into a concise and memorable link. Generate QR codes for the shortened link. Manage your shortened links."
+        },
+        "google_one_trick": {
+            "name": "Google One Trick",
+            "desc": "Helps you register for all Google One plans for free."
+        },
         "code_formatter": {
             "name": "Code Formatter",
             "desc": "A powerful tool to format your code in multiple languages with customizable options."
@@ -48,9 +72,81 @@
             "name": "Password Generator",
             "desc": "Generate secure passwords with customizable length and character sets."
         },
-        "pdf": {
-            "name": "PDF Split/Merge",
-            "desc": "Split or merge multiple PDF files into a single file."
+        "cv_online": {
+            "name": "Online CV Maker",
+            "desc": "Create professional resumes online with various templates."
+        },
+        "platzi_fake_api": {
+            "name": "Platzi Fake Store API",
+            "desc": "A fake API for e-commerce products by Platzi."
+        },
+        "software_testing_tools": {
+            "name": "Software Testing Tools & Resources",
+            "desc": "A curated list of hand-picked software testing tools and resources."
+        },
+        "sql_visualizer": {
+            "name": "SQL Visualizer",
+            "desc": "Visualize your SQL queries as animated diagrams."
+        },
+        "fake_store_api": {
+            "name": "Fake Store API",
+            "desc": "Free online REST API for fake data, great for testing and prototyping."
+        },
+        "dangvo_docs": {
+            "name": "DangVo's Guides",
+            "desc": "A collection of helpful guides and documents written by DangVo."
+        },
+        "netflix_dangvo": {
+            "name": "DangVo's Online Movies",
+            "desc": "Watch movies online on DangVo's platform."
+        },
+        "bbc_news": {
+            "name": "BBC News",
+            "desc": "See the latest news from BBC for Vietnamese people not blocked."
+        },
+        "kafe_stories": {
+            "name": "9kafe - Good Stories",
+            "desc": "A repository of good stories and novels."
+        },
+        "random_profile": {
+            "name": "Random Vietnamese Profile Generator",
+            "desc": "Generate random personal profiles for Vietnamese people."
+        },
+        "edu_temp_mail": {
+            "name": "Educational Temporary Mail",
+            "desc": "Get a temporary email address with an educational domain."
+        },
+        "online_alarm": {
+            "name": "Online Alarm Clock",
+            "desc": "Set up an online alarm clock directly in your browser."
+        },
+        "email_alias_generator": {
+            "name": "Email Alias Generator",
+            "desc": "Generate temporary email aliases."
+        },
+        "url_extractor": {
+            "name": "URL Extractor",
+            "desc": "Extract URLs from comments and social media posts."
+        },
+        "random_name_generator": {
+            "name": "Random Vietnamese Name Generator",
+            "desc": "Generate random Vietnamese names."
+        },
+        "temp_email_list": {
+            "name": "List of Temporary Email Websites",
+            "desc": "A curated list of reputable free temporary email providers."
+        },
+        "sensitive_word_replacer": {
+            "name": "Sensitive Word Replacer for Facebook",
+            "desc": "Replace sensitive words when posting on Facebook."
+        },
+        "professional_cv": {
+            "name": "Professional CV Builder",
+            "desc": "Create professional, internationally standard CVs."
+        },
+        "dang_guidio_blog": {
+            "name": "DangVo's Blog",
+            "desc": "A blog where I share my thoughts and experiences in software development."
         }
     },
     "search": {
