@@ -173,7 +173,7 @@ body {
 
 /* Common elements */
 .customer-code {
-    color: var(--white);
+    color: #ff9900dc;
     font-size: 0.9rem;
     margin: 10px 0;
 }
