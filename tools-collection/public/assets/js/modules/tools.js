@@ -216,6 +216,13 @@ const tools = [
         image: "https://plus.unsplash.com/premium_photo-1720744786849-a7412d24ffbf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
         link: "https://dangvo.io.vn",
         tags: ["Blog", "Guide", "Sharing"]
+    },
+    {
+        title: "tool.power_schedule.name",
+        description: "tool.power_schedule.desc",
+        image: "https://images.unsplash.com/photo-1413882353314-73389f63b6fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+        link: "https://power.dangvo.io.vn",
+        tags: ["Power", "Schedule", "Reduction"]
     }
     // Add more tools as needed (will trigger pagination if more than 6)
 ];

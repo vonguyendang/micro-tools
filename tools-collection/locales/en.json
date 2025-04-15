@@ -147,6 +147,10 @@
         "dang_guidio_blog": {
             "name": "DangVo's Blog",
             "desc": "A blog where I share my thoughts and experiences in software development."
+        },
+        "power_schedule": {
+            "name": "Look up the calendar to stop reducing the Southern power supply",
+            "desc": "Update the latest reduction schedule for electricity supply in the South."
         }
     },
     "search": {

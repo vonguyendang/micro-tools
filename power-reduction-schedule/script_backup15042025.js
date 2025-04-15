@@ -489,19 +489,21 @@ $(document).ready(function() {
                 tableRows += `
                     <tr>
                         <td>
-                            <div class="d-flex flex-column">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-calendar-day table-icon me-2"></i>
-                                    <span>${startParts[0]}</span>
-                                </div>
-                                <div class="d-flex align-items-center mt-1">
-                                    <i class="fas fa-clock table-icon me-2"></i>
-                                    <span>${startParts[1] || ''}</span>
-                                </div>
-                                <div class="d-flex align-items-center mt-1">
-                                    <i class="fas fa-history table-icon me-2"></i>
-                                    <span>${endParts[1] || ''}</span>
-                                </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-day table-icon"></i>
+                                <span>${startParts[0]}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock table-icon"></i>
+                                <span>${startParts[1] || ''}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-history table-icon"></i>
+                                <span>${endParts[1] || ''}</span>
                             </div>
                         </td>
                         <td>
@@ -535,7 +537,9 @@ $(document).ready(function() {
                     <table class="result-table">
                         <thead>
                             <tr>
-                                <th>Thời gian</th>
+                                <th>Ngày</th>
+                                <th>Bắt đầu</th>
+                                <th>Kết thúc</th>
                                 <th>Khu vực</th>
                                 <th>Lý do</th>
                             </tr>

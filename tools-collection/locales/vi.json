@@ -147,6 +147,10 @@
         "dang_guidio_blog": {
             "name": "Blog cá nhân của DangVo",
             "desc": "Blog hướng dẫn và chia sẻ kiến thức về lập trình và công nghệ."
+        },
+        "power_schedule": {
+            "name": "Tra cứu lịch ngừng giảm cấp điện miền Nam",
+            "desc": "Cập nhật lịch ngừng giảm cấp điện mới nhất khu vực miền Nam."
         }
     },
     "search": {
