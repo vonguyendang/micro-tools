@@ -1,0 +1,9 @@
+# public/.htaccess
+RewriteEngine On
+
+# Nếu request không phải là file hoặc thư mục thật
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Chuyển tất cả request đến index.php
+RewriteRule ^ /public/index.php [L]

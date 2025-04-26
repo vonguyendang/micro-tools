@@ -1,0 +1,23 @@
+{
+    "name": "dangvo/location-api",
+    "description": "API for looking up Vietnam administrative divisions.",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Võ Nguyễn Đăng",
+            "email": "vndang.contact@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
