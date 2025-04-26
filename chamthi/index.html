@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ chấm thi trắc nghiệm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CÔNG CỤ HỖ TRỢ CHẤM THI TRẮC NGHIỆM MKU</h1>
+
+        <div class="section">
+            <h2>1. Nhập đáp án chuẩn</h2>
+            <div class="input-controls">
+                 <label for="correct-answers-input">Nhập hoặc dán đáp án chuẩn (hỗ trợ nhiều định dạng):</label>
+                 <button class="paste-button" data-target="correct-answers-input" title="Dán nội dung từ clipboard">Paste</button>
+            </div>
+            <textarea id="correct-answers-input" rows="10" placeholder="Ví dụ: 1C 2D 3A... hoặc 1.C, 2.D,... hoặc mỗi đáp án 1 dòng..."></textarea>
+            <div class="button-group">
+                <button id="save-key-button">Lưu đáp án chuẩn</button>
+                <button id="new-key-button" class="secondary-button">Tạo mới đáp án</button>
+            </div>
+            <p id="key-status" class="status"></p>
+            <div id="formatted-key-section" style="display: none;">
+                <h3>Đáp án chuẩn đã xử lý:</h3>
+                <pre><code id="formatted-correct-answers" class="key-display"></code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Nhập bài làm của thí sinh</h2>
+             <div class="input-controls">
+                <label for="student-answers-input">Nhập hoặc dán nội dung bài làm của thí sinh:</label>
+                <button class="paste-button" data-target="student-answers-input" title="Dán nội dung từ clipboard">Paste</button>
+            </div>
+            <textarea id="student-answers-input" rows="10" placeholder="Hệ thống sẽ tự động xử lý nhiều định dạng khác nhau...Nhập nội dung từ >>> Đã được lưu: 1C, 2.D câu 3 A"></textarea>
+            <div class="button-group">
+                <button id="grade-button" disabled>Chấm điểm</button>
+                <button id="clear-submission-button" class="secondary-button">Xóa bài làm</button> </div>
+             <p class="hint">Lưu ý: Nút "Chấm điểm" chỉ hoạt động sau khi bạn đã "Lưu đáp án chuẩn".</p>
+        </div>
+
+        <div class="section results" id="results-section" style="display: none;">
+            <h2>3. Kết quả chấm điểm</h2>
+
+            <div id="formatted-student-answers-section">
+                <h3>Bài làm của thí sinh (đã định dạng):</h3>
+                <pre><code id="formatted-student-answers"></code></pre>
+            </div>
+
+            <div id="score-summary">
+                <h3>Tổng kết:</h3>
+                <p id="score-details"></p>
+                <p id="total-score"></p>
+            </div>
+
+            <div id="incorrect-answers-section" style="display: none;">
+                <h3>Các câu trả lời sai:</h3>
+                <ul id="incorrect-answers-list"></ul>
+            </div>
+             <div id="missing-answers-section" style="display: none;">
+                <h3>Các câu thí sinh bỏ trống hoặc không nhận dạng được:</h3>
+                <ul id="missing-answers-list"></ul>
+            </div>
+        </div>
+        <footer> <p>Developed with ❤️ by Dang Vo.</p>
+    </footer>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>

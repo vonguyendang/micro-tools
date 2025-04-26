@@ -1,0 +1,225 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+h1 {
+    text-align: center;
+    color: #0056b3;
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+}
+
+.input-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu không đủ chỗ */
+    gap: 5px;
+}
+
+.input-controls label {
+    margin-bottom: 0;
+    flex-grow: 1; /* Cho label chiếm không gian còn lại */
+    min-width: 200px; /* Chiều rộng tối thiểu cho label */
+}
+
+textarea {
+    width: 100%; /* Sử dụng 100% width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    resize: vertical;
+    display: block;
+    box-sizing: border-box; /* Tính padding và border vào width/height */
+    min-height: 100px; /* Chiều cao tối thiểu */
+    margin-bottom: 10px; /* Thêm lại margin bottom cho textarea */
+}
+
+.button-group {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép nút xuống dòng trên màn hình nhỏ */
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    line-height: 1.5; /* Đảm bảo chiều cao chữ trong nút ổn định */
+}
+
+button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.paste-button {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background-color: #6c757d;
+    min-width: 60px;
+    flex-shrink: 0; /* Ngăn nút paste bị co lại */
+}
+.paste-button:hover:not(:disabled) {
+     background-color: #5a6268;
+}
+
+.secondary-button {
+    background-color: #ffc107; /* Màu vàng cảnh báo */
+    color: #212529; /* Màu chữ đậm hơn cho nền vàng */
+}
+
+.secondary-button:hover:not(:disabled) {
+    background-color: #e0a800;
+}
+
+
+.status {
+    margin-top: 10px;
+    font-weight: bold;
+    min-height: 1.5em; /* Đảm bảo không gian cho status */
+}
+
+.status.success {
+    color: green;
+}
+
+.status.error {
+    color: red;
+}
+
+.hint {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.results {
+    margin-top: 30px;
+    border-top: 2px solid #007bff;
+    padding-top: 20px;
+}
+
+/* Khu vực hiển thị đáp án đã định dạng (chung) */
+#formatted-key-section pre,
+#formatted-student-answers-section pre {
+    max-height: 300px;
+    overflow-y: auto; /* Thanh cuộn dọc khi cần */
+    overflow-x: hidden; /* Ẩn thanh cuộn ngang không cần thiết cho pre */
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 4px; /* Áp border radius cho pre */
+}
+
+#formatted-correct-answers,
+#formatted-student-answers {
+    padding: 15px;
+    border-radius: 4px;
+    white-space: pre-wrap; /* Cho phép xuống dòng tự động */
+    word-wrap: break-word; /* Ngắt từ nếu quá dài */
+    font-family: monospace;
+    line-height: 2; /* Tăng khoảng cách dòng */
+    display: block; /* Đảm bảo code là block */
+    min-height: 40px; /* Chiều cao tối thiểu */
+}
+
+/* Styling riêng cho đáp án chuẩn */
+#formatted-key-section {
+    margin-top: 15px;
+}
+#formatted-correct-answers {
+    background-color: #d4edda; /* Màu xanh lá nhạt */
+    color: #155724; /* Màu xanh lá đậm */
+    border: 1px solid #c3e6cb;
+}
+
+/* Styling riêng cho bài làm thí sinh */
+#formatted-student-answers {
+    background-color: #e9ecef; /* Màu xám nhạt */
+    color: #495057; /* Màu chữ tối hơn */
+    border: 1px solid #dee2e6;
+}
+
+
+/* Danh sách câu sai/bỏ trống */
+#incorrect-answers-list, #missing-answers-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 5px;
+}
+
+#incorrect-answers-list li, #missing-answers-list li {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+#incorrect-answers-list li {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+#missing-answers-list li {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+}
+
+/* Ẩn các section khi không có nội dung */
+#incorrect-answers-section:not([style*="block"]),
+#missing-answers-section:not([style*="block"]) {
+    display: none;
+}
+
+footer {
+    text-align: center; /* Căn giữa nội dung */
+    margin-top: 40px; /* Khoảng cách phía trên footer */
+    padding: 20px 0; /* Khoảng đệm trên và dưới */
+    font-size: 0.9em; /* Cỡ chữ nhỏ hơn một chút */
+    color: #6c757d; /* Màu xám nhẹ */
+    border-top: 1px solid #e9ecef; /* Đường kẻ mờ phía trên */
+}
+
+footer p {
+    margin: 0; /* Bỏ margin mặc định của thẻ p */
+}
