@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="pageTitle">Thông tin chuyển tiền</title> 
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="icon" href="images/favicon_io/favicon-32x32.png" type="image/x-icon"> 
+</head>
+<body>
+    <div id="loading-indicator">
+        <div class="spinner"></div>
+        <p data-i18n="loadingText">Đang tải dữ liệu...</p>
+    </div>
+    <div id="toast-container"></div> 
+    <header>
+        <div id="language-switcher" class="language-switcher">
+            </div>
+        <h1 id="main-header-title" data-i18n="headerTitle"></h1>
+        <p id="main-header-subtitle" data-i18n="headerSubtitle"></p>
+    </header>
+
+    <main id="main-content" style="visibility: hidden;"> </main>
+
+    <section class="contact-support-area payment-category animate-on-scroll">
+        <div class="cs-container">
+            <div class="cs-left">
+                <section id="support" class="cs-section">
+                    <h2 data-i18n="contactTitle"><i class="fa-solid fa-headset"></i> Cần Hỗ Trợ?</h2> 
+                    <p data-i18n="contactIntro">Nếu bạn gặp khó khăn...</p>
+                    <ul id="contact-list"></ul>
+                </section>
+
+                <section id="social-links" class="cs-section">
+                    <h2 data-i18n="socialLinksTitle"><i class="fa-solid fa-share-nodes"></i> Kết nối với tôi</h2> 
+                    <div class="social-icons-container"></div>
+                </section>
+                <section id="donation-section" class="payment-category animate-on-scroll">
+                    <h2 data-i18n="donationTitle"><i class="fa-solid fa-hand-holding-dollar"></i> Ủng hộ / Donate</h2>
+                    <div class="donation-options-container">
+                    </div>
+                </section>
+            </div>
+
+            <div class="cs-right">
+                 <section id="contact-form-section" class="cs-section">
+                     <h2 data-i18n="contactFormTitle"><i class="fa-regular fa-envelope"></i> Gửi phản hồi / Xác nhận CK</h2>
+                     <form id="contact-form" novalidate> 
+                         <div class="form-group">
+                             <label for="contact-name" data-i18n="yourNameLabel">Họ tên bạn</label>
+                             <input type="text" id="contact-name" name="name" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="contact-subject" data-i18n="subjectLabel">Tiêu đề</label>
+                             <input type="text" id="contact-subject" name="subject" required>
+                         </div>
+                          <div class="form-group">
+                             <label for="contact-message" data-i18n="messageLabel">Nội dung</label>
+                             <textarea id="contact-message" name="message" rows="4" required></textarea>
+                         </div>
+                          <div class="form-group">
+                             <label for="contact-attachment" data-i18n="attachmentLabel">Đính kèm ảnh/file CK (nếu có)</label>
+                             <input type="file" id="contact-attachment" name="attachment" accept="image/*,.pdf,.doc,.docx"> 
+                             <small data-i18n="attachmentMailtoHint" style="color: #6c757d;">Lưu ý: Bạn cần tự đính kèm tệp trong ứng dụng email sau khi bấm Gửi.</small> 
+                         </div>
+                         <div class="form-group form-submit-group">
+                              <button type="button" id="contact-submit-btn" class="submit-btn" data-i18n="sendButtonText">Gửi qua Email</button> 
+                              <span id="form-status-message" class="form-status"></span> 
+                         </div>
+                     </form>
+                 </section>
+            </div>
+        </div>
+    </section>
+    <!-- <section id="donation-section" class="payment-category animate-on-scroll">
+         <h2 data-i18n="donationTitle"><i class="fa-solid fa-hand-holding-dollar"></i> Ủng hộ / Donate</h2>
+         <div class="donation-options-container">
+             </div>
+     </section> -->
+     <section id="security-note" class="payment-category animate-on-scroll"> 
+        <h2 data-i18n="securityTitle"><i class="fa-solid fa-shield-halved"></i> Lưu ý Bảo mật</h2> 
+        <p data-i18n="securityNote">Trang web này chỉ cung cấp thông tin...</p> 
+    </section>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> <span id="footer-text" data-i18n="footerText"></span></p>
+    </footer>
+
+    <div id="qr-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <button id="popup-close-btn" class="popup-close" aria-label="Close popup">&times;</button>
+            <h4 id="popup-bank-name"></h4>
+            <img id="popup-qr-image" src="" alt="QR Code Chuyển khoản">
+            <p id="popup-account-info"></p>
+            <p class="popup-scan-hint" data-i18n="scanQrHint">Quét mã bằng ứng dụng Ngân hàng hoặc Ví điện tử hỗ trợ VietQR.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

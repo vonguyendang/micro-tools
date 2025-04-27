@@ -1,0 +1,286 @@
+{
+    "languages": {
+      "vi": "Tiếng Việt",
+      "en": "English",
+      "th": "ไทย",
+      "ja": "日本語",
+      "zh": "中文",
+      "ko": "한국어",
+      "hi": "हिन्दी"
+    },
+    "defaultLang": "vi",
+    "translations": {
+      "vi": { // Đã cá nhân hóa phần này
+        "pageTitle": "Thông tin chuyển tiền - VÕ NGUYỄN ĐĂNG",
+        "headerTitle": "Thông tin chuyển tiền cho VÕ NGUYỄN ĐĂNG",
+        "headerSubtitle": "Chọn phương thức thuận tiện cho bạn bên dưới.",
+        "bankTransferTitle": "Chuyển khoản Ngân hàng",
+        "eWalletsTitle": "Ví điện tử",
+        "creditCardsTitle": "Thẻ Tín Dụng/Ghi Nợ",
+        "contactTitle": "Cần Hỗ Trợ?",
+        "contactIntro": "Nếu bạn gặp khó khăn hoặc cần xác nhận thông tin, vui lòng liên hệ:",
+        "contactPhoneLabel": "Điện thoại/Zalo",
+        "contactEmailLabel": "Email",
+        "securityTitle": "Lưu ý Bảo mật",
+        "securityNote": "Trang web này chỉ cung cấp thông tin, không yêu cầu bạn nhập bất kỳ chi tiết thanh toán nào tại đây. Luôn kiểm tra kỹ thông tin trước khi thực hiện giao dịch trên ứng dụng của bạn. Kết nối của bạn đến trang này được bảo mật (kiểm tra biểu tượng ổ khóa trên trình duyệt).",
+        "footerText": "VÕ NGUYỄN ĐĂNG. Thiết kế với ❤️.",
+        "accountHolderLabel": "Chủ tài khoản",
+        "accountNumberLabel": "Số tài khoản",
+        "branchLabel": "Chi nhánh",
+        "walletHolderLabel": "Chủ ví",
+        "phoneNumberLabel": "Số điện thoại",
+        "copyButtonText": "Sao chép",
+        "copiedButtonText": "Đã sao chép!",
+        "openAppButtonText": "Mở ứng dụng",
+        "paymentGatewayButtonText": "Thanh toán qua cổng",
+        "creditCardInfoText": "Liên hệ trực tiếp để nhận thông tin thanh toán qua thẻ hoặc sử dụng cổng thanh toán (nếu có).",
+        "errorLoading": "Đã xảy ra lỗi khi tải thông tin thanh toán. Vui lòng thử lại sau.",
+        "errorCopying": "Không thể sao chép tự động. Vui lòng thử lại hoặc sao chép thủ công." // Thêm key dịch cho lỗi copy nếu muốn
+      },
+      "en": { // <-- CẦN THAY THẾ [Your Name] nếu muốn cá nhân hóa
+        "pageTitle": "Payment Information - [Your Name]",
+        "headerTitle": "Payment Information for [Your Name]",
+        "headerSubtitle": "Choose a convenient payment method below.",
+        "bankTransferTitle": "Bank Transfer",
+        "eWalletsTitle": "E-Wallets",
+        "creditCardsTitle": "Credit/Debit Cards",
+        "contactTitle": "Need Help?",
+        "contactIntro": "If you encounter difficulties or need to confirm information, please contact:",
+        "contactPhoneLabel": "Phone/Zalo",
+        "contactEmailLabel": "Email",
+        "securityTitle": "Security Note",
+        "securityNote": "This website only provides information and does not require you to enter any payment details here. Always double-check the information before making transactions in your app. Your connection to this site is secure (check the padlock icon in your browser).",
+        "footerText": "[Your Name]. Designed with ❤️.",
+        "accountHolderLabel": "Account Holder",
+        "accountNumberLabel": "Account Number",
+        "branchLabel": "Branch",
+        "walletHolderLabel": "Wallet Owner",
+        "phoneNumberLabel": "Phone Number",
+        "copyButtonText": "Copy",
+        "copiedButtonText": "Copied!",
+        "openAppButtonText": "Open App",
+        "paymentGatewayButtonText": "Pay via Gateway",
+        "creditCardInfoText": "Contact directly for card payment information or use the payment gateway (if available).",
+        "errorLoading": "An error occurred while loading payment information. Please try again later.",
+        "errorCopying": "Could not copy automatically. Please try again or copy manually."
+      },
+      // ... (Các ngôn ngữ khác cũng cần thay thế [Tên] tương ứng) ...
+      "th": { // <-- CẦN THAY THẾ [ชื่อของคุณ]
+        "pageTitle": "ข้อมูลการชำระเงิน - [ชื่อของคุณ]",
+        "headerTitle": "ข้อมูลการชำระเงินสำหรับ [ชื่อของคุณ]",
+        "headerSubtitle": "เลือกวิธีการชำระเงินที่สะดวกด้านล่าง",
+        "bankTransferTitle": "โอนเงินผ่านธนาคาร",
+        "eWalletsTitle": "กระเป๋าเงินอิเล็กทรอนิกส์",
+        "creditCardsTitle": "บัตรเครดิต/เดบิต",
+        "contactTitle": "ต้องการความช่วยเหลือ?",
+        "contactIntro": "หากคุณประสบปัญหาหรือต้องการยืนยันข้อมูล โปรดติดต่อ:",
+        "contactPhoneLabel": "โทรศัพท์/Zalo",
+        "contactEmailLabel": "อีเมล",
+        "securityTitle": "หมายเหตุด้านความปลอดภัย",
+        "securityNote": "เว็บไซต์นี้ให้ข้อมูลเท่านั้นและไม่ต้องการให้คุณป้อนรายละเอียดการชำระเงินใดๆ ที่นี่ ตรวจสอบข้อมูลให้ดีทุกครั้งก่อนทำธุรกรรมในแอปของคุณ การเชื่อมต่อของคุณกับไซต์นี้ปลอดภัย (ตรวจสอบไอคอนแม่กุญแจในเบราว์เซอร์ของคุณ)",
+        "footerText": "[ชื่อของคุณ]. ออกแบบด้วย ❤️.",
+        "accountHolderLabel": "ชื่อบัญชี",
+        "accountNumberLabel": "เลขที่บัญชี",
+        "branchLabel": "สาขา",
+        "walletHolderLabel": "เจ้าของกระเป๋า",
+        "phoneNumberLabel": "หมายเลขโทรศัพท์",
+        "copyButtonText": "คัดลอก",
+        "copiedButtonText": "คัดลอกแล้ว!",
+        "openAppButtonText": "เปิดแอป",
+        "paymentGatewayButtonText": "ชำระเงินผ่านเกตเวย์",
+        "creditCardInfoText": "ติดต่อโดยตรงสำหรับข้อมูลการชำระเงินผ่านบัตร หรือใช้ช่องทางการชำระเงิน (ถ้ามี)",
+        "errorLoading": "เกิดข้อผิดพลาดขณะโหลดข้อมูลการชำระเงิน กรุณาลองใหม่อีกครั้งในภายหลัง",
+        "errorCopying": "ไม่สามารถคัดลอกโดยอัตโนมัติได้ โปรดลองอีกครั้งหรือคัดลอกด้วยตนเอง"
+      },
+      "ja": { // <-- CẦN THAY THẾ [あなたの名前]
+          "pageTitle": "支払い情報 - [あなたの名前]",
+          "headerTitle": "[あなたの名前]への支払い情報",
+          "headerSubtitle": "便利な支払い方法を以下から選択してください。",
+          "bankTransferTitle": "銀行振込",
+          "eWalletsTitle": "電子ウォレット",
+          "creditCardsTitle": "クレジットカード/デビットカード",
+          "contactTitle": "お困りですか？",
+          "contactIntro": "問題が発生した場合や情報を確認する必要がある場合は、以下にご連絡ください:",
+          "contactPhoneLabel": "電話/Zalo",
+          "contactEmailLabel": "Eメール",
+          "securityTitle": "セキュリティに関する注意",
+          "securityNote": "このウェブサイトは情報提供のみを目的としており、ここで支払い詳細を入力する必要はありません。アプリで取引を行う前に、必ず情報を再確認してください。このサイトへの接続は安全です（ブラウザの南京錠アイコンを確認してください）。",
+          "footerText": "[あなたの名前]. ❤️でデザイン。",
+          "accountHolderLabel": "口座名義人",
+          "accountNumberLabel": "口座番号",
+          "branchLabel": "支店",
+          "walletHolderLabel": "ウォレット所有者",
+          "phoneNumberLabel": "電話番号",
+          "copyButtonText": "コピー",
+          "copiedButtonText": "コピーしました！",
+          "openAppButtonText": "アプリを開く",
+          "paymentGatewayButtonText": "ゲートウェイ経由で支払う",
+          "creditCardInfoText": "カード支払い情報については直接お問い合わせいただくか、支払いゲートウェイ（利用可能な場合）をご利用ください。",
+          "errorLoading": "支払い情報の読み込み中にエラーが発生しました。後でもう一度お試しください。",
+          "errorCopying": "自動的にコピーできませんでした。もう一度試すか、手動でコピーしてください。"
+      },
+      "zh": { // <-- CẦN THAY THẾ [您的姓名]
+          "pageTitle": "付款信息 - [您的姓名]",
+          "headerTitle": "给[您的姓名]的付款信息",
+          "headerSubtitle": "请在下方选择方便的付款方式。",
+          "bankTransferTitle": "银行转账",
+          "eWalletsTitle": "电子钱包",
+          "creditCardsTitle": "信用卡/借记卡",
+          "contactTitle": "需要帮助？",
+          "contactIntro": "如果您遇到困难或需要确认信息，请联系：",
+          "contactPhoneLabel": "电话/Zalo",
+          "contactEmailLabel": "电子邮件",
+          "securityTitle": "安全提示",
+          "securityNote": "本网站仅提供信息，不要求您在此输入任何付款详情。在您的应用程序中进行交易前，请务必仔细核对信息。您与本网站的连接是安全的（请检查浏览器中的挂锁图标）。",
+          "footerText": "[您的姓名]. ❤️ 设计。",
+          "accountHolderLabel": "账户持有人",
+          "accountNumberLabel": "账号",
+          "branchLabel": "分行",
+          "walletHolderLabel": "钱包所有者",
+          "phoneNumberLabel": "电话号码",
+          "copyButtonText": "复制",
+          "copiedButtonText": "已复制！",
+          "openAppButtonText": "打开应用程序",
+          "paymentGatewayButtonText": "通过网关付款",
+          "creditCardInfoText": "请直接联系以获取银行卡付款信息，或使用付款网关（如果可用）。",
+          "errorLoading": "加载付款信息时出错。请稍后重试。",
+          "errorCopying": "无法自动复制。请重试或手动复制。"
+      },
+       "ko": { // <-- CẦN THAY THẾ [이름]
+          "pageTitle": "결제 정보 - [이름]",
+          "headerTitle": "[이름]님께 보내는 결제 정보",
+          "headerSubtitle": "아래에서 편리한 결제 방법을 선택하세요.",
+          "bankTransferTitle": "계좌 이체",
+          "eWalletsTitle": "전자 지갑",
+          "creditCardsTitle": "신용카드/직불카드",
+          "contactTitle": "도움이 필요하신가요?",
+          "contactIntro": "어려움이 있거나 정보 확인이 필요한 경우 다음으로 문의하십시오.",
+          "contactPhoneLabel": "전화/Zalo",
+          "contactEmailLabel": "이메일",
+          "securityTitle": "보안 안내",
+          "securityNote": "이 웹사이트는 정보만 제공하며 결제 세부 정보를 입력하도록 요구하지 않습니다. 앱에서 거래하기 전에 항상 정보를 다시 확인하십시오. 이 사이트에 대한 연결은 안전합니다(브라우저의 자물쇠 아이콘 확인).",
+          "footerText": "[이름]. ❤️ 디자인.",
+          "accountHolderLabel": "계좌 소유주",
+          "accountNumberLabel": "계좌 번호",
+          "branchLabel": "지점",
+          "walletHolderLabel": "지갑 소유자",
+          "phoneNumberLabel": "전화번호",
+          "copyButtonText": "복사",
+          "copiedButtonText": "복사됨!",
+          "openAppButtonText": "앱 열기",
+          "paymentGatewayButtonText": "게이트웨이를 통해 결제",
+          "creditCardInfoText": "카드 결제 정보는 직접 문의하시거나 결제 게이트웨이(사용 가능한 경우)를 이용하십시오.",
+          "errorLoading": "결제 정보를 로드하는 중 오류가 발생했습니다. 나중에 다시 시도하십시오.",
+          "errorCopying": "자동으로 복사할 수 없습니다. 다시 시도하거나 수동으로 복사하십시오."
+      },
+      "hi": { // <-- CẦN THAY THẾ [आपका नाम]
+          "pageTitle": "भुगतान जानकारी - [आपका नाम]",
+          "headerTitle": "[आपका नाम] के लिए भुगतान जानकारी",
+          "headerSubtitle": "नीचे एक सुविधाजनक भुगतान विधि चुनें।",
+          "bankTransferTitle": "बैंक ट्रांसफर",
+          "eWalletsTitle": "ई-वॉलेट",
+          "creditCardsTitle": "क्रेडिट/डेबिट कार्ड",
+          "contactTitle": "मदद चाहिए?",
+          "contactIntro": "यदि आपको कठिनाइयों का सामना करना पड़ता है या जानकारी की पुष्टि करने की आवश्यकता है, तो कृपया संपर्क करें:",
+          "contactPhoneLabel": "फोन/ज़ालो",
+          "contactEmailLabel": "ईमेल",
+          "securityTitle": "सुरक्षा नोट",
+          "securityNote": "यह वेबसाइट केवल जानकारी प्रदान करती है और आपको यहां कोई भुगतान विवरण दर्ज करने की आवश्यकता नहीं है। अपने ऐप में लेनदेन करने से पहले हमेशा जानकारी की दोबारा जांच करें। इस साइट से आपका कनेक्शन सुरक्षित है (अपने ब्राउज़र में पैडलॉक आइकन देखें)।",
+          "footerText": "[आपका नाम]। ❤️ द्वारा डिज़ाइन किया गया।",
+          "accountHolderLabel": "खाता धारक",
+          "accountNumberLabel": "खाता संख्या",
+          "branchLabel": "शाखा",
+          "walletHolderLabel": "वॉलेट स्वामी",
+          "phoneNumberLabel": "फ़ोन नंबर",
+          "copyButtonText": "कॉपी करें",
+          "copiedButtonText": "कॉपी किया गया!",
+          "openAppButtonText": "ऐप खोलें",
+          "paymentGatewayButtonText": "गेटवे के माध्यम से भुगतान करें",
+          "creditCardInfoText": "कार्ड भुगतान जानकारी के लिए सीधे संपर्क करें या भुगतान गेटवे (यदि उपलब्ध हो) का उपयोग करें।",
+          "errorLoading": "भुगतान जानकारी लोड करते समय एक त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
+          "errorCopying": "स्वचालित रूप से कॉपी नहीं किया जा सका। कृपया पुनः प्रयास करें या मैन्युअल रूप से कॉपी करें।"
+      }
+    },
+    "paymentCategories": [
+      {
+        "id": "bank-transfer",
+        "titleKey": "bankTransferTitle", 
+        "iconClass": "fa-solid fa-building-columns", 
+        "methods": [
+          {
+            "name": "Ngân hàng TMCP Ngoại Thương Việt Nam",
+            "logo": "https://api.vietqr.io/img/VCB.png",
+            "themeColor": "#0054A6", // <-- VÍ DỤ: Thêm themeColor nếu muốn
+            "details": [
+              {"labelKey": "accountHolderLabel", "value": "Võ Nguyễn Đăng"}, 
+              {"labelKey": "accountNumberLabel", "value": "[Số tài khoản VCB]", "isCopyable": true, "idSuffix": "vcb-account"}, // <-- CẦN THAY THẾ
+              {"labelKey": "branchLabel", "value": "Chi Nhánh Cần Thơ"}
+            ],
+            "appLink": "[Deep Link Vietcombank]", // <-- CẦN THAY THẾ
+            "appName": "Vietcombank" 
+          },
+          {
+            "name": "Ngân hàng TMCP Tiên Phong", // TPBank
+            "logo": "https://api.vietqr.io/img/TPB.png",
+            "themeColor": "#8A007F", // <-- VÍ DỤ: Thêm themeColor nếu muốn (Màu TPBank là tím)
+             "details": [
+              {"labelKey": "accountHolderLabel", "value": "Võ Nguyễn Đăng"},
+              {"labelKey": "accountNumberLabel", "value": "[Số tài khoản TPBank]", "isCopyable": true, "idSuffix": "tpb-account"}, // <-- CẦN THAY THẾ (Đổi idSuffix thành tpb)
+              {"labelKey": "branchLabel", "value": "Chi nhánh TPHCM"} // <-- CẦN THAY THẾ (Nếu cần)
+            ],
+            "appLink": "[Deep Link TPBank]", // <-- CẦN THAY THẾ
+            "appName": "TPBank" // <-- Đổi appName thành TPBank
+          }
+        ]
+      },
+      {
+        "id": "e-wallets",
+        "titleKey": "eWalletsTitle",
+        "iconClass": "fa-solid fa-wallet",
+        "methods": [
+          {
+            "name": "MoMo",
+            "logo": "images/logo-momo.png", // Giả sử bạn lưu logo momo vào images
+            "themeColor": "#AE2070", // <-- VÍ DỤ: Thêm themeColor nếu muốn
+            "details": [
+              {"labelKey": "walletHolderLabel", "value": "[Tên hoặc SĐT MoMo]"}, // <-- CẦN THAY THẾ
+              {"labelKey": "phoneNumberLabel", "value": "[Số điện thoại MoMo]", "isCopyable": true, "idSuffix": "momo-phone"} // <-- CẦN THAY THẾ
+            ],
+            // Nhớ thay SĐT của bạn vào cả link này
+            "appLink": "momo://app/transfer?phone=[Số điện thoại MoMo]", // <-- CẦN THAY THẾ
+            "appName": "MoMo"
+          },
+          {
+            "name": "ZaloPay",
+            "logo": "images/logo-zalopay.png", // Giả sử bạn lưu logo zalopay vào images
+            "themeColor": "#00A1FF", // <-- VÍ DỤ: Thêm themeColor nếu muốn
+             "details": [
+              {"labelKey": "walletHolderLabel", "value": "[Tên hoặc SĐT ZaloPay]"}, // <-- CẦN THAY THẾ
+              {"labelKey": "phoneNumberLabel", "value": "[Số điện thoại ZaloPay]", "isCopyable": true, "idSuffix": "zalopay-phone"} // <-- CẦN THAY THẾ
+            ],
+            "appLink": "[Deep Link ZaloPay]", // <-- CẦN THAY THẾ
+             "appName": "ZaloPay"
+          }
+        ]
+      },
+      {
+        "id": "credit-cards",
+        "titleKey": "creditCardsTitle",
+        "iconClass": "fa-regular fa-credit-card",
+         "methods": [
+           {
+             "name": "Visa / MasterCard / JCB...",
+             "logo": "images/logo-visa-mastercard.png", // Giả sử bạn lưu logo này vào images
+             // "themeColor": "#F0F0F0", // <-- VÍ DỤ: Thêm themeColor nếu muốn
+             "details": [
+                {"valueKey": "creditCardInfoText"} 
+             ]
+           }
+         ]
+      }
+    ],
+    "contactInfo": {
+        "phoneZalo": "[Số điện thoại của bạn]", // <-- CẦN THAY THẾ
+        "email": "[Địa chỉ email của bạn]" // <-- CẦN THAY THẾ
+    }
+  }

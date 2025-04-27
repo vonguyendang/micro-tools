@@ -1,0 +1,992 @@
+{
+    "languages": {
+        "vi": "Tiếng Việt",
+        "en": "English",
+        "th": "ไทย",
+        "ja": "日本語",
+        "zh": "中文",
+        "ko": "한국어",
+        "hi": "हिन्दी"
+    },
+    "defaultLang": "vi",
+    "contactFormRecipient": "vndang.contact@gmail.com",
+    "translations": {
+        "vi": {
+            "pageTitle": "Thông tin chuyển tiền - VÕ NGUYỄN ĐĂNG",
+            "headerTitle": "Thông tin chuyển tiền cho VÕ NGUYỄN ĐĂNG",
+            "headerSubtitle": "Chọn phương thức thuận tiện cho bạn bên dưới.",
+            "bankTransferTitle": "Chuyển khoản Ngân hàng",
+            "eWalletsTitle": "Ví điện tử",
+            "creditCardsTitle": "Thẻ Tín Dụng/Ghi Nợ",
+            "contactTitle": "Cần Hỗ Trợ?",
+            "contactIntro": "Nếu bạn gặp khó khăn hoặc cần xác nhận thông tin, vui lòng liên hệ:",
+            "contactPhoneLabel": "Điện thoại/Zalo",
+            "contactEmailLabel": "Email",
+            "socialLinksTitle": "Kết nối với tôi",
+            "contactFormTitle": "Gửi phản hồi / Xác nhận CK",
+            "yourNameLabel": "Họ tên bạn",
+            "subjectLabel": "Tiêu đề",
+            "messageLabel": "Nội dung",
+            "attachmentLabel": "Đính kèm ảnh/file CK (nếu có)",
+            "attachmentMailtoHint": "Lưu ý: Bạn cần tự đính kèm tệp trong ứng dụng email sau khi bấm Gửi.",
+            "sendButtonText": "Gửi qua Email",
+            "formSuccessMessage": "Đang mở ứng dụng email của bạn...",
+            "formErrorMessage": "Không thể tạo email. Vui lòng thử lại.",
+            "formValidationError": "Vui lòng điền đầy đủ các trường bắt buộc.",
+            "securityTitle": "Lưu ý Bảo mật",
+            "securityNote": "Trang web này chỉ cung cấp thông tin, không yêu cầu bạn nhập bất kỳ chi tiết thanh toán nào tại đây. Luôn kiểm tra kỹ thông tin trước khi thực hiện giao dịch trên ứng dụng của bạn. Kết nối của bạn đến trang này được bảo mật (kiểm tra biểu tượng ổ khóa trên trình duyệt).",
+            "footerText": "VÕ NGUYỄN ĐĂNG. Thiết kế với ❤️.",
+            "accountHolderLabel": "Chủ tài khoản",
+            "accountNumberLabel": "Số tài khoản",
+            "branchLabel": "Chi nhánh",
+            "walletHolderLabel": "Chủ ví",
+            "phoneNumberLabel": "Số điện thoại",
+            "copyButtonText": "Sao chép",
+            "copiedButtonText": "Đã sao chép!",
+            "copiedToastMessage": "Đã sao chép {itemName}",
+            "openAppButtonText": "Mở ứng dụng",
+            "openInterbankAppButtonText": "Mở bank khác",
+            "showQrCodeButtonText": "Mã QR",
+            "paymentGatewayButtonText": "Thanh toán qua cổng",
+            "creditCardInfoText": "Liên hệ trực tiếp để nhận thông tin thanh toán qua thẻ hoặc sử dụng cổng thanh toán (nếu có).",
+            "donationTitle": "Ủng hộ / Donate",
+            "statusMaintenance": "Đang bảo trì",
+            "statusWaiting": "Chờ kích hoạt",
+            "statusLocked": "Tạm khóa",
+            "scanQrHint": "Quét mã bằng ứng dụng Ngân hàng hoặc Ví điện tử hỗ trợ VietQR.",
+            "errorLoading": "Đã xảy ra lỗi khi tải thông tin thanh toán. Vui lòng thử lại sau.",
+            "errorCopying": "Không thể sao chép tự động. Vui lòng thử lại hoặc sao chép thủ công."
+        },
+        "en": {
+            "pageTitle": "Payment Information - VO NGUYEN DANG",
+            "headerTitle": "Payment Information for VO NGUYEN DANG",
+            "headerSubtitle": "Choose a convenient payment method below.",
+            "bankTransferTitle": "Bank Transfer",
+            "eWalletsTitle": "E-Wallets",
+            "creditCardsTitle": "Credit/Debit Cards",
+            "contactTitle": "Need Help?",
+            "contactIntro": "If you encounter difficulties or need to confirm information, please contact:",
+            "contactPhoneLabel": "Phone/Zalo",
+            "contactEmailLabel": "Email",
+            "socialLinksTitle": "Connect with Me",
+            "contactFormTitle": "Send Feedback / TX Confirmation",
+            "yourNameLabel": "Your Name",
+            "subjectLabel": "Subject",
+            "messageLabel": "Message",
+            "attachmentLabel": "Attach screenshot/file (optional)",
+            "attachmentMailtoHint": "Note: You need to manually attach the file in your email client after clicking Send.",
+            "sendButtonText": "Send via Email",
+            "formSuccessMessage": "Opening your email client...",
+            "formErrorMessage": "Could not compose email. Please try again.",
+            "formValidationError": "Please fill in all required fields.",
+            "securityTitle": "Security Note",
+            "securityNote": "This website only provides information and does not require you to enter any payment details here. Always double-check the information before making transactions in your app. Your connection to this site is secure (check the padlock icon in your browser).",
+            "footerText": "VO NGUYEN DANG. Designed with ❤️.",
+            "accountHolderLabel": "Account Holder",
+            "accountNumberLabel": "Account Number",
+            "branchLabel": "Branch",
+            "walletHolderLabel": "Wallet Owner",
+            "phoneNumberLabel": "Phone Number",
+            "copyButtonText": "Copy",
+            "copiedButtonText": "Copied!",
+            "copiedToastMessage": "Copied {itemName}",
+            "openAppButtonText": "Open App",
+            "openInterbankAppButtonText": "Interbank Transfer",
+            "showQrCodeButtonText": "QR Code",
+            "paymentGatewayButtonText": "Pay via Gateway",
+            "creditCardInfoText": "Contact directly for card payment information or use the payment gateway (if available).",
+            "donationTitle": "Support / Donate",
+            "statusMaintenance": "Under Maintenance",
+            "statusWaiting": "Waiting Activation",
+            "statusLocked": "Temporarily Locked",
+            "scanQrHint": "Scan the code using a Banking App or E-wallet that supports VietQR.",
+            "errorLoading": "An error occurred while loading payment information. Please try again later.",
+            "errorCopying": "Could not copy automatically. Please try again or copy manually."
+        },
+        "th": {
+            "pageTitle": "ข้อมูลการชำระเงิน - VO NGUYEN DANG",
+            "headerTitle": "ข้อมูลการชำระเงินสำหรับ VO NGUYEN DANG",
+            "headerSubtitle": "เลือกวิธีการชำระเงินที่สะดวกด้านล่าง",
+            "bankTransferTitle": "โอนเงินผ่านธนาคาร",
+            "eWalletsTitle": "กระเป๋าเงินอิเล็กทรอนิกส์",
+            "creditCardsTitle": "บัตรเครดิต/เดบิต",
+            "contactTitle": "ต้องการความช่วยเหลือ?",
+            "contactIntro": "หากคุณประสบปัญหาหรือต้องการยืนยันข้อมูล โปรดติดต่อ:",
+            "contactPhoneLabel": "โทรศัพท์/Zalo",
+            "contactEmailLabel": "อีเมล",
+            "socialLinksTitle": "เชื่อมต่อกับฉัน",
+            "contactFormTitle": "ส่งคำติชม / ยืนยันการโอน",
+            "yourNameLabel": "ชื่อของคุณ",
+            "subjectLabel": "หัวเรื่อง",
+            "messageLabel": "ข้อความ",
+            "attachmentLabel": "แนบภาพหน้าจอ/ไฟล์ (ไม่จำเป็น)",
+            "attachmentMailtoHint": "หมายเหตุ: คุณต้องแนบไฟล์ด้วยตนเองในไคลเอนต์อีเมลของคุณหลังจากคลิกส่ง",
+            "sendButtonText": "ส่งทางอีเมล",
+            "formSuccessMessage": "กำลังเปิดไคลเอนต์อีเมลของคุณ...",
+            "formErrorMessage": "ไม่สามารถเขียนอีเมลได้ กรุณาลองอีกครั้ง",
+            "formValidationError": "กรุณากรอกข้อมูลในเขตข้อมูลบังคับ",
+            "securityTitle": "หมายเหตุด้านความปลอดภัย",
+            "securityNote": "เว็บไซต์นี้ให้ข้อมูลเท่านั้นและไม่ต้องการให้คุณป้อนรายละเอียดการชำระเงินใดๆ ที่นี่ ตรวจสอบข้อมูลให้ดีทุกครั้งก่อนทำธุรกรรมในแอปของคุณ การเชื่อมต่อของคุณกับไซต์นี้ปลอดภัย (ตรวจสอบไอคอนแม่กุญแจในเบราว์เซอร์ของคุณ)",
+            "footerText": "VÕ NGUYỄN ĐĂNG. ออกแบบด้วย ❤️.",
+            "accountHolderLabel": "ชื่อบัญชี",
+            "accountNumberLabel": "เลขที่บัญชี",
+            "branchLabel": "สาขา",
+            "walletHolderLabel": "เจ้าของกระเป๋า",
+            "phoneNumberLabel": "หมายเลขโทรศัพท์",
+            "copyButtonText": "คัดลอก",
+            "copiedButtonText": "คัดลอกแล้ว!",
+            "copiedToastMessage": "คัดลอก {itemName} แล้ว",
+            "openAppButtonText": "เปิดแอป",
+            "openInterbankAppButtonText": "โอนเงินข้ามธนาคาร",
+            "showQrCodeButtonText": "QR Code",
+            "paymentGatewayButtonText": "ชำระเงินผ่านเกตเวย์",
+            "creditCardInfoText": "ติดต่อโดยตรงสำหรับข้อมูลการชำระเงินผ่านบัตร หรือใช้ช่องทางการชำระเงิน (ถ้ามี)",
+            "donationTitle": "สนับสนุน / บริจาค",
+            "statusMaintenance": "อยู่ระหว่างการบำรุงรักษา",
+            "statusWaiting": "รอการเปิดใช้งาน",
+            "statusLocked": "ถูกระงับชั่วคราว",
+            "scanQrHint": "สแกนรหัสโดยใช้แอปธนาคารหรือ E-wallet ที่รองรับ VietQR",
+            "errorLoading": "เกิดข้อผิดพลาดขณะโหลดข้อมูลการชำระเงิน กรุณาลองใหม่อีกครั้งในภายหลัง",
+            "errorCopying": "ไม่สามารถคัดลอกโดยอัตโนมัติได้ โปรดลองอีกครั้งหรือคัดลอกด้วยตนเอง"
+        },
+        "ja": {
+            "pageTitle": "支払い情報 - VO NGUYEN DANG",
+            "headerTitle": "VO NGUYEN DANGへの支払い情報",
+            "headerSubtitle": "便利な支払い方法を以下から選択してください。",
+            "bankTransferTitle": "銀行振込",
+            "eWalletsTitle": "電子ウォレット",
+            "creditCardsTitle": "クレジットカード/デビットカード",
+            "contactTitle": "お困りですか？",
+            "contactIntro": "問題が発生した場合や情報を確認する必要がある場合は、以下にご連絡ください:",
+            "contactPhoneLabel": "電話/Zalo",
+            "contactEmailLabel": "Eメール",
+            "socialLinksTitle": "私とつながる",
+            "contactFormTitle": "フィードバック送信 / 振込確認",
+            "yourNameLabel": "あなたの名前",
+            "subjectLabel": "件名",
+            "messageLabel": "メッセージ",
+            "attachmentLabel": "スクリーンショット/ファイルを添付 (任意)",
+            "attachmentMailtoHint": "注: 送信をクリックした後、メールクライアントで手動でファイルを添付する必要があります。",
+            "sendButtonText": "メールで送信",
+            "formSuccessMessage": "メールクライアントを開いています...",
+            "formErrorMessage": "メールを作成できませんでした。もう一度お試しください。",
+            "formValidationError": "必須フィールドに記入してください。",
+            "securityTitle": "セキュリティに関する注意",
+            "securityNote": "このウェブサイトは情報提供のみを目的としており、ここで支払い詳細を入力する必要はありません。アプリで取引を行う前に、必ず情報を再確認してください。このサイトへの接続は安全です（ブラウザの南京錠アイコンを確認してください）。",
+            "footerText": "VO NGUYEN DANG。❤️でデザイン。",
+            "accountHolderLabel": "口座名義人",
+            "accountNumberLabel": "口座番号",
+            "branchLabel": "支店",
+            "walletHolderLabel": "ウォレット所有者",
+            "phoneNumberLabel": "電話番号",
+            "copyButtonText": "コピー",
+            "copiedButtonText": "コピーしました！",
+            "copiedToastMessage": "{itemName}をコピーしました",
+            "openAppButtonText": "アプリを開く",
+            "openInterbankAppButtonText": "他の銀行に振込",
+            "showQrCodeButtonText": "QRコード",
+            "paymentGatewayButtonText": "ゲートウェイ経由で支払う",
+            "creditCardInfoText": "カード支払い情報については直接お問い合わせいただくか、支払いゲートウェイ（利用可能な場合）をご利用ください。",
+            "donationTitle": "サポート / 寄付",
+            "statusMaintenance": "メンテナンス中",
+            "statusWaiting": "アクティベーション待ち",
+            "statusLocked": "一時的にロックされています",
+            "scanQrHint": "VietQRに対応した銀行アプリまたは電子ウォレットでコードをスキャンしてください。",
+            "errorLoading": "支払い情報の読み込み中にエラーが発生しました。後でもう一度お試しください。",
+            "errorCopying": "自動的にコピーできませんでした。もう一度試すか、手動でコピーしてください。"
+        },
+        "zh": {
+            "pageTitle": "付款信息 - VO NGUYEN DANG",
+            "headerTitle": "VO NGUYEN DANG 的付款信息",
+            "headerSubtitle": "请在下方选择方便的付款方式。",
+            "bankTransferTitle": "银行转账",
+            "eWalletsTitle": "电子钱包",
+            "creditCardsTitle": "信用卡/借记卡",
+            "contactTitle": "需要帮助？",
+            "contactIntro": "如果您遇到困难或需要确认信息，请联系：",
+            "contactPhoneLabel": "电话/Zalo",
+            "contactEmailLabel": "电子邮件",
+            "socialLinksTitle": "与我联系",
+            "contactFormTitle": "发送反馈 / 转账确认",
+            "yourNameLabel": "您的名字",
+            "subjectLabel": "主题",
+            "messageLabel": "消息",
+            "attachmentLabel": "附加截图/文件 (可选)",
+            "attachmentMailtoHint": "注意：点击发送后，您需要在邮件客户端中手动附加文件。",
+            "sendButtonText": "通过邮件发送",
+            "formSuccessMessage": "正在打开您的邮件客户端...",
+            "formErrorMessage": "无法撰写邮件。请重试。",
+            "formValidationError": "请填写强制性字段。",
+            "securityTitle": "安全提示",
+            "securityNote": "本网站仅提供信息，不要求您在此输入任何付款详情。在您的应用程序中进行交易前，请务必仔细核对信息。您与本网站的连接是安全的（请检查浏览器中的挂锁图标）。",
+            "footerText": "VO NGUYEN DANG。用❤️设计。",
+            "accountHolderLabel": "账户持有人",
+            "accountNumberLabel": "账号",
+            "branchLabel": "分行",
+            "walletHolderLabel": "钱包所有者",
+            "phoneNumberLabel": "电话号码",
+            "copyButtonText": "复制",
+            "copiedButtonText": "已复制！",
+            "copiedToastMessage": "已复制{itemName}",
+            "openAppButtonText": "打开应用",
+            "openInterbankAppButtonText": "跨行转账",
+            "showQrCodeButtonText": "二维码",
+            "paymentGatewayButtonText": "通过网关付款",
+            "creditCardInfoText": "请直接联系以获取银行卡付款信息，或使用付款网关（如果可用）。",
+            "donationTitle": "支持 / 捐赠",
+            "statusMaintenance": "维护中",
+            "statusWaiting": "等待激活",
+            "statusLocked": "暂时锁定",
+            "scanQrHint": "使用支持VietQR的银行应用程序或电子钱包扫描代码。",
+            "errorLoading": "加载付款信息时出错。请稍后重试。",
+            "errorCopying": "无法自动复制。请重试或手动复制。"
+        },
+        "ko": {
+            "pageTitle": "결제 정보 - VO NGUYEN DANG",
+            "headerTitle": "VO NGUYEN DANG 님께 보내는 결제 정보",
+            "headerSubtitle": "아래에서 편리한 결제 방법을 선택하세요.",
+            "bankTransferTitle": "계좌 이체",
+            "eWalletsTitle": "전자 지갑",
+            "creditCardsTitle": "신용카드/직불카드",
+            "contactTitle": "도움이 필요하신가요?",
+            "contactIntro": "어려움이 있거나 정보 확인이 필요한 경우 다음으로 문의하십시오.",
+            "contactPhoneLabel": "전화/Zalo",
+            "contactEmailLabel": "이메일",
+            "socialLinksTitle": "저와 연결",
+            "contactFormTitle": "피드백 보내기 / 송금 확인",
+            "yourNameLabel": "당신의 이름",
+            "subjectLabel": "제목",
+            "messageLabel": "메시지",
+            "attachmentLabel": "스크린샷/파일 첨부 (선택사항)",
+            "attachmentMailtoHint": "참고: 보내기를 클릭한 후 이메일 클라이언트에서 수동으로 파일을 첨부해야 합니다.",
+            "sendButtonText": "이메일로 보내기",
+            "formSuccessMessage": "이메일 클라이언트를 여는 중...",
+            "formErrorMessage": "이메일을 작성할 수 없습니다. 다시 시도하십시오.",
+            "formValidationError": "필수 필드를 작성하십시오.",
+            "securityTitle": "보안 안내",
+            "securityNote": "이 웹사이트는 정보만 제공하며 결제 세부 정보를 입력하도록 요구하지 않습니다. 앱에서 거래하기 전에 항상 정보를 다시 확인하십시오. 이 사이트에 대한 연결은 안전합니다(브라우저의 자물쇠 아이콘 확인).",
+            "footerText": "VO NGUYEN DANG. ❤️ 디자인.",
+            "accountHolderLabel": "계좌 소유주",
+            "accountNumberLabel": "계좌 번호",
+            "branchLabel": "지점",
+            "walletHolderLabel": "지갑 소유자",
+            "phoneNumberLabel": "전화번호",
+            "copyButtonText": "복사",
+            "copiedButtonText": "복사됨!",
+            "copiedToastMessage": "{itemName} 복사됨",
+            "openAppButtonText": "앱 열기",
+            "openInterbankAppButtonText": "타행 송금",
+            "showQrCodeButtonText": "QR 코드",
+            "paymentGatewayButtonText": "게이트웨이를 통해 결제",
+            "creditCardInfoText": "카드 결제 정보는 직접 문의하시거나 결제 게이트웨이(사용 가능한 경우)를 이용하십시오.",
+            "donationTitle": "지원 / 기부",
+            "statusMaintenance": "유지 보수 중",
+            "statusWaiting": "활성화 대기 중",
+            "statusLocked": "일시적으로 잠김",
+            "scanQrHint": "VietQR을 지원하는 은행 앱 또는 전자 지갑을 사용하여 코드를 스캔하십시오.",
+            "errorLoading": "결제 정보를 로드하는 중 오류가 발생했습니다. 나중에 다시 시도하십시오.",
+            "errorCopying": "자동으로 복사할 수 없습니다. 다시 시도하거나 수동으로 복사하십시오."
+        },
+        "hi": {
+            "pageTitle": "भुगतान जानकारी - VO NGUYEN DANG",
+            "headerTitle": "VO NGUYEN DANG के लिए भुगतान जानकारी",
+            "headerSubtitle": "नीचे एक सुविधाजनक भुगतान विधि चुनें।",
+            "bankTransferTitle": "बैंक ट्रांसफर",
+            "eWalletsTitle": "ई-वॉलेट",
+            "creditCardsTitle": "क्रेडिट/डेबिट कार्ड",
+            "contactTitle": "मदद चाहिए?",
+            "contactIntro": "यदि आपको कठिनाइयों का सामना करना पड़ता है या जानकारी की पुष्टि करने की आवश्यकता है, तो कृपया संपर्क करें:",
+            "contactPhoneLabel": "फोन/ज़ालो",
+            "contactEmailLabel": "ईमेल",
+            "socialLinksTitle": "मेरे साथ जुड़ें",
+            "contactFormTitle": "प्रतिक्रिया भेजें / लेन-देन पुष्टि",
+            "yourNameLabel": "आपका नाम",
+            "subjectLabel": "विषय",
+            "messageLabel": "संदेश",
+            "attachmentLabel": "स्क्रीनशॉट/फ़ाइल संलग्न करें (वैकल्पिक)",
+            "attachmentMailtoHint": "नोट: भेजने पर क्लिक करने के बाद आपको अपने ईमेल क्लाइंट में मैन्युअल रूप से फ़ाइल संलग्न करने की आवश्यकता है।",
+            "sendButtonText": "ईमेल के माध्यम से भेजें",
+            "formSuccessMessage": "आपका ईमेल क्लाइंट खोला जा रहा है...",
+            "formErrorMessage": "ईमेल बना नहीं सका। कृपया पुनः प्रयास करें।",
+            "formValidationError": "कृपया अनिवार्य क्षेत्रों में भरें।",
+            "securityTitle": "सुरक्षा नोट",
+            "securityNote": "यह वेबसाइट केवल जानकारी प्रदान करती है और आपको यहां कोई भुगतान विवरण दर्ज करने की आवश्यकता नहीं है। अपने ऐप में लेनदेन करने से पहले हमेशा जानकारी की दोबारा जांच करें। इस साइट से आपका कनेक्शन सुरक्षित है (अपने ब्राउज़र में पैडलॉक आइकन देखें)।",
+            "footerText": "VO NGUYEN DANG। ❤️ द्वारा डिज़ाइन किया गया।",
+            "accountHolderLabel": "खाता धारक",
+            "accountNumberLabel": "खाता संख्या",
+            "branchLabel": "शाखा",
+            "walletHolderLabel": "वॉलेट स्वामी",
+            "phoneNumberLabel": "फ़ोन नंबर",
+            "copyButtonText": "कॉपी करें",
+            "copiedButtonText": "कॉपी किया गया!",
+            "copiedToastMessage": "{itemName} कॉपी किया गया",
+            "openAppButtonText": "ऐप खोलें",
+            "openInterbankAppButtonText": "इंटरबैंक ट्रांसफर",
+            "showQrCodeButtonText": "क्यूआर कोड",
+            "paymentGatewayButtonText": "गेटवे के माध्यम से भुगतान करें",
+            "creditCardInfoText": "कार्ड भुगतान जानकारी के लिए सीधे संपर्क करें या भुगतान गेटवे (यदि उपलब्ध हो) का उपयोग करें।",
+            "donationTitle": "समर्थन / दान",
+            "statusMaintenance": "रखरखाव के तहत",
+            "statusWaiting": "सक्रियण की प्रतीक्षा",
+            "statusLocked": "अस्थायी रूप से लॉक किया गया",
+            "scanQrHint": "VietQR का समर्थन करने वाले बैंकिंग ऐप या ई-वॉलेट का उपयोग करके कोड को स्कैन करें।",
+            "errorLoading": "भुगतान जानकारी लोड करते समय एक त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
+            "errorCopying": "स्वचालित रूप से कॉपी नहीं किया जा सका। कृपया पुनः प्रयास करें या मैन्युअल रूप से कॉपी करें।"
+        }
+    },
+    "paymentCategories": [
+        {
+            "id": "bank-transfer",
+            "titleKey": "bankTransferTitle",
+            "iconClass": "fa-solid fa-building-columns",
+            "methods": [
+                {
+                    "nameVi": "Ngân hàng TMCP Ngoại Thương Việt Nam",
+                    "nameEn": "Joint Stock Commercial Bank for Foreign Trade of Vietnam",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/VCB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#067346",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0111000342941",
+                            "isCopyable": true,
+                            "idSuffix": "vcb-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi Nhánh Cần Thơ"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=vcb",
+                    "appName": "Vietcombank",
+                    "//interbankAppLink": "https://dl.vietqr.io/pay",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/VCB-0111000342941-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Tiên Phong",
+                    "nameEn": "Tien Phong Commercial Joint Stock Bank",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/TPB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#8A007F",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "02036598001",
+                            "isCopyable": true,
+                            "idSuffix": "tpb1-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=tpb",
+                    "appName": "TPBank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/TPB-02036598001-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Tiên Phong",
+                    "nameEn": "Tien Phong Commercial Joint Stock Bank",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/TPB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#8A007F",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "tpb2-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=tpb",
+                    "appName": "TPBank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/TPB-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng số Timo by Ban Viet Bank",
+                    "nameEn": "Timo Digital Bank by BVBank",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://vietqr.net/portal-service/resources/icons/TIMO.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#5F4B8B",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "9021892508298",
+                            "isCopyable": true,
+                            "idSuffix": "timo1-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=timo",
+                    "appName": "TIMO",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/TIMO-9021892508298-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng số Timo by Ban Viet Bank",
+                    "nameEn": "Timo Digital Bank by BVBank",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://vietqr.net/portal-service/resources/icons/TIMO.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#5F4B8B",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "timo2-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=timo",
+                    "appName": "TIMO",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/TIMO-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng số CAKE by VPBank",
+                    "nameEn": "CAKE Digital Bank by VPBank",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/CAKE.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#FF69B4",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "cake-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=cake",
+                    "appName": "CAKE",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/CAKE-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Công thương Việt Nam",
+                    "nameEn": "Vietnam Joint Stock Commercial Bank for Industry and Trade",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/ICB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#004080",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "101884211265",
+                            "isCopyable": true,
+                            "idSuffix": "vietinbank-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh Tây Cần Thơ"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=icb",
+                    "appName": "VietinBank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/ICB-101884211265-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Công thương Việt Nam",
+                    "nameEn": "Vietnam Joint Stock Commercial Bank for Industry and Trade",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/ICB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#004080",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "vietinbank-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh Tây Cần Thơ"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=icb",
+                    "appName": "VietinBank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/ICB-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Sài Gòn Thương Tín",
+                    "nameEn": "Saigon Thuong Tin Commercial Joint Stock Bank",
+                    "isActive": false,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/STB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1554A6",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "070051020977",
+                            "isCopyable": true,
+                            "idSuffix": "stb-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh Cần Thơ"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=stb",
+                    "appName": "Sacombank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/STB-070051020977-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Á Châu",
+                    "nameEn": "Asia Commercial Joint Stock Bank",
+                    "isActive": false,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/ACB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1F53AE",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "222227999",
+                            "isCopyable": true,
+                            "idSuffix": "acb-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi Nhánh Hậu Giang"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=acb",
+                    "appName": "ACB",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/ACB-222227999-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Ngân hàng TMCP Lộc Phát",
+                    "nameEn": "Loc Phat Commercial Joint Stock Bank",
+                    "isActive": false,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/LPB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#804A21",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "LPBank-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi Nhánh Cần Thơ"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=lpbank",
+                    "appName": "LPBank",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/LPBank-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                }
+            ]
+        },
+        {
+            "id": "e-wallets",
+            "titleKey": "eWalletsTitle",
+            "iconClass": "fa-solid fa-wallet",
+            "methods": [
+                {
+                    "nameVi": "Ví MoMo",
+                    "nameEn": "MoMo Wallet",
+                    "isActive": true,
+                    "logo": "images/e-wallet/icon-momo.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#AE2070",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "momo-phone"
+                        }
+                    ],
+                    "appLink": "https://page.momoapp.vn/FwAWGSVIEyh",
+                    "appName": "MoMo"
+                },
+                {
+                    "nameVi": "Ví ShopeePay",
+                    "nameEn": "ShopeePay Wallet",
+                    "isActive": true,
+                    "logo": "images/e-wallet/icon-shopee-pay.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#EE4D2D",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "shopeepay-phone"
+                        }
+                    ],
+                    "appLink": "https://shopeepayvn.onelink.me/Wnz3/TaiAppShopeepay",
+                    "appName": "ShopeePay"
+                },
+                {
+                    "nameVi": "Ví ZaloPay",
+                    "nameEn": "ZaloPay Wallet",
+                    "isActive": true,
+                    "logo": "images/e-wallet/icon-zalopay.jpeg",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#0034C9",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "zalopay-phone"
+                        }
+                    ],
+                    "appLink": "https://onelink.zalopay.vn/7527853931963180",
+                    "appName": "ZaloPay"
+                },
+                {
+                    "nameVi": "Ví Viettel Money",
+                    "nameEn": "Viettel Money Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-viettel-monney.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#EE0033",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "viettelmonney-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link ViettelPay]",
+                    "appName": "Viettel Money"
+                },
+                {
+                    "nameVi": "Ví VNPay",
+                    "nameEn": "VNPay Wallet",
+                    "isActive": true,
+                    "logo": "images/e-wallet/icon-vnpay.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#EF282C",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "vnpay-phone"
+                        }
+                    ],
+                    "appLink": "https://app.vnpay.vn/2025",
+                    "appName": "VNPay"
+                },
+                {
+                    "nameVi": "Ví VNPT Money",
+                    "nameEn": "VNPT Money Wallet",
+                    "isActive": true,
+                    "logo": "images/e-wallet/icon-vnpt-pay.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#00BAF2",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "vnptmoney-phone"
+                        }
+                    ],
+                    "appLink": "https://km.vnptmoney.vn/app",
+                    "appName": "VNPT Monney"
+                },
+                {
+                    "nameVi": "Ví Moca",
+                    "nameEn": "Moca Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-moca.svg",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1188DC",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "moca-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link Moca]",
+                    "appName": "Moca"
+                },
+                {
+                    "nameVi": "Ví VTCPay",
+                    "nameEn": "VTCPay Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-vtcpay.webp",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1747C8",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "vtcpay-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link VTCPay]",
+                    "appName": "VTCPay"
+                }
+            ]
+        },
+        {
+            "id": "credit-cards",
+            "titleKey": "creditCardsTitle",
+            "iconClass": "fa-regular fa-credit-card",
+            "methods": [
+                {
+                    "nameVi": "Thẻ tín dụng VISA VIETINBANK",
+                    "nameEn": "VISA VIETINBANK Credit Card",
+                    "isActive": false,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/ICB.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#004080",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "visactg-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh Tây Cần Thơ"
+                        }
+                    ],
+                    "appLink": "[Deep Link Vietinbank]",
+                    "appName": "VISA VietinBank",
+                    "interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/ICB-0944353323-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Thẻ ghi nợ VISA TIMO",
+                    "nameEn": "VISA TIMO Debit Card",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://vietqr.net/portal-service/resources/icons/TIMO.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#5F4B8B",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "4619300003757001",
+                            "isCopyable": true,
+                            "idSuffix": "visatimo-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=timo",
+                    "appName": "VISA TIMO",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/TIMO-4619300003757001-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                },
+                {
+                    "nameVi": "Thẻ ghi nợ VISA CAKE",
+                    "nameEn": "VISA CAKE Debit Card",
+                    "isActive": true,
+                    "inactiveStatusKey": "statusMaintenance",
+                    "logo": "https://api.vietqr.io/img/CAKE.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#FF69B4",
+                    "details": [
+                        {
+                            "labelKey": "accountHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "accountNumberLabel",
+                            "value": "4553720107585016",
+                            "isCopyable": true,
+                            "idSuffix": "visacake-account"
+                        },
+                        {
+                            "labelKey": "branchLabel",
+                            "value": "Chi nhánh TPHCM"
+                        }
+                    ],
+                    "appLink": "https://dl.vietqr.io/pay?app=cake",
+                    "appName": "VISA CAKE",
+                    "//interbankAppLink": "[LINK APP CHUYỂN KHÁC NH/VIETQR]",
+                    "//interbankAppNameKey": "openInterbankAppButtonText",
+                    "qrCodeUrl": "https://img.vietqr.io/image/CAKE-4553720107585016-print.png?&accountName=V%C3%B5%20Nguy%E1%BB%85n%20%C4%90%C4%83ng"
+                }
+            ]
+        }
+    ],
+    "contactInfo": {
+        "phoneZalo": "0944353323",
+        "email": "vndang.contact@gmail.com"
+    },
+    "socialLinks": {
+        "zalo": "https://zalo.me/0944353323",
+        "facebook": "https://www.facebook.com/vodang2702",
+        "messenger": "https://m.me/vodang2702",
+        "website": "https://dangvo.io.vn",
+        "telegram": "https://t.me/vndang",
+        "github": "https://github.com/vonguyendang",
+        "instagram": "https://www.instagram.com/_dangvn",
+        "tiktok": "https://www.tiktok.com/@dangvo.dev",
+        "x": "https://twitter.com/vodang2702",
+        "linkedin": "https://www.linkedin.com/in/vonguyendang",
+        "youtube": "https://www.youtube.com/@vodang2702",
+        "twitch": "https://www.twitch.tv/vodang2702",
+        "patreon": "https://www.patreon.com/vodang2702"
+    },
+    "donationLinks": {
+        "titleKey": "donationTitle",
+        "options": [
+            {
+                "name": "MoMo QR",
+                "link": "https://me.momo.vn/dangvo",
+                "isQR": false,
+                "icon": "images/e-wallet/icon-momo.png"
+            },
+            {
+                "name": "Buy Me a Coffee",
+                "link": "https://buymeacoffee.com/dangvo",
+                "isQR": false,
+                "icon": "images/e-wallet/icon-buy-me-a-coffee.png"
+            }
+        ]
+    }
+}
