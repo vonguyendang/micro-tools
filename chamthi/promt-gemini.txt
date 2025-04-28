@@ -1,0 +1,115 @@
+Tôi cần tạo 1 web html,css, js để chấm thi, do hệ thống lỗi nên cho người dùng tự nhập đáp án. Do tự nhập nên câu trả lời không theo format chuẩn. Có nhiều dạng input câu trả lời. Tôi cần hệ thống cho phép nhập Đáp án chuẩn như bên dưới, bấm save để lưu. Sau đó bên dưới cho nhập input của thí sinh, có nhiều kiểu. Cần chấm điểm. Tổng điểm là 10, nếu đáp án chuẩn có 40 câu thì mỗi câu 0,25, nếu đáp án chuẩn có 20 câu thì mỗi câu 0,5. Yêu cầu hệ thống in ra màn hình kết quả:
+1. Bài làm của thí sinh:
+1C, 2D, 3A, 4A, 5A, 6B, 7A, 8C, 9D, 10B,
+11A, 12B, 13B, 14B, 15D, 16B, 17A, 18C, 19C, 20C,
+21A, 22A, 23B, 24D, 25A, 26B, 27C, 28D, 29C, 30C,
+31C, 32B, 33D, 34A, 35A, 36B, 37C, 38B, 39B, 40A
+
+2. Kết quả chấm điểm:
+
+Số câu trả lời đúng: 37 / 40 câu
+Tổng điểm: 37 * 0,25 = 9,25 điểm
+
+3. Các câu trả lời sai:
+
+Câu 14: Thí sinh chọn B. Đáp án đúng là C.
+Câu 17: Thí sinh chọn A. Đáp án đúng là B.
+Câu 36: Thí sinh chọn B. Đáp án đúng là A.
+
+==========================
+Input Đáp án chuẩn:
+1C
+2D
+3A
+4A
+5A
+6B
+7A
+8C
+9D
+10B
+11A
+12B
+13B
+14C
+15D
+16B
+17B
+18C
+19C
+20C
+21A
+22A
+23B
+24D
+25A
+26B
+27C
+28D
+29C
+30C
+31C
+32B
+33D
+34A
+35A
+36A
+37C
+38B
+39B
+40A
+
+Input
+Dạng trả lời 1: 
+1.C 18.C 35.A 2.D 19.C 36.B 3.A 20.C 37.C 4.A 21.A 38.B 5.A 22.A 39.B 6.B 23.B 40.A 7.A 24.D 8.C 25.A 9.D 26.B 10.B 27.C 11.A 28.D 12.B 29.C 13.B 30.C 14.B 31.C 15.D 32.B 16.B 33.D 17.A 34.A
+
+Dạng trả lời 2: 
+1C 2D 3A 4A 5A 6B 7A 8C 9D 10A 11A 12B 13B 14B 15D 16B 17A 18C 19C 20C 21A 22A 23B 24D 25A 26B 27C 28D 29C 30C 31C 32B 33D 34A 35A 36B 37C 38B 39B 40A
+
+Dạng trả lời 3: 
+1.C           2.D    3.A          4.A 5.A 6.B 7.A 8.C 9.D 10.B 11.A 12.B 13.B 14.B 15.D 16.B 17.A 18.C 19.C 20.C 21.A 22.A 23.B 24.D 25.A 26.B 27.C 28.D 29.C 30.C 31.C 32.B 33.D 34.A 35.A 36.B 37.C 38.B 39.B 40.A
+
+Dạng trả lời 4: 
+1 A  2 D  3 A  4 A  5 A  6 B  7 A  8 C  9 B  10 B 11 A  12 B  13 B  14 B  15 D 16 B  17 A  18 C  19 C  20 C  21 A  22 A  23 B  24 D  25 A  26 B  27 C 28 D  29 C  30 C  31 C 32 B  33 D  34 A  35 A  36 B  37 C  38 B  39 B  40 A 
+
+Dạng trả lời 5: 
+1. C.     38. B          39.B          40.A 2. D 3. A 4. A 5. A 6. B 7. A 8. C 9. D 10. A 11. A 12. B 13. B 14. B 15. D 16. B 17. A 18. C 19. C 20. C 21. A 22. A 23. B 24. D 25. A 26. B 27. C 28. D 29. C 30. C 31.C 32.B 33.D 34.A 35.A 36.B 37.C
+
+Dạng trả lời 6: 
+1 C           31 C 2 D           32 B 3 A           33 D 4 A           34 A 5 A           35 A 6 B           36 B 7 A           37 C 8 C           38 B 9 D           39 B 10 B         40 A 11 A 12 B 13 B 14 B 15 D 16 B 17 A 18 C 19 C 20 C 21 A 22 A 23 B 24 D 25 A 26 B 27 C 28 D 29 C 30 C
+
+Dạng trả lời 7: 
+Câu 1. C   Câu 2. B   Câu 3. B   Câu 4. A   Câu 5. A   Câu 6. B   Câu 7. A   Câu 8. C   Câu 9. D   Câu 10. B   Câu 11. A   Câu 12. C   Câu 13. B   Câu 14. B   Câu 15. D   Câu 16. B   Câu 17. B   Câu 18. C   Câu 19. C   Câu 20. C   Câu 21. A   Câu 22. A   Câu 23. B   Câu 24. C   Câu 25. A   Câu 26. B   Câu 27. C   Câu 28. D   Câu 29. C   Câu 30. C   Câu 31. C   Câu 32. A   Câu 33. A   Câu 34. A   Câu 35. A   Câu 36. A   Câu 37. C   Câu 38. B   Câu 39. B   Câu 40. A
+
+Dạng trả lời 8: 
+1 A 2 D 3 A 4 A 5 A 6 B 7 A 8 C 9 D 10 B 11 A 12 B 13 B 14 B 15 D 16 B 17 A 18 C 19 C 20 C 21 A 22 A 23 B 24 D 25 A 26 B 27 C 28 D 29 C 30 C 31 C 32 B 33 D 34 A 35 A 36 B 37 C 38 B 39 B 40 A
+
+Dạng trả lời 9: 
+1.C  2.D 3.A  4.A 5.A 6.B 7.A 8.C 9.D 10.B 11.A 12.B 13.B 14.B 15.D 16.B 17.A 18.C 19.C 20.C 21.A 22.A 23.B 24.D 25.A 26.B 27.C 28.D 29.C 30.C 31.C 32.B 33.D 34.A 35.A 36.B 37.C 38.B 39.B 40.A
+
+Dạng trả lời 10: 
+1.C 18.C 35.A 2.D 19.C 36.B 3.A 20.C 37.C 4.A 21.A 38.B 5.A 22.A 39.B 6.B 23.B 40.A 7.A 24.D 8.C 25.A 9.D 26.B 10.B 27.C 11.A 28.D 12.B 29.C 13.B 30.C 14.B 31.C 15.D 32.B 16.B 33.D 17.A 34.A
+
+Dạng trả lời 11: 
+1.A 2. B 3. A 4. A 5. A 6. B 7. A 8. C 9. D 10. A 11. A 12. B 13. B 14. B 15. D 16. B 17. A 18. C 19. C 20. C 21. A 22. A 23. B 24. D 25. A 26. B 27. C 28. D 29. C 30. C 31. C 32. B 33. D 34. A 35. A 36. B 37. C 38. B 39. B 40. A
+
+Dạng trả lời 12: 
+1.C 2. D 3. A 4.A 5.A 6.B 7.A 8.C 9.D 10.B 11. A 12.B 13.B 14.B 15.D 16.B 17.A 18.C 19.C 20.C 21.A 22.A 23.B 24.D 25.A 26.B 27.C 28.D 29.C 30.C 31.C 32.B 33.D 34.A 35.A 36.B 37.C 38.B 39.B 40.A
+
+Dạng trả lời 13: 
+1:C 2:D 3:A 4:A 5:A 6:B 7:A 8:C 9:D 10:B 11:A 12:B 13:B 14:B 15:D 16:B 17:A 18:C 19:C 20:C 21:A 22:A 23:B 24:D 25:A 26:B 27:C 28:D 29:C 30:C 31:C 32:B 33:D 34:A 35:A 36:B 37:C 38:B 39:B 40:A
+
+Dạng trả lời 14: 
+câu 1: C, Câu 2:D, câu 3:A, câu 4:A, câu 5:A, câu 6:B, câu 7:A, câu 8:C, câu 9, D, câu 10:A, câu 11:A, câu 12:B, câu 13:B, câu 14:B, câu 15: D, câu 16:B, câu 17:A, câu 18:C, câu 19: C, câu 20:C, Câu 21: A, câu 22: A, câu 23:B, câu 24: D, câu 25: A, Câu 26:B, Câu 27:C, câu 28:D, Câu 29, C, câu 30: C, Câu 31: C, câu 32: B, câu 33: D, câu 34: A, câu 35: A, câu 36: B, câu 37:C, câu 38:B, câu 39:B, Câu 40:A
+
+Dạng trả lời 15: 
+1-C 2-D 3-C 4-A 5-C 6-B 7-A 8-C 9-D 10-B 11-A 12-B 13-B 14-B 15-D 16-B 17-A 18-C 19-C 20-C 21-A 22-A 23-B 24-D 25-A 26-B 27-C 28-D 29-C 30-C 31-C 32-B 33-D 34-A 35-A 36-B 37-C 38-A 39-B 40-A
+
+Dạng trả lời 16: 
+1 C. Một tổ chức chính trị - xã hội 2  C. Võ Thị Ánh Xuân 3  B. Bánh xe răng 4  A. Hội đồng nhân dân và Uỷ ban nhân dân 5  A. Quốc hội và Hội đồng nhân dân 6 B. Khi làm thiệt hại nghiêm trọng đến lợi ích của nhân dân địa phương 7  A. Sơ thẩm 8  C. Bộ tài chính 9  D. Bộ trưởng Bộ công thương 10  A. Chủ tịch nước 11  C. Chính phủ 12 B. 60 ngày 13  B. 12 tháng 14  B. Chủ tịch nước, Ủy ban thường vụ Quốc hội, Thủ tướng Chính phủ hoặc ít nhất một phần ba tổng số đại biểu Quốc hội yêu cầu 15  B. Ít nhất một phần ba tổng số đại biểu Quốc hội 16  B. Ủy ban nhân dân 17  A. 5 18  C. Quốc hội 19  C. Các quan hệ xã hội cơ bản nhất, quan trọng nhất liên quan đến việc xác định những vấn đề quan trọng nhất của đất nước. 20  C. Chánh án Tòa án nhân dân tối cao 21  A. 01/01/2014 22  A. Phổ thông, bình đẳng, trực tiếp và bỏ phiếu kín 23  B. Thống nhất quản lý về kinh tế, văn hóa, xã hội, giáo dục, y tế, khoa học, công nghệ, môi trường, thông tin, truyền thông, đối ngoại, quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội 24  B. Gồm 11 chương với 117 điều 25  A. Đất liền, hải đảo, vùng biển và vùng trời 26  B. 5 27  C. 2/3 tổng số đại biểu Quốc hội biểu quyết tán thành 28  D. Hội đồng dân tộc 29  C. Hội đồng bầu cử Quốc gia, Kiểm toán nhà nước 30  D. Hai chế độ sở hữu, năm thành phần kinh tế 31  C. Mặt trận tổ quốc Việt Nam 32  B. Miễn nhiệm ĐBQH 33  B. ít nhất là 30 % tổng số đại biểu Quốc hội 34  B. Ủy ban thường vụ Quốc hội 35  B. 1946 36  C. Nguyễn Ái Quốc37 37  C. Quốc hội 38  B. Phản bội Tổ Quốc 39  B. Tập thể, quyết định theo đa số 40  A. Nhà nước
+
+Dạng trả lời 17:
+1c ,2d,3a,4a,5a,6b,7a,8c,9d,10a,11a,12b,13b,14b,15d,16b,17b,18c,19c,20c,21a,22a,23b,24d,25a,26b,27c,28d,29c,30c,31c,32d,33c,34b,35a,36b,37c,38b,39b,40a
+
+Dạng trả lời 18:
+CÂU 1 :C                  CÂU 21 :A CÂU 2:A                   CÂU 22 :A CÂU 3 :A                  CÂU 23 :B CÂU 4 :A                  CÂU 24 :D CÂU 5 :A                  CÂU 25 :A CÂU 6 : B                 CÂU 26 :B CÂU 7 : A                  CÂU 27 :C CÂU 8 : C                  CÂU 28 :D CÂU 9 : D                 CÂU 29 :C CÂU 10 : A              CÂU 30 :V CÂU 11 : A               CÂU 31 :C CÂU 12 : B              CÂU 32 :B CÂU 13 B               CÂU 33 :D CÂU 14 : B             CÂU 34 :A CÂU 15 : D              CÂU 35 :A CÂU 16 : B                CÂU 36 :B CÂU 17 : A                CÂU 37 :C CÂU 18 :C                  CÂU 38 :B CÂU 19 :C                 CÂU 39 :B CÂU 20 : C                 CÂU 40 :A
