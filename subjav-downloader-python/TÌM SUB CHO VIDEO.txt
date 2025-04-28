@@ -1,0 +1,51 @@
+TÌM SUB CHO VIDEO
+
+#CHUẨN BỊ:
+├── Video
+│   ├── subtilecat.py
+│   ├── name.txt
+│   ├── sublink.txt
+
+* Các bước tìm sub cho list video có sẵn trên cloud từ subtitlecat.com
+
+Bước 1. Lậý danh sách file mp4 hoặc ts và tinh gọn file danh sách
+
+rclone tree "dangvo2:Tutorial/Course/Leak/" > name_jav_danvo2.txt
+
+Dữ liệu thô:
+/
+├── Aoi Hinata
+│   ├── SONE-044 ''Tôi đang rất phấn khích, vì vậy hãy làm điều-vi.srt
+│   ├── SONE-044 ``Tôi đang rất phấn khích, vì vậy hãy làm điều.ts
+│   ├── SONE-045 Cửa hàng tình dục vào phút cuối - _ Một quán cà-vi.srt
+│   ├── SONE-045 Cửa hàng tình dục vào phút cuối! _ Một quán cà.ts
+│   ├── SSIS-998 Khi tôi đề nghị cô em gái táo bạo của mình trở-vi.srt
+│   └── SSIS-998 Khi tôi đề nghị cô em gái táo bạo của mình trở.ts
+├── Apricot Here
+.....
+
+Dữ liệu tinh gọn:
+
+SONE-044 ''Tôi đang rất phấn khích, vì vậy hãy làm điều-vi.srt
+SONE-044 ``Tôi đang rất phấn khích, vì vậy hãy làm điều.ts
+SONE-045 Cửa hàng tình dục vào phút cuối - _ Một quán cà-vi.srt
+SONE-045 Cửa hàng tình dục vào phút cuối! _ Một quán cà.ts
+SSIS-998 Khi tôi đề nghị cô em gái táo bạo của mình trở-vi.srt
+SSIS-998 Khi tôi đề nghị cô em gái táo bạo của mình trở.ts
+
+Bước 2. Mở Excel > Onedrive (haidang908@live.com) > Accounts.xlsx > Sheet SUBJAV
+Paste dữ liệu tinh gọn ở Bước 1 vào cột B (LINK DOWNLOAD - bắt đầu từ B3)
+
+Bước 3. Paste dữ liệu cột E (Name.txt - Bắt đầu từ E3) vào file name.txt
+		Paste dữ liệu cột G (Sublink.txt - Bắt đầu từ G3) vào file sublink.txt
+
+Bước 4. Chạy lệnh thực thi tải sub srt
+
+python3 subtitlecat.py
+
+Bước 5. Sau khi bước 4 hoàn thành > Mở file cannotdownload.txt > Download lại các srt không download được
+		Nếu cần thiết thì Mở file file notfound.txt > Download sub ở các trang web khác
+
+Bước 6, Mở AirExplorer > Cut tất cả file download được vào thư mục tương ứng ở Cloud
+
+
