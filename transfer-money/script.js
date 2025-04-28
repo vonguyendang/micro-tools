@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLoading(show = true) {
         if (!loadingIndicator) return;
         const loadingTextElement = loadingIndicator.querySelector('p');
-        if (loadingTextElement) { loadingTextElement.textContent = __('loadingText'); }
+        if (loadingTextElement) { loadingTextElement.textContent = __('Please wait a little bit.....'); }
         if (show) {
             mainContent.style.visibility = 'hidden'; 
             loadingIndicator.classList.remove('hidden');
