@@ -537,7 +537,7 @@
                             "labelKey": "accountNumberLabel",
                             "value": "101884211265",
                             "isCopyable": true,
-                            "idSuffix": "vietinbank-account"
+                            "idSuffix": "ctg1-account"
                         },
                         {
                             "labelKey": "branchLabel",
@@ -567,7 +567,7 @@
                             "labelKey": "accountNumberLabel",
                             "value": "0944353323",
                             "isCopyable": true,
-                            "idSuffix": "vietinbank-account"
+                            "idSuffix": "ctg2-account"
                         },
                         {
                             "labelKey": "branchLabel",
@@ -852,6 +852,116 @@
                     ],
                     "appLink": "[Deep Link VTCPay]",
                     "appName": "VTCPay"
+                },
+                {
+                    "nameVi": "Ví PayPal",
+                    "nameEn": "PayPal Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-paypal.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#32316F",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "0944353323",
+                            "isCopyable": true,
+                            "idSuffix": "paypal-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link PayPal]",
+                    "appName": "PayPal"
+                },
+                {
+                    "nameVi": "Ví Payoo",
+                    "nameEn": "Payoo Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-payoo.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#FF6F00",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "[Số tk Payoo]",
+                            "isCopyable": true,
+                            "idSuffix": "paypal-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link Payoo]",
+                    "appName": "Payoo"
+                },
+                {
+                    "nameVi": "Ví Payoneer",
+                    "nameEn": "Payoneer Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-payoneer.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#32316F",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "[Số tk Payoneer]",
+                            "isCopyable": true,
+                            "idSuffix": "paypal-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link Payoneer]",
+                    "appName": "Payoneer"
+                },
+                {
+                    "nameVi": "Ví ApplePay",
+                    "nameEn": "ApplePay Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-apple-pay.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1747C8",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "[Số tk ApplePay]",
+                            "isCopyable": true,
+                            "idSuffix": "applepay-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link ApplePay]",
+                    "appName": "ApplePay"
+                },
+                {
+                    "nameVi": "Ví GPay",
+                    "nameEn": "GPay Wallet",
+                    "isActive": false,
+                    "logo": "images/e-wallet/icon-gpay.png",
+                    "themeColor": "#FFFFFF",
+                    "buttonColor": "#1747C8",
+                    "details": [
+                        {
+                            "labelKey": "walletHolderLabel",
+                            "value": "Võ Nguyễn Đăng"
+                        },
+                        {
+                            "labelKey": "phoneNumberLabel",
+                            "value": "[Số tk GPay]",
+                            "isCopyable": true,
+                            "idSuffix": "gpay-phone"
+                        }
+                    ],
+                    "appLink": "[Deep Link GPay]",
+                    "appName": "GPay"
                 }
             ]
         },
@@ -893,7 +1003,7 @@
                 {
                     "nameVi": "Thẻ ghi nợ VISA TIMO",
                     "nameEn": "VISA TIMO Debit Card",
-                    "isActive": true,
+                    "isActive": false,
                     "inactiveStatusKey": "statusMaintenance",
                     "logo": "https://vietqr.net/portal-service/resources/icons/TIMO.png",
                     "themeColor": "#FFFFFF",
@@ -923,7 +1033,7 @@
                 {
                     "nameVi": "Thẻ ghi nợ VISA CAKE",
                     "nameEn": "VISA CAKE Debit Card",
-                    "isActive": true,
+                    "isActive": false,
                     "inactiveStatusKey": "statusMaintenance",
                     "logo": "https://api.vietqr.io/img/CAKE.png",
                     "themeColor": "#FFFFFF",
