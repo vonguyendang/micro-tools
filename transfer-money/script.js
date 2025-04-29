@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let accountHolder = ''; 
         if (method.isActive !== false && Array.isArray(method.details)) { 
              method.details.forEach((detail, index) => {
-                 const copyTargetId = `copy-${categoryId}-${method.idSuffix || methodName.toLowerCase().replace(/\s+/g, '-')}-${index}`; 
+                 const copyTargetId = `copy-${categoryId}-${detail.idSuffix || methodName.toLowerCase().replace(/\s+/g, '-')}-${index}`; 
                  const label = detail.labelKey ? __(detail.labelKey) : ''; 
                  const value = detail.valueKey ? __(detail.valueKey) : detail.value; 
                  if(detail.labelKey === 'accountNumberLabel') accountNumber = value;
@@ -388,13 +388,18 @@ document.addEventListener('DOMContentLoaded', () => {
      // --- Event Listener Chung (Copy + QR Popup + Form Submit) ---
      document.body.addEventListener('click', (event) => {
          // --- Xử lý nút Sao chép ---
-         const copyButton = event.target.closest('.copy-btn'); 
+         const copyButton = event.target.closest('.copy-btn');
+         console.log('Copy button clicked copyButton:', copyButton);
          if (copyButton) {
               const targetSelector = copyButton.dataset.copyTarget;
+              console.log('Copy button clicked targetSelector:', targetSelector);
               const targetElement = document.querySelector(targetSelector);
+              console.log('Target element:', targetElement);
               const itemName = copyButton.dataset.itemName || __('accountNumberLabel'); // Lấy tên item
+              console.log('Item name:', itemName);
               if (targetElement) {
                   const textToCopy = targetElement.innerText;
+                  console.log('Text to copy:', textToCopy);
                   navigator.clipboard.writeText(textToCopy).then(() => {
                       const toastMsgTemplate = __('copiedToastMessage'); 
                       const toastMsg = toastMsgTemplate.replace('{itemName}', itemName); 
