@@ -389,14 +389,14 @@ document.addEventListener('DOMContentLoaded', () => {
      document.body.addEventListener('click', (event) => {
          // --- Xử lý nút Sao chép ---
          const copyButton = event.target.closest('.copy-btn');
-         console.log('Copy button clicked copyButton:', copyButton);
+        //  console.log('Copy button clicked copyButton:', copyButton);
          if (copyButton) {
               const targetSelector = copyButton.dataset.copyTarget;
-              console.log('Copy button clicked targetSelector:', targetSelector);
+            //   console.log('Copy button clicked targetSelector:', targetSelector);
               const targetElement = document.querySelector(targetSelector);
-              console.log('Target element:', targetElement);
+            //   console.log('Target element:', targetElement);
               const itemName = copyButton.dataset.itemName || __('accountNumberLabel'); // Lấy tên item
-              console.log('Item name:', itemName);
+            //   console.log('Item name:', itemName);
               if (targetElement) {
                   const textToCopy = targetElement.innerText;
                   console.log('Text to copy:', textToCopy);
