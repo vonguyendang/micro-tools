@@ -1,0 +1,506 @@
+/* ----- General Styles & Variables ----- */
+:root {
+    --primary-color: #3498db; /* Blue */
+    --primary-darker: #2980b9;
+    --secondary-color: #2ecc71; /* Green */
+    --secondary-darker: #27ae60;
+    --accent-color: #f39c12; /* Orange */
+    --background-color: #f4f7f6;
+    --container-bg: #ffffff;
+    --text-color: #2c3e50;
+    --light-text-color: #ffffff;
+    --border-color: #e0e6ed;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --success-bg: #e8f5e9;
+    --success-text: #4caf50;
+    --error-color: #e74c3c; /* Red */
+    --price-up-color: #27ae60; /* Darker Green */
+    --price-down-color: #e74c3c; /* Red */
+    --ceiling-price-color: #8e44ad; /* Purple */
+    --reference-price-color: #f39c12; /* Orange/Gold */
+    --floor-price-color: #2980b9; /* Darker Blue */
+    --star-color: #f1c40f; /* Yellow */
+
+    --font-family: 'Poppins', 'Arial', sans-serif;
+    --base-font-size: 16px;
+    --header-font-size: 1.8rem; /* ~28px */
+    --label-font-size: 1rem;   /* ~16px */
+    --input-font-size: 1rem;   /* ~16px */
+    --button-font-size: 1.1rem; /* ~17.5px */
+    --result-font-size: 0.95rem; /* ~15px */
+    --small-font-size: 0.85rem; /* ~13.5px */
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px; /* Thêm padding trên dưới */
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ----- Tabs ----- */
+.tabs-container {
+    width: 95%;
+    max-width: 1000px;
+    margin-bottom: 20px; /* Khoảng cách giữa tabs và container */
+    display: flex; /* Canh giữa tabs */
+    justify-content: center;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    overflow: hidden; /* Đảm bảo border-radius hoạt động */
+    padding: 5px; /* Khoảng đệm nhỏ bên trong tabs */
+}
+
+.tab {
+    padding: 12px 25px;
+    cursor: pointer;
+    background-color: var(--light-text-color); /* Màu nền mặc định */
+    color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius); /* Bo tròn nhẹ */
+    margin: 5px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+    flex-grow: 1; /* Các tab chia đều không gian */
+    text-align: center;
+    white-space: nowrap; /* Ngăn text xuống dòng không cần thiết */
+}
+
+.tab:hover {
+    background-color: #e9f5ff; /* Màu nền nhạt hơn khi hover */
+    color: var(--primary-darker);
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên nhẹ */
+}
+
+.tab.active {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab i {
+    margin-right: 8px;
+}
+
+
+/* ----- Container ----- */
+.container {
+    background-color: var(--container-bg);
+    padding: 30px 40px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    width: 95%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    display: none; /* Mặc định ẩn các container */
+    margin-top: 0; /* Bỏ margin-top vì đã có từ .tabs-container */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.container.active-container {
+    display: block; /* Hiển thị container active */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+h1 {
+    color: var(--primary-darker);
+    font-size: var(--header-font-size);
+    margin: 0;
+    font-weight: 600;
+}
+
+h1 i {
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+/* ----- Forms & Inputs ----- */
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 500; /* Medium weight */
+    font-size: var(--label-font-size);
+    display: block;
+    margin-bottom: 8px; /* Khoảng cách giữa label và input */
+    color: var(--text-color);
+}
+
+label i {
+    margin-right: 6px;
+    color: var(--primary-color);
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    font-size: var(--input-font-size);
+    padding: 12px 15px;
+    margin: 0; /* Bỏ margin mặc định */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    background-color: #f8f9fa; /* Màu nền input nhẹ */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Hiệu ứng focus */
+}
+
+/* Placeholder style */
+::placeholder {
+    color: #aaa;
+    opacity: 1; /* Firefox */
+}
+
+/* ----- Inline Groups (for ratios) ----- */
+.inline-group {
+    display: flex;
+    align-items: center; /* Căn giữa các item theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa các input và dấu ':' */
+    margin-bottom: 20px; /* Khoảng cách dưới nhóm */
+}
+
+.inline-item {
+    flex: 1; /* Chia đều không gian */
+}
+
+.inline-item input[type="number"] {
+    margin: 0; /* Bỏ margin vì đã có gap */
+}
+
+.divider {
+    font-size: 1.2rem; /* Kích thước dấu ':' */
+    font-weight: bold;
+    color: var(--text-color);
+    padding: 0 5px; /* Khoảng đệm quanh dấu ':' */
+    margin-bottom: 0; /* Reset margin */
+}
+
+/* ----- Buttons ----- */
+.button-container {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa các nút */
+    margin-top: 25px; /* Khoảng cách trên */
+    justify-content: center; /* Căn giữa các nút trong container */
+    flex-wrap: wrap; /* Cho phép nút xuống dòng nếu không đủ chỗ */
+}
+
+.action-button {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: var(--button-font-size);
+    font-weight: 500;
+    transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    display: inline-flex; /* Sử dụng inline-flex để icon và text căn chỉnh tốt */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.action-button i {
+    margin-right: 8px;
+}
+
+.action-button:hover {
+    background-color: var(--primary-darker);
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button styles if needed */
+.calculate-button {
+    background-color: var(--secondary-color);
+}
+.calculate-button:hover {
+    background-color: var(--secondary-darker);
+}
+
+.external-link-button {
+    background-color: var(--accent-color);
+    color: var(--light-text-color);
+}
+.external-link-button:hover {
+    background-color: #d35400; /* Darker Orange */
+}
+
+
+/* ----- Result Area ----- */
+.result {
+    margin-top: 30px;
+    font-size: var(--result-font-size);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.placeholder-text {
+    color: #888;
+    text-align: center;
+    font-style: italic;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    border: 1px dashed var(--border-color);
+}
+
+/* ----- Result Table Styles ----- */
+.result table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--small-font-size); /* Smaller font for tables */
+    margin-bottom: 20px; /* Space between tables */
+    box-shadow: 0 1px 3px var(--shadow-color);
+    border-radius: var(--border-radius); /* Bo góc cho table */
+    overflow: hidden; /* Cần thiết cho border-radius trên table */
+}
+
+.result th, .result td {
+    border: 1px solid var(--border-color);
+    padding: 10px 12px; /* Tăng padding nhẹ */
+    text-align: left;
+    vertical-align: middle; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.result th {
+    background-color: #f8f9fa; /* Màu nền header nhạt */
+    font-weight: 600; /* Header đậm hơn */
+    color: var(--primary-darker);
+}
+
+.result th.center, .result td.center {
+    text-align: center;
+}
+.result td.center-content {
+    text-align: center;
+}
+
+.result .value {
+    text-align: right;
+    font-weight: 500; /* Giá trị đậm hơn một chút */
+    white-space: nowrap;
+}
+
+/* Alternating row colors for better readability */
+.result tbody tr:nth-child(even) {
+    background-color: #fdfdfe;
+}
+.result tbody tr:hover {
+    background-color: #e9f5ff; /* Highlight row on hover */
+}
+
+/* Specific table for hidden border look (like price info) */
+.hidden-border {
+    border: none;
+    box-shadow: none; /* Bỏ shadow cho bảng này */
+    margin-bottom: 25px;
+}
+
+.hidden-border td, .hidden-border th {
+    border: none;
+    padding: 8px;
+    text-align: center;
+    font-weight: 500;
+    font-size: var(--small-font-size);
+    background-color: transparent !important; /* Ghi đè màu nền */
+}
+.hidden-border th {
+     font-weight: 600;
+     color: var(--primary-darker);
+     padding-bottom: 15px;
+}
+.hidden-border tr:hover {
+    background-color: transparent !important; /* Bỏ hover effect */
+}
+.hidden-border .button-container {
+    margin-top: 10px; /* Giảm margin top cho nút trong bảng này */
+    margin-bottom: 20px;
+}
+.hidden-border .external-link-button { /* Style riêng cho nút link ngoài */
+     padding: 8px 15px;
+     font-size: 0.9rem;
+}
+
+/* Price color classes */
+.price-up { color: var(--price-up-color); font-weight: bold; }
+.price-down { color: var(--price-down-color); font-weight: bold; }
+.ceiling-price { color: var(--ceiling-price-color); font-weight: bold; }
+.reference-price { color: var(--reference-price-color); font-weight: bold; }
+.floor-price { color: var(--floor-price-color); font-weight: bold; }
+
+/* Star Rating */
+#star-rating {
+    color: var(--star-color);
+    font-size: 1.1rem; /* Kích thước sao */
+}
+#star-rating i {
+    margin: 0 1px; /* Khoảng cách nhỏ giữa các sao */
+}
+.assessment-header th {
+    font-size: 1rem; /* Tăng kích thước font cho header đánh giá */
+}
+
+/* ----- Result GDKHQ ----- */
+#resultGDKHQ {
+    text-align: center;
+    font-size: 1.3rem; /* Tăng kích thước font */
+    font-weight: 600; /* Đậm hơn */
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    color: var(--secondary-darker);
+    background-color: #eafaf1; /* Nền xanh lá cây nhạt hơn */
+    border: 1px solid var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: translateY(10px) scale(0.98); /* Bắt đầu từ dưới lên và nhỏ hơn */
+    transition: opacity var(--transition-speed) ease-out, transform var(--transition-speed) ease-out;
+}
+
+#resultGDKHQ.show {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Trở về vị trí và kích thước bình thường */
+}
+
+/* ----- Loading Spinner ----- */
+.fa-spinner {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+}
+
+/* ----- Icons in Table ----- */
+.result .icon {
+    margin-right: 8px;
+    color: var(--primary-color);
+    width: 18px; /* Đảm bảo icon chiếm không gian nhất định */
+    text-align: center;
+}
+
+
+/* ----- Responsive Design ----- */
+
+/* Tablets and smaller desktops */
+@media (max-width: 768px) {
+    body {
+        padding: 15px 5px;
+    }
+    .container {
+        width: 98%;
+        padding: 20px;
+    }
+    h1 {
+        font-size: 1.6rem; /* ~25px */
+    }
+    .tab {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    .inline-group {
+        flex-direction: column; /* Stack items vertically */
+        align-items: stretch; /* Make items full width */
+        gap: 5px;
+    }
+    .divider {
+        display: none; /* Hide divider on small screens */
+    }
+    .result th, .result td {
+        padding: 8px 10px;
+    }
+    .result table {
+        font-size: 0.8rem; /* Further reduce font size */
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    body {
+        padding: 10px 5px;
+    }
+    .container {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 1.4rem; /* ~22px */
+    }
+    .tab {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px;
+    }
+    .action-button {
+        width: 100%; /* Make buttons full width */
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+    input[type="text"],
+    input[type="number"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+     label {
+        font-size: 0.95rem;
+    }
+    #resultGDKHQ {
+        font-size: 1.1rem;
+        padding: 15px;
+    }
+    .hidden-border td, .hidden-border th {
+         font-size: 0.75rem; /* Font nhỏ hơn cho bảng giá */
+         padding: 5px;
+    }
+    .hidden-border .button-container {
+        flex-direction: row; /* Giữ các nút link ngoài hàng ngang */
+        gap: 5px;
+    }
+     .hidden-border .external-link-button {
+         flex-grow: 1; /* Chia đều không gian */
+         padding: 6px 8px;
+         font-size: 0.8rem;
+    }
+}
