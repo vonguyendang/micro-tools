@@ -359,7 +359,7 @@
                         }),
                         fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json'),
 
-                        fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/v2/stock/${stockCode}`, {
+                        fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stockCode}`, {
                             headers: {
                                 'accept': 'application/json',
                             }
@@ -408,22 +408,22 @@
                     // Hàm rút gọn để định dạng giá trị, nếu giá trị null/undefined thì trả về 0
                     const formatPrice = (value) => formatNumber(value ?? 0);
 
-                    const averagePrice = formatPrice(data.ap);
-                    const ceilingPrice = formatPrice(data.c);
-                    const floorPrice = formatPrice(data.f);
-                    const highestPrice = formatPrice(data.h);
-                    const lowestPrice = formatPrice(data.l);
-                    const marketPrice = data.mp ?? stockData.marketCap / stockData.sharesOutstanding;
-                    const openingPrice = formatPrice(data.o);
-                    const referencePrice = formatPrice(data.r);
-                    const priceChange = formatPrice(data.pc);
-                    const percentageChange = formatNumber(data.cp ?? 0, 2);
-                    const totalVolume = data.mtq;
-                    const totalBuyVolume = data.sbv ?? 0;
-                    const totalSellVolume = data.ssv ?? 0;
-                    const totalForeignBuyVolume = data.bfq ?? 0;
+                    const averagePrice = formatPrice(data.avgPrice);
+                    const ceilingPrice = formatPrice(data.ceiling);
+                    const floorPrice = formatPrice(data.floor);
+                    const highestPrice = formatPrice(data.highest);
+                    const lowestPrice = formatPrice(data.lowest);
+                    const marketPrice = formatPrice(data.matchedPrice);
+                    const openingPrice = formatPrice(data.openPrice);
+                    const referencePrice = formatPrice(data.refPrice);
+                    const priceChange = formatPrice(data.priceChange);
+                    const percentageChange = formatNumber(data.priceChangePercent ?? 0, 2);
+                    const totalVolume = data.stockVol ?? 0;
+                    const totalBuyVolume = data.stockBUVol ?? 0;
+                    const totalSellVolume = data.stockSDVol ?? 0;
+                    const totalForeignBuyVolume = data.buyForeignQtty ?? 0;
                     const totalInternalBuyVolume = totalBuyVolume - totalForeignBuyVolume;
-                    const totalForeignSellVolume = data.sfq ?? 0;
+                    const totalForeignSellVolume = data.sellForeignQtty ?? 0;
                     const totalInternalSellVolume = totalSellVolume - totalForeignSellVolume;
                     const percentBuyVolume = formatNumber((totalBuyVolume / totalVolume) * 100, 1);
                     const percentSellVolume = formatNumber((totalSellVolume / totalVolume) * 100, 1);
@@ -432,7 +432,7 @@
                     const percentForeignSellVolume = formatNumber((totalForeignSellVolume / totalSellVolume) * 100, 1);
                     const percentInternalSellVolume = formatNumber((totalInternalSellVolume / totalSellVolume) * 100, 1);
 
-                    let marketPriceClass = getPriceClass(formatNumber(marketPrice), referencePrice, ceilingPrice, floorPrice);
+                    let marketPriceClass = getPriceClass(marketPrice, referencePrice, ceilingPrice, floorPrice);
                     let openingPriceClass = getPriceClass(openingPrice, referencePrice, ceilingPrice, floorPrice);
                     let averagePriceClass = getPriceClass(averagePrice, referencePrice, ceilingPrice, floorPrice);
                     let highestPriceClass = getPriceClass(highestPrice, referencePrice, ceilingPrice, floorPrice);
@@ -493,7 +493,7 @@
 
                     //Định giá trung bình
 
-                    const avgPrice = (price1 + price2 + price6 + price3 * 0.5 + price4 * 0.3 + price5 * 0.2) / 4
+                    const avgPrice = formatPrice((price1 + price2 + price6 + price3 * 0.5 + price4 * 0.3 + price5 * 0.2) / 4)
 
                     // Thể hiện đánh giá bằng số sao sáng màu vàng
                     const totalStars = 10;
@@ -685,6 +685,12 @@
                     let avgPriceComment = '';
 
                     if (avgPrice > marketPrice) {
+                        console.log("avgPrice", avgPrice);
+                        console.log("marketPrice", marketPrice);
+                        console.log("avgPrice/marketPrice", avgPrice / marketPrice);
+                        console.log("avgPrice/marketPrice - 1", (avgPrice / marketPrice - 1) * 100);
+                        console.log("formatNumber", formatNumber((avgPrice / marketPrice - 1) * 100, 1));
+                        console.log("avgPriceComment", avgPriceComment);
                         achievedStars += 1;
                         avgPriceComment = `Cổ phiếu được định giá cao hơn giá thị trường ${formatNumber((avgPrice / marketPrice - 1) * 100, 1)}%, có thể là cơ hội đầu tư.`;
                     } else if (avgPrice < marketPrice) {
@@ -787,7 +793,7 @@
                                                     <td colspan="3">Tên doanh nghiệp <br>${stockNameVi}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class=${marketPriceClass}>Giá hiện tại <br>${formatNumber(marketPrice)}</td>
+                                                    <td class=${marketPriceClass}>Giá hiện tại <br>${marketPrice}</td>
                                                     <td class=${marketPriceClass}>${priceChange} đ<br>
                                                         ${percentageChange} %
                                                     </td>
@@ -862,7 +868,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td><i class="fas fa-dollar-sign icon"></i> Giá thị trường</td>
-                                                    <td class="value">${formatNumber(marketPrice)} đ</td>
+                                                    <td class="value">${marketPrice} đ</td>
                                                     <td>${marketPriceComment}</td>
                                                 </tr>
                                                 <tr>
@@ -952,7 +958,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-coins icon"></i> Định giá trung bình</td>
-                                                    <td class="value">${formatNumber(avgPrice)} đ</td>
+                                                    <td class="value">${avgPrice} đ</td>
                                                     <td>${avgPriceComment}</td>
                                                 </tr>
                                             </tbody>
