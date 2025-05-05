@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Review</title>
+    <link rel="shortcut icon" href="favicon_io/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('tab1')"><i class="fas fa-chart-pie"></i> ĐỊNH GIÁ CỔ PHIẾU</button>
+            <button class="tab" onclick="showTab('tab2')"><i class="fas fa-calendar-alt"></i> GIÁ NGÀY GDKHQ</button>
+        </div>
+    </div>
+
+
+    <div id="tab1" class="container active-container">
+        <header>
+            <h1><i class="fas fa-search-dollar"></i> Định Giá Cổ Phiếu</h1>
+        </header>
+        <main>
+            <div class="input-group">
+                <label for="stockCode"><i class="fas fa-tag"></i> Mã cổ phiếu:</label>
+                <input type="text" id="stockCode" placeholder="Nhập mã cổ phiếu (VD: HPG, FPT)...">
+            </div>
+            <div class="button-container main-actions">
+                 <button class="action-button calculate-button" onclick="fetchStockData()">
+                    <i class="fas fa-calculator"></i> Tính toán Định giá
+                 </button>
+            </div>
+            <div class="result" id="resultValuation">
+                 <p class="placeholder-text">Nhập mã cổ phiếu và nhấn "Tính toán" để xem kết quả định giá chi tiết.</p>
+            </div>
+         </main>
+    </div>
+
+    <div id="tab2" class="container">
+        <header>
+            <h1><i class="fas fa-adjust"></i> Tính Giá Điều Chỉnh Ngày GDKHQ</h1>
+        </header>
+        <main>
+            <div class="input-group">
+                <label for="preGDKHQInput"><i class="fas fa-file-invoice-dollar"></i> Giá trước GDKHQ hoặc Mã CK:</label>
+                <input type="text" id="preGDKHQInput" placeholder="Nhập giá (VD: 50000) hoặc Mã CK (VD: HPG)">
+                <small>Nếu nhập Mã CK, giá đóng cửa gần nhất sẽ được tự động lấy.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="Pa"><i class="fas fa-cash-register"></i> Giá thực hiện quyền mua PHT (VNĐ):</label>
+                <input type="number" id="Pa" step="100" placeholder="Giá mua ưu đãi (VD: 10000)">
+            </div>
+
+            <div class="input-group">
+                <label for="phtRatioInput"><i class="fas fa-percentage"></i> Tỷ lệ PHT (Cổ phiếu được mua / Cổ phiếu sở hữu):</label>
+                <input type="text" id="phtRatioInput" placeholder="VD: 100:10 hoặc 10% hoặc 10/100">
+                 <small>Định dạng: Sở hữu:Được mua (100:10), Phần trăm (10%), hoặc Phân số (10/100)</small>
+            </div>
+
+            <div class="input-group">
+                <label for="cashDividendInput"><i class="fas fa-hand-holding-usd"></i> Cổ tức bằng tiền mặt (VNĐ/cổ phiếu):</label>
+                <input type="text" id="cashDividendInput" placeholder="VD: 2000 hoặc 20%">
+                <small>Nhập số tiền (2000) hoặc Tỷ lệ % trên mệnh giá (20% = 2000đ)</small>
+            </div>
+
+             <div class="input-group">
+                <label for="stockDividendRatioInput"><i class="fas fa-file-invoice-dollar"></i> Tỷ lệ Cổ tức bằng Cổ phiếu (Cổ phiếu nhận thêm / Cổ phiếu sở hữu):</label>
+                <input type="text" id="stockDividendRatioInput" placeholder="VD: 100:10 hoặc 10% hoặc 10/100">
+                 <small>Định dạng: Sở hữu:Nhận thêm (1000:125), Phần trăm (12,5%), hoặc Phân số (125/1000)</small>
+            </div>
+
+             <div class="button-container main-actions">
+                <button class="action-button calculate-button" onclick="calculateAdjustedPrice()"> <i class="fas fa-calculator"></i> Tính Giá Điều Chỉnh
+                </button>
+             </div>
+
+            <div class="result" id="resultGDKHQ">
+                <p class="placeholder-text">Nhập các thông số và nhấn nút để tính giá tham chiếu điều chỉnh.</p>
+            </div>
+             <div id="loadingGDKHQ" style="display: none; text-align: center; margin-top: 15px;">
+                 <i class="fas fa-spinner fa-spin"></i> Đang lấy giá cổ phiếu...
+             </div>
+        </main>
+    </div>
+    <footer>
+        <p>© 2023 Stock Review by Dangvo. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>
