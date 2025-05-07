@@ -1,0 +1,472 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset và Styles cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa; /* Nền xám rất nhạt, sạch sẽ */
+    color: #343a40; /* Màu chữ chính, dễ đọc */
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column; /* Cho phép footer (nếu có) hoặc pagination đẩy xuống */
+    align-items: center; /* Căn giữa container */
+    padding-top: 20px; /* Khoảng cách trên cùng */
+    padding-bottom: 40px; /* Khoảng cách dưới cùng */
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px; /* Tăng nhẹ độ rộng tối đa cho nội dung quản lý */
+    margin: 20px auto; /* Căn giữa và tạo khoảng cách */
+    padding: 30px 35px; /* Padding lớn hơn một chút */
+    background: #fff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Shadow mềm mại, tinh tế */
+    border-radius: 12px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50; /* Màu tiêu đề đậm hơn */
+    margin-bottom: 30px;
+    font-weight: 600;
+    font-size: 1.9rem;
+}
+
+/* Thông tin người dùng và nút Đăng xuất */
+.user-info-logout {
+    display: flex; /* Sử dụng flex để căn chỉnh tốt hơn */
+    justify-content: flex-end; /* Đẩy sang phải */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    padding: 10px 0; /* Chỉ padding top/bottom nếu không có background */
+    /* background-color: #f8f9fa; */ /* Bỏ background nếu không muốn */
+    /* border-radius: 6px; */
+}
+
+.user-info-logout span {
+    color: #495057;
+    margin-right: 15px;
+}
+
+.user-info-logout strong {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.user-info-logout a {
+    text-decoration: none;
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.user-info-logout a:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Controls phía trên bảng (ví dụ: ô tìm kiếm) */
+.table-controls {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start; /* Căn ô tìm kiếm sang trái */
+    align-items: center;
+}
+
+#search-input {
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 350px; /* Giới hạn độ rộng ô tìm kiếm */
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    outline: none;
+}
+
+/* Form Thêm Liên Kết */
+#add-link-form {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    gap: 15px;
+    margin-bottom: 35px;
+    align-items: flex-end; /* Căn các item thẳng hàng ở dưới đáy */
+}
+
+#add-link-form input[type="text"],
+#add-link-form input[type="url"] {
+    flex: 1 1 200px; /* Cho phép co giãn và đặt kích thước cơ sở */
+    min-width: 180px; /* Độ rộng tối thiểu */
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+#add-link-form input[type="text"]::placeholder,
+#add-link-form input[type="url"]::placeholder {
+    color: #aaa;
+}
+
+#add-link-form input[type="text"]:focus,
+#add-link-form input[type="url"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+#add-link-form button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0; /* Không cho nút bị co lại */
+}
+
+#add-link-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+#add-link-form button i {
+    font-size: 0.9em;
+}
+
+/* Bọc bảng để cuộn ngang nếu cần */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 10px; /* Giảm margin-top nếu add-link-form đã có margin-bottom */
+}
+
+/* Bảng Hiển Thị Liên Kết */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* box-shadow: 0 4px 15px rgba(0,0,0,0.07); */ /* Shadow đã áp dụng cho .container hoặc .table-responsive */
+    border-radius: 8px;
+    overflow: hidden; /* Để bo góc hoạt động với background của thead */
+}
+
+th, td {
+    padding: 12px 15px; /* Giảm padding một chút cho gọn hơn */
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #e9ecef;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 0.9rem; /* Giảm nhẹ font-size header */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap; /* Không cho tiêu đề cột xuống dòng */
+}
+
+td {
+    background-color: #fff;
+    font-size: 0.88rem; /* Giảm nhẹ font-size cell */
+    color: #555;
+}
+
+td a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+td a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+td[data-label="Original URL"] a {
+    word-break: break-all; /* Cho phép link gốc xuống dòng nếu cần */
+    /* Bỏ các giới hạn max-width, white-space, text-overflow ở đây, để responsive CSS xử lý */
+}
+
+
+tbody tr:nth-of-type(even) td {
+    background-color: #f8f9fa;
+}
+
+tbody tr:hover td {
+    background-color: #f1f3f5;
+}
+
+/* Các nút Hành Động trong Bảng */
+.actions-cell { /* Class cho td chứa nút hành động */
+    white-space: nowrap; /* Ngăn các nút xuống dòng không mong muốn */
+    text-align: right; /* Căn các nút sang phải */
+}
+.actions-cell button {
+    padding: 6px 10px; /* Padding nhỏ hơn */
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    margin: 2px; /* Giảm margin, để vừa hơn trên mobile */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa icon và text nếu có */
+    gap: 4px; /* Khoảng cách nhỏ giữa icon và text */
+    min-width: 36px; /* Đảm bảo nút có độ rộng tối thiểu (cho icon) */
+}
+
+.actions-cell button i {
+    /* margin-right: 0; Đã dùng gap */
+    font-size: 0.9em; /* Icon nhỏ hơn một chút */
+}
+
+.edit-btn { background-color: #28a745; }
+.edit-btn:hover { background-color: #218838; }
+
+.delete-btn { background-color: #dc3545; }
+.delete-btn:hover { background-color: #c82333; }
+
+.copy-btn { background-color: #007bff; }
+.copy-btn:hover { background-color: #0056b3; }
+
+.qr-code-btn { background-color: #ffc107; color: #212529; }
+.qr-code-btn:hover { background-color: #e0a800; }
+
+
+/* Phân Trang */
+#pagination-controls {
+    text-align: center;
+    margin-top: 25px;
+    padding-bottom: 10px; /* Thêm padding dưới cho đẹp */
+}
+#pagination-controls .page-btn {
+    background-color: #fff;
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 8px 13px; /* Tăng nhẹ padding */
+    margin: 0 5px; /* Tăng margin */
+    border-radius: 5px; /* Bo góc nhiều hơn */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+#pagination-controls .page-btn:hover {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+}
+#pagination-controls .page-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+}
+#pagination-controls .page-btn:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
+}
+#pagination-controls .page-btn:disabled:hover {
+    box-shadow: none;
+}
+#pagination-controls span { /* Cho dấu "..." */
+    margin: 0 8px;
+    color: #777;
+    vertical-align: middle; /* Căn giữa với nút */
+}
+
+
+/* CSS tùy chỉnh cho SweetAlert2 (trước đây có thể inject bằng JS) */
+.swal-input-left-align .swal2-input {
+    text-align: left !important;
+}
+.qr-popup-custom .swal2-popup { /* Cho popup QR */
+    width: auto !important;
+    max-width: 320px !important; /* Kích thước tối đa cho popup QR */
+}
+.qr-popup-custom .swal2-html-container {
+    overflow: visible !important;
+    padding-top: 10px !important; /* Khoảng cách trên cho canvas QR */
+    padding-bottom: 10px !important; /* Khoảng cách dưới cho canvas QR */
+}
+
+
+/* Responsive cho Bảng Quản Lý */
+@media (max-width: 992px) { /* Tablet ngang và nhỏ hơn */
+    .container {
+        padding: 25px 20px;
+    }
+    #add-link-form {
+        align-items: stretch; /* Cho các input và button thẳng hàng và chiếm full height */
+    }
+    #add-link-form input[type="text"],
+    #add-link-form input[type="url"] {
+        flex-basis: calc(50% - 8px); /* Chia đôi không gian, trừ gap */
+    }
+    #add-link-form button {
+        flex-basis: 100%; /* Nút chiếm full width nếu xuống hàng */
+        margin-top: 10px; /* Thêm margin nếu nút xuống hàng */
+    }
+}
+
+
+@media (max-width: 768px) { /* Tablet đứng và mobile */
+    .container {
+        padding: 20px 15px;
+        margin: 10px;
+    }
+
+    #add-link-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #add-link-form input[type="text"],
+    #add-link-form input[type="url"],
+    #add-link-form button {
+        width: 100%;
+        flex-basis: auto; /* Reset flex-basis */
+        margin-top: 0; /* Reset margin-top nếu có */
+    }
+    #add-link-form button {
+         margin-top: 10px; /* Nút Thêm luôn có margin top */
+    }
+
+
+    .table-responsive { /* Đảm bảo table-responsive không cần thiết nữa khi bảng chuyển block */
+        overflow-x: visible;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 10px; /* Thêm padding cho card */
+    }
+    tbody tr:nth-of-type(even) td, tbody tr:nth-of-type(odd) td { /* Reset background cho card */
+        background-color: transparent;
+    }
+
+
+    td {
+        border: none;
+        border-bottom: 1px dashed #eee; /* Phân cách nhẹ giữa các field trong card */
+        position: relative;
+        padding: 8px 0 8px 45%; /* Điều chỉnh padding cho data-label */
+        text-align: right;
+        min-height: 38px;
+        display: flex; /* Sử dụng flex để căn chỉnh nội dung và label */
+        align-items: center; /* Căn giữa label và nội dung */
+        justify-content: flex-end; /* Đẩy nội dung sang phải */
+    }
+    td:last-child { /* Bỏ border cho field cuối cùng trong card */
+        border-bottom: none;
+    }
+
+    td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: calc(45% - 20px);
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.85rem;
+    }
+
+    td[data-label="Original URL"] a { /* Cho phép hiển thị đầy đủ hơn trên mobile card */
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: 100%; /* Cho phép chiếm hết phần nội dung còn lại */
+    }
+
+    .actions-cell {
+        text-align: right; /* Đảm bảo các nút vẫn căn phải */
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+    .actions-cell button {
+        margin: 3px; /* Tăng nhẹ margin giữa các nút trên mobile */
+    }
+
+    #pagination-controls .page-btn {
+        padding: 6px 10px;
+        margin: 0 3px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    .container {
+        margin: 0;
+        border-radius: 0;
+        padding: 15px 10px;
+    }
+    td:before {
+        font-size: 0.8rem;
+        left: 5px; /* Giảm padding cho label */
+        width: calc(40% - 10px); /* Điều chỉnh độ rộng label */
+    }
+    td {
+        padding-left: 40%;
+        padding-right: 5px; /* Giảm padding phải của cell */
+    }
+    .actions-cell {
+        display: flex; /* Cho các nút có thể wrap */
+        flex-wrap: wrap;
+        justify-content: flex-end; /* Căn phải */
+    }
+     .actions-cell button {
+        flex-basis: calc(50% - 6px); /* Cho 2 nút trên 1 hàng nếu đủ chỗ */
+        font-size: 0.75rem; /* Giảm font nút nhỏ hơn */
+        padding: 5px 8px;
+    }
+}

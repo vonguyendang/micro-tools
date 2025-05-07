@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Nếu truy cập vào s-manager thì hiển thị trang quản lý (đã được bảo vệ bằng PHP session)
+RewriteRule ^s-manager/?$ s-manager/index.php [L]
+
+# Nếu truy cập vào shortlink thì chuyển hướng đến redirect.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ redirect.php?code=$1 [L,QSA]

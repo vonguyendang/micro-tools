@@ -1,0 +1,302 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset và Styles cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column; /* Để footer có thể đẩy xuống dưới */
+    justify-content: center; /* Căn giữa container theo chiều dọc */
+    align-items: center; /* Căn giữa container theo chiều ngang */
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient nền */
+    color: #333;
+    padding: 20px; /* Padding cho body để container không dính sát cạnh màn hình nhỏ */
+    overflow-x: hidden; /* Chống scroll ngang nếu có gì đó bất ngờ */
+}
+
+.container {
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 16px; /* Bo góc lớn hơn một chút */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); /* Bóng đổ nổi bật hơn */
+    text-align: center;
+    width: 100%;
+    max-width: 580px; /* Tăng nhẹ max-width */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: auto; /* Đẩy container lên trên nếu footer xuất hiện */
+    margin-top: auto; /* Căn giữa container nếu không có footer hoặc footer nhỏ */
+}
+
+.container:hover {
+    transform: translateY(-7px); /* Hiệu ứng nhấc lên rõ hơn */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #2c3e50; /* Màu tối hơn một chút cho tiêu đề */
+    font-weight: 700;
+    font-size: 2.2rem; /* Sử dụng rem cho font-size dễ scale */
+    line-height: 1.3;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* Khoảng cách giữa các input/button trong form */
+}
+
+input[type="url"],
+input[type="text"] {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #dfe4ea; /* Border nhẹ nhàng */
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    color: #333;
+}
+
+input[type="url"]::placeholder,
+input[type="text"]::placeholder {
+    color: #999; /* Màu placeholder */
+}
+
+input[type="url"]:focus,
+input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
+}
+
+.submit-area {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa nút và loader */
+}
+
+button {
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* all để bao gồm transform và background */
+    text-transform: uppercase; /* Viết hoa chữ trên button */
+    letter-spacing: 0.5px;
+}
+
+#submit-button { /* Nút chính có thể to hơn */
+    flex-grow: 1; /* Cho nút chiếm phần lớn không gian nếu cần */
+}
+
+
+button:hover {
+    background: linear-gradient(to right, #0056b3, #004085);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Loader (Spinner) */
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #007bff; /* Blue */
+    border-radius: 50%;
+    width: 28px; /* Kích thước loader */
+    height: 28px;
+    animation: spin 1s linear infinite;
+    display: inline-block; /* Hoặc 'none' ban đầu */
+}
+
+.hidden {
+    display: none !important; /* Quan trọng để ẩn hoàn toàn */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Result Section */
+#result {
+    margin-top: 35px;
+    padding: 25px;
+    background-color: #f8f9fa; /* Nền sáng hơn một chút */
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#result.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#result p {
+    margin-bottom: 18px;
+    font-size: 1rem;
+    color: #343a40;
+    word-break: break-all;
+}
+
+#result p a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+#result p a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+#edit-url { /* Input tùy chỉnh link */
+    margin-bottom: 20px;
+}
+
+.result-actions {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các nút xuống hàng trên màn hình nhỏ */
+    gap: 10px; /* Khoảng cách giữa các nút */
+    justify-content: center; /* Căn giữa các nút */
+    margin-bottom: 15px; /* Khoảng cách với QR code nếu có */
+}
+
+.result-actions button {
+    padding: 10px 15px; /* Padding nhỏ hơn cho các nút này */
+    font-size: 0.9rem;
+    text-transform: none; /* Không viết hoa cho các nút phụ */
+    letter-spacing: normal;
+    flex-grow: 1; /* Cho các nút có thể co giãn đều */
+    min-width: 120px; /* Độ rộng tối thiểu cho nút */
+}
+
+#copy-button { background: #28a745; }
+#copy-button:hover { background: #218838; }
+
+#run-button { background: #17a2b8; }
+#run-button:hover { background: #138496; }
+
+#qr-button { background: #ffc107; color: #212529; } /* Màu chữ tối hơn cho nút vàng */
+#qr-button:hover { background: #e0a800; }
+
+/* QR Code Canvas */
+canvas#qr-code {
+    margin: 20px auto 0; /* Căn giữa và thêm margin top */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: block; /* Để margin auto căn giữa hoạt động */
+}
+
+canvas#qr-code.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px; /* Khoảng cách từ container hoặc nội dung cuối cùng */
+    padding: 15px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8); /* Màu chữ trắng mờ cho footer */
+    width: 100%;
+}
+footer a {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 25px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+    input[type="url"],
+    input[type="text"],
+    button {
+        font-size: 0.95rem;
+        padding: 12px 15px;
+    }
+    .result-actions button {
+        font-size: 0.85rem;
+        padding: 9px 12px;
+        /* Trên màn hình nhỏ, có thể cho các nút chiếm full width nếu muốn */
+        /* flex-basis: 100%; */
+    }
+    #result {
+        padding: 20px;
+        margin-top: 25px;
+    }
+    canvas#qr-code {
+        max-width: 160px; /* Đảm bảo QR không quá to trên mobile */
+        max-height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    .container {
+        padding: 25px 20px;
+    }
+    .submit-area {
+        flex-direction: column; /* Nút và loader có thể xếp chồng lên nhau */
+        gap: 10px;
+    }
+    #submit-button {
+        width: 100%; /* Nút submit chiếm toàn bộ chiều rộng */
+    }
+    .loader {
+        width: 24px;
+        height: 24px;
+    }
+    .result-actions {
+        flex-direction: column; /* Xếp chồng các nút hành động */
+    }
+    .result-actions button {
+        width: 100%; /* Các nút hành động chiếm full width */
+    }
+}
