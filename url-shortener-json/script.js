@@ -18,7 +18,7 @@ document.getElementById('shorten-form').addEventListener('submit', async functio
 
     const result = await response.json();
     if (result.success) {
-        const shortenedUrl = `https://www.dangvo.io.vn/s/${result.shortUrl}`;
+        const shortenedUrl = `https://go.dangvo.io.vn/${result.shortUrl}`;
         document.getElementById('shortened-url').textContent = shortenedUrl;
         document.getElementById('shortened-url').href = shortenedUrl;
         document.getElementById('result').classList.remove('hidden');
@@ -58,7 +58,7 @@ document.getElementById('edit-url').addEventListener('keydown', async function (
 
         const result = await response.json();
         if (result.success) {
-            const shortenedUrl = `https://www.dangvo.io.vn/s/${result.shortUrl}`;
+            const shortenedUrl = `https://go.dangvo.io.vn/${result.shortUrl}`;
             document.getElementById('shortened-url').textContent = shortenedUrl;
             document.getElementById('shortened-url').href = shortenedUrl;
             Toastify({
