@@ -1,0 +1,145 @@
+/* --- Biến màu và Font cho GIAO DIỆN SÁNG --- */
+:root {
+    --background-color: #f4f7f9;
+    --container-color: #ffffff;
+    --accent-color: #007bff;
+    --accent-hover-color: #0056b3;
+    --green-color: #28a745;
+    --green-hover-color: #218838;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+/* --- Thiết lập cơ bản --- */
+body {
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Cho phép cuộn khi nội dung dài */
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+}
+
+/* --- Container chính --- */
+.container {
+    background-color: var(--container-color);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px; /* Tăng chiều rộng để chứa 3 QR */
+    text-align: center;
+    border-top: 4px solid var(--accent-color);
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* --- Nhóm Input và Bản đồ (Giữ nguyên) --- */
+.input-group { display: flex; margin-bottom: 25px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+#address-input { flex-grow: 1; padding: 15px 20px; border: none; font-size: 16px; background-color: #fff; color: var(--text-primary); outline: none; }
+#address-input::placeholder { color: #adb5bd; }
+#search-button { display: flex; align-items: center; gap: 8px; padding: 15px 25px; border: none; background-color: var(--accent-color); color: white; font-size: 16px; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; }
+#search-button:hover { background-color: var(--accent-hover-color); }
+#map { width: 100%; height: 600px; margin-bottom: 25px; border-radius: 8px; border: 1px solid var(--border-color); }
+
+/* --- Nút Tạo QR (Giữ nguyên) --- */
+#generate-qr-button { width: 100%; padding: 15px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; background-color: var(--accent-color); color: white; margin-bottom: 25px; }
+#generate-qr-button:hover { background-color: var(--accent-hover-color); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); transform: translateY(-2px); }
+
+/* --- ⭐ KHU VỰC HIỂN THỊ CÁC MÃ QR --- */
+#qrcode-container-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    gap: 20px; /* Khoảng cách giữa các card */
+    margin-top: 20px;
+}
+
+.qr-code-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    width: 220px; /* Chiều rộng mỗi card */
+}
+
+.qr-code-item h3 {
+    margin: 0 0 15px 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.qr-image-container {
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.qr-actions {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa 2 nút */
+    width: 100%;
+}
+
+.qr-image-container canvas {
+    /* Đảm bảo canvas (ảnh QR) luôn vừa với container của nó trên giao diện */
+    width: 100% !important;
+    height: auto !important;
+}
+.btn {
+    flex-grow: 1;
+    display: inline-block;
+    padding: 8px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-download {
+    background-color: var(--green-color);
+}
+
+.btn-download:hover {
+    background-color: var(--green-hover-color);
+}
+
+.btn-open {
+    background-color: var(--accent-color);
+}
+
+.btn-open:hover {
+    background-color: var(--accent-hover-color);
+}
+
+/* Tùy chỉnh bộ điều khiển lớp bản đồ (Giữ nguyên) */
+.leaflet-control-layers { border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border: 1px solid var(--border-color); }
+.leaflet-control-layers-base label { font-weight: 500; }
+.leaflet-control-layers-separator { border-top: 1px solid var(--border-color); margin: 5px 0; }
