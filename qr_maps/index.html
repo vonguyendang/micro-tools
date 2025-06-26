@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Coordinates Generator</title>
+    <link rel="shortcut icon" href="favicon_io/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bản đồ Đa chế độ - QR Tọa độ</h1>
+        <p>Chọn chế độ bản đồ, tìm địa chỉ, hoặc <strong>nhấn giữ trong 3 giây</strong> để ghim vị trí và <strong> nhấn lại nút Tạo mã QR </strong> để tạo lại vị trí vừa ghim.</p>
+
+        <div class="input-group">
+            <input type="text" id="address-input" placeholder="Ví dụ: 326 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ, Việt Nam">
+            <button id="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>Tìm kiếm</span>
+            </button>
+        </div>
+
+        <div id="map"></div>
+
+        <button id="generate-qr-button" style="display: none;">Tạo mã QR</button>
+
+        <div id="qrcode-container-wrapper">
+            </div>
+    </div>
+
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
