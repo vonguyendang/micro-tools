@@ -28,7 +28,7 @@ Công cụ Python giúp tạo nhiều mã đề thi từ một file Word chứa 
 ### ✅ Cài đặt thư viện
 
 ```bash
-pip install python-docx
+pip3 install python-docx
 ```
 
 ---
@@ -61,7 +61,7 @@ D. Nước quân sự
 
 ### 2. Chạy script:
 ```bash
-python trondethi.py
+python3 trondethi.py
 ```
 
 ### 3. Quá trình chạy:
