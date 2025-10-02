@@ -411,6 +411,17 @@ input[type="number"]:focus {
     border-color: var(--primary-darker);
 }
 
+.period-tab:disabled {
+    background-color: #f0f0f0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    border-color: #d0d0d0;
+}
+
+.period-tab:disabled:hover {
+    background-color: #f0f0f0; /* No change on hover */
+}
+
 
 /* ----- Result GDKHQ ----- */
 #resultGDKHQ {
