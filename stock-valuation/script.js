@@ -144,7 +144,8 @@ async function fetchStockData() {
         const averagePrice = transactionData.avgPrice ?? 0; // Giá trung bình phiên
         const priceChange = transactionData.priceChange ?? 0;
         const percentageChange = transactionData.priceChangePercent ?? 0;
-
+        // Dữ liệu thông tin doanh nghiệp
+        const companyWebsite = profileData.webAddress ?? '';
         // Dữ liệu khối lượng
         const totalVolume = transactionData.stockVol ?? 0;
         const totalBuyVolume = transactionData.stockBUVol ?? 0; // Tổng KL đặt mua
@@ -431,6 +432,7 @@ async function fetchStockData() {
                     <tr>
                         <td colspan="5" class="center">
                             <div class="button-container">
+                                <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website DN</button>
                                 <button class="action-button external-link-button" onclick="openFireant('${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
                                 <button class="action-button external-link-button" onclick="openVietstock('${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
                                 <button class="action-button external-link-button" onclick="openTradingView('${stockExchange}','${stockCode}')"><i class="fas fa-external-link-alt"></i> TradingView</button>
@@ -626,6 +628,12 @@ async function fetchStockData() {
 
 // --- Các hàm tiện ích khác ---
 
+// Mở link website doanh nghiệp
+function openCompanyWebsite(companyWebsite) {
+    if (companyWebsite) {
+        window.open(`https://${companyWebsite}`, '_blank');
+    }
+}
 // Mở link Fireant
 function openFireant(code) {
     if (code) {
