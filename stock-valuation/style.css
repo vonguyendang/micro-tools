@@ -380,6 +380,38 @@ input[type="number"]:focus {
     font-size: 1rem; /* Tăng kích thước font cho header đánh giá */
 }
 
+/* ----- Period Tabs (Sub-tabs) ----- */
+.period-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px; /* Space below the tabs */
+}
+
+.period-tab {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    background-color: #e9f5ff;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.period-tab:hover {
+    background-color: #d4eaf7;
+}
+
+.period-tab.active {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    border-color: var(--primary-darker);
+}
+
+
 /* ----- Result GDKHQ ----- */
 #resultGDKHQ {
     text-align: center;
