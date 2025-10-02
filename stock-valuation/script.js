@@ -7,6 +7,19 @@ let globalStockTransaction = {};
 let globalDividendEvents = [];
 let globalStockProfile = {};
 
+// --- NEW: Central configuration for analysis periods ---
+const PERIODS = [
+    { id: '1Q', name: 'Quý gần nhất', required: 1, source: 'q' },
+    { id: '2Q', name: '2 Quý', required: 2, source: 'q' },
+    { id: '3Q', name: '3 Quý', required: 3, source: 'q' },
+    { id: '4Q', name: '4 Quý', required: 4, source: 'q' },
+    { id: '1Y', name: '1 Năm', required: 1, source: 'y' },
+    { id: '2Y', name: '2 Năm', required: 2, source: 'y' },
+    { id: '3Y', name: '3 Năm', required: 3, source: 'y' },
+    { id: '4Y', name: '4 Năm', required: 4, source: 'y' },
+    { id: '5Y', name: '5 Năm', required: 5, source: 'y' }
+];
+
 
 // Hàm hiển thị tab được chọn và ẩn các tab khác
 function showTab(tabId) {
@@ -112,8 +125,21 @@ async function fetchStockData() {
             globalStockProfile
         ] = await Promise.all(responses.map(res => res.json()));
 
-        // Initial UI render with default period '4Q'
-        updateValuationUI('4Q');
+        // --- UPDATED: Smartly select the default period ---
+        const q_count = globalFinancialDataQuarter.length;
+        const y_count = globalFinancialDataYear.length;
+
+        const availablePeriods = PERIODS.filter(p => {
+            const source_count = p.source === 'q' ? q_count : y_count;
+            return source_count >= p.required;
+        });
+        
+        // Default to the longest available period, or fallback to 1Q
+        // const defaultPeriod = availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q';
+        // Default to 1Y if available, else longest available, else 1Q
+        const defaultPeriod = availablePeriods.find(p => p.id === '1Y') ? '1Y' : (availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q');
+
+        updateValuationUI(defaultPeriod);
 
     } catch (error) {
         console.error("Lỗi khi fetch dữ liệu:", error);
@@ -121,7 +147,7 @@ async function fetchStockData() {
     }
 }
 
-// --- NEW: Main function to calculate and render the valuation UI ---
+// --- Main function to calculate and render the valuation UI ---
 function updateValuationUI(period = '4Q') {
     const resultDiv = document.getElementById('resultValuation');
     if (!globalStockProfile || !globalStockProfile.symbol) {
@@ -129,96 +155,62 @@ function updateValuationUI(period = '4Q') {
         return;
     }
 
-    // --- Select data based on the chosen period ---
-    let dataToProcess = [];
-    let periodLabel = '';
-    let isDataAvailable = true;
+    // --- Check data availability and manage tab states ---
+    const q_count = globalFinancialDataQuarter.length;
+    const y_count = globalFinancialDataYear.length;
 
-    switch (period) {
-        case '1Q':
-            dataToProcess = globalFinancialDataQuarter.slice(0, 1);
-            periodLabel = 'Quý Gần Nhất';
-            if (dataToProcess.length < 1) isDataAvailable = false;
-            break;
-        case '2Q':
-            dataToProcess = globalFinancialDataQuarter.slice(0, 2);
-            periodLabel = 'TB 2 Quý';
-            if (dataToProcess.length < 2) isDataAvailable = false;
-            break;
-        case '3Q':
-            dataToProcess = globalFinancialDataQuarter.slice(0, 3);
-            periodLabel = 'TB 3 Quý';
-            if (dataToProcess.length < 3) isDataAvailable = false;
-            break;
-        case '4Q':
-            dataToProcess = globalFinancialDataQuarter.slice(0, 4);
-            periodLabel = 'TB 4 Quý';
-            if (dataToProcess.length < 4) isDataAvailable = false;
-            break;
-        case '1Y':
-            dataToProcess = globalFinancialDataYear.slice(0, 1);
-            periodLabel = 'Năm Gần Nhất';
-            if (dataToProcess.length < 1) isDataAvailable = false;
-            break;
-        case '2Y':
-            dataToProcess = globalFinancialDataYear.slice(0, 2);
-            periodLabel = 'TB 2 Năm';
-            if (dataToProcess.length < 2) isDataAvailable = false;
-            break;
-        case '3Y':
-            dataToProcess = globalFinancialDataYear.slice(0, 3);
-            periodLabel = 'TB 3 Năm';
-            if (dataToProcess.length < 3) isDataAvailable = false;
-            break;
-        case '4Y':
-            dataToProcess = globalFinancialDataYear.slice(0, 4);
-            periodLabel = 'TB 4 Năm';
-            if (dataToProcess.length < 4) isDataAvailable = false;
-            break;
-        case '5Y':
-            dataToProcess = globalFinancialDataYear.slice(0, 5);
-            periodLabel = 'TB 5 Năm';
-            if (dataToProcess.length < 5) isDataAvailable = false;
-            break;
-        default:
-            dataToProcess = globalFinancialDataQuarter.slice(0, 4);
-            periodLabel = 'TB 4 Quý';
-            if (dataToProcess.length < 4) isDataAvailable = false;
-    }
-
-    if (!isDataAvailable) {
-        // Find the existing assessment table and show an error message
-        const existingHTML = resultDiv.innerHTML;
-        const errorMsg = `<p class="placeholder-text error-text" style="margin-top:15px;">Không đủ dữ liệu cho kỳ phân tích '${periodLabel}'. Vui lòng chọn kỳ khác.</p>`;
-        // A bit of a hack to insert the error without re-rendering everything
-        const tableStart = existingHTML.indexOf('<table>');
-        resultDiv.innerHTML = existingHTML.slice(0, tableStart) + errorMsg + existingHTML.slice(tableStart);
-        // Re-activate the previously active tab
-        const prevPeriod = document.querySelector('.period-tab.active')?.dataset.period || '4Q';
-        document.querySelector(`.period-tab[data-period="${period}"]`).classList.remove('active');
-        document.querySelector(`.period-tab[data-period="${prevPeriod}"]`).classList.add('active');
+    const availablePeriods = PERIODS.filter(p => {
+        const source_count = p.source === 'q' ? q_count : y_count;
+        return source_count >= p.required;
+    });
+    
+    // If no data is available for any period, show an error.
+    if (availablePeriods.length === 0) {
+        renderBaseUI(); 
+        const assessmentContainer = document.getElementById('assessment-container');
+        if(assessmentContainer) {
+            assessmentContainer.innerHTML = `<p class="placeholder-text error-text" style="margin-top:15px;">Không có đủ dữ liệu tài chính để phân tích. Cổ phiếu có thể quá mới.</p>`;
+        }
         return;
     }
 
+    const selectedPeriodIsValid = availablePeriods.some(p => p.id === period);
+    if (!selectedPeriodIsValid) {
+        period = availablePeriods[availablePeriods.length - 1].id;
+    }
 
-    // --- All calculation and rendering logic is now here ---
 
-    // 1. Dữ liệu giao dịch từ SSI (ưu tiên) hoặc Profile Fireant
+    // --- Select data based on the chosen period ---
+    let dataToProcess = [];
+    const selectedPeriodInfo = PERIODS.find(p => p.id === period);
+    const periodLabel = selectedPeriodInfo.name;
+
+    if (selectedPeriodInfo.source === 'q') {
+        dataToProcess = globalFinancialDataQuarter.slice(0, selectedPeriodInfo.required);
+    } else {
+        dataToProcess = globalFinancialDataYear.slice(0, selectedPeriodInfo.required);
+    }
+
+    // --- Render Base UI (once) ---
+    renderBaseUI();
+
+    // --- Calculate and Render Assessment UI ---
+    renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods);
+}
+
+
+function renderBaseUI() {
+    const resultDiv = document.getElementById('resultValuation');
     const transactionData = globalStockTransaction.data || {};
     const profileData = globalStockProfile || {};
-    const stockData = globalStockData || {};
     const dividendEvents = globalDividendEvents || [];
-    const bonds = globalBonds || {};
-    const financialDataYear = globalFinancialDataYear || [];
-
     const stockCode = profileData.symbol;
     const stockExchange = (transactionData.exchange ?? profileData.exchange ?? 'N/A').toUpperCase();
     const stockNameVi = (transactionData.companyNameVi ?? profileData.companyName ?? 'Không rõ').toUpperCase();
-    const stockNameEn = (transactionData.companyNameEn ?? profileData.internationalName ?? 'Unknown').toUpperCase();
     const companyWebsite = profileData.webAddress ?? '';
-
+    
     const safeFormatNumber = (value, decimals = 0) => formatNumber(value ?? 0, decimals);
-
+    
     const marketPrice = transactionData.matchedPrice ?? 0;
     const referencePrice = transactionData.refPrice ?? 0;
     const ceilingPrice = transactionData.ceiling ?? 0;
@@ -255,169 +247,9 @@ function updateValuationUI(period = '4Q') {
     let foreignNetFlowClass = totalForeignNetFlow > 0 ? 'price-up' : (totalForeignNetFlow < 0 ? 'price-down' : 'reference-price');
     let internalNetFlowClass = totalInternalNetFlow > 0 ? 'price-up' : (totalInternalNetFlow < 0 ? 'price-down' : 'reference-price');
     let netFlowClass = totalNetFlow > 0 ? 'price-up' : (totalNetFlow < 0 ? 'price-down' : 'reference-price');
-
-    const betaStock = stockData.beta ?? 0;
-    const sharesOutstanding = stockData.sharesOutstanding ?? 0;
-    const freeShares = stockData.freeShares ?? 0;
-    const floatingShareRatio = sharesOutstanding > 0 ? freeShares / sharesOutstanding : 0;
-
-    // Tính toán chỉ số trung bình dựa trên `dataToProcess`
-    let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
-    let validPeriods = 0;
-
-    dataToProcess.forEach(data => {
-        if (data.financialValues && data.financialValues.BasicEPS != null) {
-             validPeriods++;
-             totalEPS += data.financialValues.BasicEPS ?? 0;
-             totalPE += data.financialValues.PE ?? 0;
-             totalPB += data.financialValues.PB ?? 0;
-             totalPS += data.financialValues.PS ?? 0;
-             totalROA += data.financialValues.ROA ?? 0;
-             totalROE += data.financialValues.ROE ?? 0;
-             totalSalePerShare += data.financialValues.SalePerShare ?? 0;
-             totalBookValuePerShare += data.financialValues.BookValuePerShare ?? 0;
-             totalTangibleBookValuePerShare += data.financialValues.TangibleBookValuePerShare ?? 0;
-        }
-    });
-
-    const avgEPS = validPeriods > 0 ? totalEPS / validPeriods : 0;
-    const avgPE = validPeriods > 0 ? totalPE / validPeriods : 0;
-    const avgPB = validPeriods > 0 ? totalPB / validPeriods : 0;
-    const avgPS = validPeriods > 0 ? totalPS / validPeriods : 0;
-    const avgROA = validPeriods > 0 ? totalROA / validPeriods : 0;
-    const avgROE = validPeriods > 0 ? totalROE / validPeriods : 0;
-    const avgSalePerShare = validPeriods > 0 ? totalSalePerShare / validPeriods : 0;
-    const avgBookValuePerShare = validPeriods > 0 ? totalBookValuePerShare / validPeriods : 0;
-    const avgTangibleBookValuePerShare = validPeriods > 0 ? totalTangibleBookValuePerShare / validPeriods : 0;
-
-    // --- Tính toán định giá ---
-    const pricePE_EPS = avgPE * avgEPS;
-    const pricePS_SPS = avgPS * avgSalePerShare;
-    const pricePB_BVPS = avgPB * avgBookValuePerShare;
-
-    let priceGraham1 = NaN, priceGraham2 = NaN, priceGraham3 = NaN;
-    let g = NaN;
-
-    if (financialDataYear.length >= 5 && financialDataYear[4].financialValues.BasicEPS > 0 && financialDataYear[0].financialValues.BasicEPS > 0) {
-       const latestEPS = financialDataYear[0].financialValues.BasicEPS;
-       const oldestEPS = financialDataYear[4].financialValues.BasicEPS;
-       g = Math.pow((latestEPS / oldestEPS), 1 / 4) - 1;
-    }
-
-    const y10 = (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') ? bonds.current[5][1] : 4.4;
-    const riskFreeRateAdj = (y10 > 0 ? y10 : 4.4) + 0.5;
-
-    if (!isNaN(g) && avgEPS > 0) {
-        const cappedG = Math.min(Math.max(g, 0), 0.15);
-        priceGraham1 = avgEPS * (8.5 + 2 * cappedG) * (4.4 / riskFreeRateAdj);
-        priceGraham2 = avgEPS * (8.5 + 2 * cappedG);
-        if (avgBookValuePerShare > 0) {
-             priceGraham3 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
-        }
-    }
-
-    // --- Định giá trung bình có trọng số ---
-    const wPE_EPS = 0.20, wPS_SPS = 0.15, wPB_BVPS = 0.15, wGraham1 = 0.25, wGraham2 = 0.10, wGraham3 = 0.15;
-    let totalPrice = 0, totalWeight = 0;
-    if (pricePE_EPS > 0 && !isNaN(pricePE_EPS)) { totalPrice += pricePE_EPS * wPE_EPS; totalWeight += wPE_EPS; }
-    if (pricePS_SPS > 0 && !isNaN(pricePS_SPS)) { totalPrice += pricePS_SPS * wPS_SPS; totalWeight += wPS_SPS; }
-    if (pricePB_BVPS > 0 && !isNaN(pricePB_BVPS)) { totalPrice += pricePB_BVPS * wPB_BVPS; totalWeight += wPB_BVPS; }
-    if (priceGraham1 > 0 && !isNaN(priceGraham1)) { totalPrice += priceGraham1 * wGraham1; totalWeight += wGraham1; }
-    if (priceGraham2 > 0 && !isNaN(priceGraham2)) { totalPrice += priceGraham2 * wGraham2; totalWeight += wGraham2; }
-    if (priceGraham3 > 0 && !isNaN(priceGraham3)) { totalPrice += priceGraham3 * wGraham3; totalWeight += wGraham3; }
-    const avgValuationPrice = totalWeight > 0 ? totalPrice / totalWeight : 0;
-
-    // --- Xây dựng Nhận định và Tính điểm ---
-    const totalStars = 10;
-    let achievedStars = 0;
-    let commentary = {};
-
-    commentary.marketPrice = `Giao dịch trên sàn ${stockExchange}.\nTên đầy đủ: ${stockNameVi}.\nTên quốc tế: ${stockNameEn}.`;
-    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt (${safeFormatNumber(avgEPS)}đ). Cho thấy hiệu quả sinh lời cao trên mỗi cổ phần.`; }
-    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt (${safeFormatNumber(avgEPS)}đ). Công ty tạo ra lợi nhuận đáng kể.`; }
-    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá (${safeFormatNumber(avgEPS)}đ). Khả năng sinh lời ở mức chấp nhận được.`; }
-    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp (${safeFormatNumber(avgEPS)}đ). Lợi nhuận trên cổ phần còn hạn chế.`; }
-    else { commentary.avgEPS = `Âm (${safeFormatNumber(avgEPS)}đ). Công ty đang thua lỗ.`; }
-
-    if (avgPE <= 0) { commentary.avgPE = `Âm/0 (${safeFormatNumber(avgPE, 2)}x). Công ty đang thua lỗ, khó định giá.`; }
-    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Thấp (${safeFormatNumber(avgPE, 2)}x). Hấp dẫn nếu nền tảng tốt.`; }
-    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý (${safeFormatNumber(avgPE, 2)}x). Phản ánh mức định giá vừa phải.`; }
-    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao (${safeFormatNumber(avgPE, 2)}x). Cho thấy kỳ vọng tăng trưởng.`; }
-    else { achievedStars += 0.25; commentary.avgPE = `Cao (${safeFormatNumber(avgPE, 2)}x). Rủi ro điều chỉnh cao.`; }
-
-    if (avgPB <= 0) { commentary.avgPB = `Âm/0 (${safeFormatNumber(avgPB, 2)}x). Tình hình tài chính rất xấu.`; }
-    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Thấp (<1) (${safeFormatNumber(avgPB, 2)}x). Giá thấp hơn giá trị sổ sách.`; }
-    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý (${safeFormatNumber(avgPB, 2)}x). Mức định giá cân bằng.`; }
-    else { achievedStars += 0.5; commentary.avgPB = `Khá cao (${safeFormatNumber(avgPB, 2)}x). Thị trường đánh giá cao hơn giá trị sổ sách.`; }
-
-    if (avgPS <= 0) { commentary.avgPS = `Âm/0 (${safeFormatNumber(avgPS, 2)}x).`; }
-    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Thấp (<0.8) (${safeFormatNumber(avgPS, 2)}x). Giá rẻ so với doanh thu.`; }
-    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Hợp lý (${safeFormatNumber(avgPS, 2)}x). Mức định giá cân bằng.`; }
-    else { achievedStars += 0.5; commentary.avgPS = `Khá cao (${safeFormatNumber(avgPS, 2)}x).`; }
-
-    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `Thấp hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Ít biến động hơn thị trường.`; }
-    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Cao hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Biến động mạnh hơn thị trường.`; }
-    else { achievedStars += 0.75; commentary.betaStock = `Trung bình (β ≈ ${safeFormatNumber(betaStock, 2)}). Biến động tương đương thị trường.`; }
-
-    const fsrPercent = floatingShareRatio * 100;
-    if (fsrPercent < 20) { achievedStars += 0.5; commentary.floatingShareRatio = `Thấp (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản có thể thấp.`; }
-    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Trung bình (${safeFormatNumber(fsrPercent, 1)}%). Mức độ cô đặc vừa phải.`; }
-    else { achievedStars += 0.75; commentary.floatingShareRatio = `Cao (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản tốt.`; }
-
-    const avgROAPercent = avgROA * 100;
-    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Rất tốt (${safeFormatNumber(avgROAPercent, 1)}%). Hiệu quả sử dụng tài sản rất cao.`; }
-    else if (avgROAPercent >= 5) { achievedStars += 0.75; commentary.avgROA = `Tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-    else if (avgROAPercent > 0) { achievedStars += 0.5; commentary.avgROA = `Trung bình (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-    else { commentary.avgROA = `Thấp/Âm (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-
-    const avgROEPercent = avgROE * 100;
-    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Rất tốt (${safeFormatNumber(avgROEPercent, 1)}%). Sinh lời trên vốn chủ sở hữu vượt trội.`; }
-    else if (avgROEPercent >= 15) { achievedStars += 0.75; commentary.avgROE = `Tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-    else if (avgROEPercent > 0) { achievedStars += 0.5; commentary.avgROE = `Trung bình (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-    else { commentary.avgROE = `Thấp/Âm (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-
-    commentary.avgSalePerShare = `Mỗi cổ phiếu đại diện cho ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
-    commentary.avgBookValuePerShare = `Giá trị sổ sách là ${safeFormatNumber(avgBookValuePerShare)}đ. `;
-    if (marketPrice > 0 && avgBookValuePerShare > marketPrice) {
-         achievedStars += 0.75;
-         commentary.avgBookValuePerShare += `Cao hơn thị giá.`;
-    }
-    commentary.avgTangibleBookValuePerShare = `GT sổ sách hữu hình là ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
-
-    const valuationMethodComment = (price, method) => {
-        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu hoặc kết quả âm cho phương pháp ${method}.`;
-        let comparison = (price / marketPrice - 1) * 100;
-        return `Định giá ${safeFormatNumber(price)}đ/cp (${comparison > 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
-    };
-
-    commentary.pricePE_EPS = valuationMethodComment(pricePE_EPS, 'P/E*EPS');
-    commentary.pricePS_SPS = valuationMethodComment(pricePS_SPS, 'P/S*SPS');
-    commentary.pricePB_BVPS = valuationMethodComment(pricePB_BVPS, 'P/B*BVPS');
-    commentary.priceGraham1 = valuationMethodComment(priceGraham1, 'Graham (đầy đủ)');
-    commentary.priceGraham2 = valuationMethodComment(priceGraham2, 'Graham (rút gọn)');
-    commentary.priceGraham3 = valuationMethodComment(priceGraham3, 'Graham (căn)');
-
-    commentary.avgValuationPrice = `Giá trị hợp lý ước tính là ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
-    if (avgValuationPrice > 0 && marketPrice > 0) {
-        const diffPercent = (avgValuationPrice / marketPrice - 1) * 100;
-         if (diffPercent > 10) { achievedStars += 1; commentary.avgValuationPrice += `Cao hơn ${safeFormatNumber(diffPercent, 1)}% so với thị giá (tiềm năng).`; }
-         else if (diffPercent < -10) { achievedStars += 0.1; commentary.avgValuationPrice += `Thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% so với thị giá (có thể đắt).`; }
-         else { achievedStars += 0.5; commentary.avgValuationPrice += `Quanh (${safeFormatNumber(diffPercent, 1)}%) mức thị giá (hợp lý).`; }
-    }
-
-    achievedStars = Math.min(Math.round(achievedStars * 2) / 2, totalStars);
-
-    // --- Generate Period Tabs HTML ---
-    const periods = [
-        { id: '1Q', name: 'Quý gần nhất' }, { id: '2Q', name: '2 Quý' },{ id: '3Q', name: '3 Quý' }, { id: '4Q', name: '4 Quý' },
-        { id: '1Y', name: 'Năm gần nhất' }, { id: '2Y', name: '2 Năm' },{ id: '3Y', name: '3 Năm' },{ id: '4Y', name: '4 Năm' }, { id: '5Y', name: '5 Năm' }
-    ];
-    const periodTabsHTML = periods.map(p =>
-        `<button class="period-tab ${p.id === period ? 'active' : ''}" data-period="${p.id}" onclick="updateValuationUI('${p.id}')">${p.name}</button>`
-    ).join('');
+    
     const [dateFrom, dateTo] = getFilterDate();
 
-    // --- Final HTML Rendering ---
     resultDiv.innerHTML = `
         <style>.result .comment { font-style: italic; color: #555; } .error-text { color: var(--error-color); font-weight: bold; }</style>
         <table class="hidden-border">
@@ -481,6 +313,179 @@ function updateValuationUI(period = '4Q') {
                     </tr>`).join('')}
             </tbody>
         </table>` : ''}
+        <div id="assessment-container"></div>
+    `;
+}
+
+function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods) {
+    const assessmentContainer = document.getElementById('assessment-container');
+    const { data: transactionData = {} } = globalStockTransaction;
+    const stockData = globalStockData || {};
+    const bonds = globalBonds || {};
+    const financialDataYear = globalFinancialDataYear || [];
+
+    const safeFormatNumber = (value, decimals = 0) => formatNumber(value ?? 0, decimals);
+    const marketPrice = transactionData.matchedPrice ?? 0;
+    
+    // --- Calculations ---
+    let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
+    let validPeriods = 0;
+
+    dataToProcess.forEach(data => {
+        if (data.financialValues && data.financialValues.BasicEPS != null) {
+             validPeriods++;
+             totalEPS += data.financialValues.BasicEPS ?? 0;
+             totalPE += data.financialValues.PE ?? 0;
+             totalPB += data.financialValues.PB ?? 0;
+             totalPS += data.financialValues.PS ?? 0;
+             totalROA += data.financialValues.ROA ?? 0;
+             totalROE += data.financialValues.ROE ?? 0;
+             totalSalePerShare += data.financialValues.SalePerShare ?? 0;
+             totalBookValuePerShare += data.financialValues.BookValuePerShare ?? 0;
+             totalTangibleBookValuePerShare += data.financialValues.TangibleBookValuePerShare ?? 0;
+        }
+    });
+
+    const avgEPS = validPeriods > 0 ? totalEPS / validPeriods : 0;
+    const avgPE = validPeriods > 0 ? totalPE / validPeriods : 0;
+    const avgPB = validPeriods > 0 ? totalPB / validPeriods : 0;
+    const avgPS = validPeriods > 0 ? totalPS / validPeriods : 0;
+    const avgROA = validPeriods > 0 ? totalROA / validPeriods : 0;
+    const avgROE = validPeriods > 0 ? totalROE / validPeriods : 0;
+    const avgSalePerShare = validPeriods > 0 ? totalSalePerShare / validPeriods : 0;
+    const avgBookValuePerShare = validPeriods > 0 ? totalBookValuePerShare / validPeriods : 0;
+    const avgTangibleBookValuePerShare = validPeriods > 0 ? totalTangibleBookValuePerShare / validPeriods : 0;
+
+    const pricePE_EPS = avgPE * avgEPS;
+    const pricePS_SPS = avgPS * avgSalePerShare;
+    const pricePB_BVPS = avgPB * avgBookValuePerShare;
+
+    let priceGraham1 = NaN, priceGraham2 = NaN, priceGraham3 = NaN;
+    let g = NaN;
+
+    if (financialDataYear.length >= 5 && financialDataYear[4].financialValues.BasicEPS > 0 && financialDataYear[0].financialValues.BasicEPS > 0) {
+       const latestEPS = financialDataYear[0].financialValues.BasicEPS;
+       const oldestEPS = financialDataYear[4].financialValues.BasicEPS;
+       g = Math.pow((latestEPS / oldestEPS), 1 / 4) - 1;
+    }
+
+    const y10 = (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') ? bonds.current[5][1] : 4.4;
+    const riskFreeRateAdj = (y10 > 0 ? y10 : 4.4) + 0.5;
+
+    if (!isNaN(g) && avgEPS > 0) {
+        const cappedG = Math.min(Math.max(g, 0), 0.15);
+        priceGraham1 = avgEPS * (8.5 + 2 * cappedG) * (4.4 / riskFreeRateAdj);
+        priceGraham2 = avgEPS * (8.5 + 2 * cappedG);
+        if (avgBookValuePerShare > 0) {
+             priceGraham3 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
+        }
+    }
+
+    const wPE_EPS = 0.20, wPS_SPS = 0.15, wPB_BVPS = 0.15, wGraham1 = 0.25, wGraham2 = 0.10, wGraham3 = 0.15;
+    let totalPrice = 0, totalWeight = 0;
+    if (pricePE_EPS > 0 && !isNaN(pricePE_EPS)) { totalPrice += pricePE_EPS * wPE_EPS; totalWeight += wPE_EPS; }
+    if (pricePS_SPS > 0 && !isNaN(pricePS_SPS)) { totalPrice += pricePS_SPS * wPS_SPS; totalWeight += wPS_SPS; }
+    if (pricePB_BVPS > 0 && !isNaN(pricePB_BVPS)) { totalPrice += pricePB_BVPS * wPB_BVPS; totalWeight += wPB_BVPS; }
+    if (priceGraham1 > 0 && !isNaN(priceGraham1)) { totalPrice += priceGraham1 * wGraham1; totalWeight += wGraham1; }
+    if (priceGraham2 > 0 && !isNaN(priceGraham2)) { totalPrice += priceGraham2 * wGraham2; totalWeight += wGraham2; }
+    if (priceGraham3 > 0 && !isNaN(priceGraham3)) { totalPrice += priceGraham3 * wGraham3; totalWeight += wGraham3; }
+    const avgValuationPrice = totalWeight > 0 ? totalPrice / totalWeight : 0;
+    
+    // --- Commentary and Scoring ---
+    const totalStars = 10;
+    let achievedStars = 0;
+    let commentary = {};
+
+    commentary.marketPrice = `Giá trị tham khảo tại thời điểm phân tích.`;
+    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt (${safeFormatNumber(avgEPS)}đ). Cho thấy hiệu quả sinh lời cao trên mỗi cổ phần.`; }
+    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt (${safeFormatNumber(avgEPS)}đ). Công ty tạo ra lợi nhuận đáng kể.`; }
+    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá (${safeFormatNumber(avgEPS)}đ). Khả năng sinh lời ở mức chấp nhận được.`; }
+    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp (${safeFormatNumber(avgEPS)}đ). Lợi nhuận trên cổ phần còn hạn chế.`; }
+    else { commentary.avgEPS = `Âm (${safeFormatNumber(avgEPS)}đ). Công ty đang thua lỗ.`; }
+
+    if (avgPE <= 0) { commentary.avgPE = `Âm/0 (${safeFormatNumber(avgPE, 2)}x). Công ty đang thua lỗ, khó định giá.`; }
+    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Thấp (${safeFormatNumber(avgPE, 2)}x). Hấp dẫn nếu nền tảng tốt.`; }
+    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý (${safeFormatNumber(avgPE, 2)}x). Phản ánh mức định giá vừa phải.`; }
+    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao (${safeFormatNumber(avgPE, 2)}x). Cho thấy kỳ vọng tăng trưởng.`; }
+    else { achievedStars += 0.25; commentary.avgPE = `Cao (${safeFormatNumber(avgPE, 2)}x). Rủi ro điều chỉnh cao.`; }
+
+    if (avgPB <= 0) { commentary.avgPB = `Âm/0 (${safeFormatNumber(avgPB, 2)}x). Tình hình tài chính rất xấu.`; }
+    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Thấp (<1) (${safeFormatNumber(avgPB, 2)}x). Giá thấp hơn giá trị sổ sách.`; }
+    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý (${safeFormatNumber(avgPB, 2)}x). Mức định giá cân bằng.`; }
+    else { achievedStars += 0.5; commentary.avgPB = `Khá cao (${safeFormatNumber(avgPB, 2)}x). Thị trường đánh giá cao hơn giá trị sổ sách.`; }
+
+    if (avgPS <= 0) { commentary.avgPS = `Âm/0 (${safeFormatNumber(avgPS, 2)}x).`; }
+    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Thấp (<0.8) (${safeFormatNumber(avgPS, 2)}x). Giá rẻ so với doanh thu.`; }
+    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Hợp lý (${safeFormatNumber(avgPS, 2)}x). Mức định giá cân bằng.`; }
+    else { achievedStars += 0.5; commentary.avgPS = `Khá cao (${safeFormatNumber(avgPS, 2)}x).`; }
+    
+    const betaStock = stockData.beta ?? 0;
+    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `Thấp hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Ít biến động hơn thị trường.`; }
+    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Cao hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Biến động mạnh hơn thị trường.`; }
+    else { achievedStars += 0.75; commentary.betaStock = `Trung bình (β ≈ ${safeFormatNumber(betaStock, 2)}). Biến động tương đương thị trường.`; }
+
+    const floatingShareRatio = stockData.sharesOutstanding > 0 ? stockData.freeShares / stockData.sharesOutstanding : 0;
+    const fsrPercent = floatingShareRatio * 100;
+    if (fsrPercent < 20) { achievedStars += 0.5; commentary.floatingShareRatio = `Thấp (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản có thể thấp.`; }
+    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Trung bình (${safeFormatNumber(fsrPercent, 1)}%). Mức độ cô đặc vừa phải.`; }
+    else { achievedStars += 0.75; commentary.floatingShareRatio = `Cao (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản tốt.`; }
+
+    const avgROAPercent = avgROA * 100;
+    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Rất tốt (${safeFormatNumber(avgROAPercent, 1)}%). Hiệu quả sử dụng tài sản rất cao.`; }
+    else if (avgROAPercent >= 5) { achievedStars += 0.75; commentary.avgROA = `Tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
+    else if (avgROAPercent > 0) { achievedStars += 0.5; commentary.avgROA = `Trung bình (${safeFormatNumber(avgROAPercent, 1)}%).`; }
+    else { commentary.avgROA = `Thấp/Âm (${safeFormatNumber(avgROAPercent, 1)}%).`; }
+
+    const avgROEPercent = avgROE * 100;
+    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Rất tốt (${safeFormatNumber(avgROEPercent, 1)}%). Sinh lời trên vốn chủ sở hữu vượt trội.`; }
+    else if (avgROEPercent >= 15) { achievedStars += 0.75; commentary.avgROE = `Tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
+    else if (avgROEPercent > 0) { achievedStars += 0.5; commentary.avgROE = `Trung bình (${safeFormatNumber(avgROEPercent, 1)}%).`; }
+    else { commentary.avgROE = `Thấp/Âm (${safeFormatNumber(avgROEPercent, 1)}%).`; }
+
+    commentary.avgSalePerShare = `Mỗi cổ phiếu đại diện cho ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
+    commentary.avgBookValuePerShare = `Giá trị sổ sách là ${safeFormatNumber(avgBookValuePerShare)}đ. `;
+    if (marketPrice > 0 && avgBookValuePerShare > marketPrice) {
+         achievedStars += 0.75;
+         commentary.avgBookValuePerShare += `Cao hơn thị giá.`;
+    }
+    commentary.avgTangibleBookValuePerShare = `GT sổ sách hữu hình là ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
+
+    const valuationMethodComment = (price, method) => {
+        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu hoặc kết quả âm cho phương pháp ${method}.`;
+        let comparison = (price / marketPrice - 1) * 100;
+        return `Định giá ${safeFormatNumber(price)}đ/cp (${comparison > 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
+    };
+
+    commentary.pricePE_EPS = valuationMethodComment(pricePE_EPS, 'P/E*EPS');
+    commentary.pricePS_SPS = valuationMethodComment(pricePS_SPS, 'P/S*SPS');
+    commentary.pricePB_BVPS = valuationMethodComment(pricePB_BVPS, 'P/B*BVPS');
+    commentary.priceGraham1 = valuationMethodComment(priceGraham1, 'Graham (đầy đủ)');
+    commentary.priceGraham2 = valuationMethodComment(priceGraham2, 'Graham (rút gọn)');
+    commentary.priceGraham3 = valuationMethodComment(priceGraham3, 'Graham (căn)');
+
+    commentary.avgValuationPrice = `Giá trị hợp lý ước tính là ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
+    if (avgValuationPrice > 0 && marketPrice > 0) {
+        const diffPercent = (avgValuationPrice / marketPrice - 1) * 100;
+         if (diffPercent > 10) { achievedStars += 1; commentary.avgValuationPrice += `Cao hơn ${safeFormatNumber(diffPercent, 1)}% so với thị giá (tiềm năng).`; }
+         else if (diffPercent < -10) { achievedStars += 0.1; commentary.avgValuationPrice += `Thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% so với thị giá (có thể đắt).`; }
+         else { achievedStars += 0.5; commentary.avgValuationPrice += `Quanh (${safeFormatNumber(diffPercent, 1)}%) mức thị giá (hợp lý).`; }
+    }
+
+    achievedStars = Math.min(Math.round(achievedStars * 2) / 2, totalStars);
+
+    // --- Generate Period Tabs HTML ---
+    const periodTabsHTML = PERIODS.map(p => {
+        const isAvailable = availablePeriods.some(ap => ap.id === p.id);
+        return `<button 
+                    class="period-tab ${p.id === period ? 'active' : ''}" 
+                    onclick="updateValuationUI('${p.id}')" 
+                    ${!isAvailable ? 'disabled title="Không đủ dữ liệu"' : ''}>
+                    ${p.name}
+                </button>`;
+    }).join('');
+
+    // --- Final HTML Rendering ---
+    assessmentContainer.innerHTML = `
         <table>
             <thead>
                 <tr><td colspan="3" style="border:none; padding: 10px 0;"><div class="period-tabs">${periodTabsHTML}</div></td></tr>
@@ -525,13 +530,11 @@ function updateValuationUI(period = '4Q') {
     `;
 }
 
-
-// --- Các hàm tiện ích khác (không thay đổi nhiều) ---
-
+// **FIXED** function
 function openCompanyWebsite(url) {
     if (url) {
-        // Xóa tất cả phần 'www.' nếu có
-        let cleanUrl = url.replace(/www\./gi, '');
+        // Xóa tất cả phần 'www.' và khoảng trắng nếu có
+        let cleanUrl = url.replace(/www\./gi, '').replace(/\s+/g, '');
 
         // Kiểm tra xem url có bắt đầu bằng http:// hoặc https:// không
         if (!/^https?:\/\//i.test(cleanUrl)) {
@@ -628,9 +631,9 @@ async function calculateAdjustedPrice() {
      const C = Math.max(0, parseRatioInput(cashDividendStr, 'cash'));
      const B = Math.max(0, parseRatioInput(stockDividendRatioStr, 'ratio'));
 
-     if (isNaN(parseRatioInput(phtRatioStr, 'ratio'))) { hasError = true; errors.push("Định dạng Tỷ lệ PHT không hợp lệ."); }
-     if (isNaN(parseRatioInput(cashDividendStr, 'cash'))) { hasError = true; errors.push("Định dạng Cổ tức tiền mặt không hợp lệ."); }
-     if (isNaN(parseRatioInput(stockDividendRatioStr, 'ratio'))) { hasError = true; errors.push("Định dạng Tỷ lệ Cổ tức CP không hợp lệ."); }
+     if (isNaN(a)) { hasError = true; errors.push("Định dạng Tỷ lệ PHT không hợp lệ."); }
+     if (isNaN(C)) { hasError = true; errors.push("Định dạng Cổ tức tiền mặt không hợp lệ."); }
+     if (isNaN(B)) { hasError = true; errors.push("Định dạng Tỷ lệ Cổ tức CP không hợp lệ."); }
 
      if (hasError) {
          resultDiv.innerHTML = "Lỗi:<br>" + errors.join("<br>");
@@ -674,13 +677,20 @@ function parseRatioInput(inputString, type, parValue = 10000) {
         const x = parseVietnameseFloat(parts[0]);
         const y = parseVietnameseFloat(parts[1]);
         if (isNaN(x) || isNaN(y) || x === 0) return NaN; // Denominator can't be zero
-        return y / x; // This works for both cash (yield per share) and ratio
+        
+        // For cash dividend like "1:1500", it should return 1500. For "100:10" (10%) it should return 1000.
+        // The y/x logic covers both. 1500/1=1500. 10/100 * 10000 = 1000
+        return y / x * (type === 'cash' && !str.includes('%') ? parValue : 1);
     }
 
-    // 3. Try to parse as a direct number
+    // 3. Try to parse as a direct number (only for cash dividend)
     const directValue = parseVietnameseFloat(str);
-    // For both 'cash' and 'ratio', the direct value is valid.
-    return directValue;
+    if (type === 'cash') {
+        return isNaN(directValue) ? NaN : directValue;
+    }
+
+    // If it's for a ratio and not in %, X:Y, or X/Y format, it's invalid unless it's 0.
+    return directValue === 0 ? 0 : NaN;
 }
 
 
@@ -688,6 +698,7 @@ function parseVietnameseFloat(inputStr) {
     if (typeof inputStr !== 'string' || !inputStr) return NaN;
     try {
         const standardString = inputStr.trim().replace(/\./g, '').replace(/,/, '.');
+        if (standardString === "") return NaN;
         return parseFloat(standardString);
     } catch (error) {
         return NaN;
