@@ -530,12 +530,14 @@ function updateValuationUI(period = '4Q') {
 
 function openCompanyWebsite(url) {
     if (url) {
-        let fullUrl = url;
-        // Check if the URL already starts with http:// or https://
-        if (!/^https?:\/\//i.test(url)) {
-            fullUrl = `https://${url}`;
+        // Xóa tất cả phần 'www.' nếu có
+        let cleanUrl = url.replace(/www\./gi, '');
+
+        // Kiểm tra xem url có bắt đầu bằng http:// hoặc https:// không
+        if (!/^https?:\/\//i.test(cleanUrl)) {
+            cleanUrl = `https://${cleanUrl}`;
         }
-        window.open(fullUrl, '_blank');
+        window.open(cleanUrl, '_blank');
     }
 }
 
