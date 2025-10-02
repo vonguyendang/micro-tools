@@ -22,13 +22,13 @@
     --star-color: #f1c40f; /* Yellow */
 
     --font-family: 'Poppins', 'Arial', sans-serif;
-    --base-font-size: 16px;
-    --header-font-size: 1.8rem; /* ~28px */
-    --label-font-size: 1rem;   /* ~16px */
-    --input-font-size: 1rem;   /* ~16px */
+    --base-font-size: 20px;
+    --header-font-size: 1.9rem; /* ~30px */
+    --label-font-size: 1.1rem;  /* ~17.5px */
+    --input-font-size: 1.1rem;  /* ~17.5px */
     --button-font-size: 1.1rem; /* ~17.5px */
-    --result-font-size: 0.95rem; /* ~15px */
-    --small-font-size: 0.85rem; /* ~13.5px */
+    --result-font-size: 1rem;   /* ~16px */
+    --small-font-size: 0.9rem;  /* ~14.5px */
     --border-radius: 8px;
     --transition-speed: 0.3s;
 }
