@@ -19,6 +19,9 @@
         <div class="tabs">
             <button class="tab active" onclick="showTab('tab1')"><i class="fas fa-chart-pie"></i> ĐỊNH GIÁ CỔ PHIẾU</button>
             <button class="tab" onclick="showTab('tab2')"><i class="fas fa-calendar-alt"></i> GIÁ NGÀY GDKHQ</button>
+            <button class="tab" onclick="showTab('tab3')"><i class="fas fa-list-alt"></i> NIÊM YẾT MỚI</button>
+            <button class="tab" onclick="showTab('tab4')"><i class="fas fa-bullhorn"></i> LỊCH SỰ KIỆN</button>
+            <button class="tab" onclick="showTab('tab5')"><i class="fas fa-paper-plane"></i> PHÁT HÀNH</button>
         </div>
     </div>
 
@@ -90,10 +93,107 @@
              </div>
         </main>
     </div>
+
+    <div id="tab3" class="container">
+        <header>
+            <h1><i class="fas fa-list-alt"></i> Niêm Yết Mới trên HSX</h1>
+        </header>
+        <main>
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showListingSubTab('listing-registered')">Đăng ký niêm yết</button>
+                <button class="period-tab" onclick="showListingSubTab('listing-approved')">Được chấp thuận chính thức</button>
+            </div>
+            
+            <div id="listing-registered" class="listing-sub-container active">
+                <div class="table-controls">
+                    <input type="text" id="search-registered" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-registered">
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-registered"></div>
+            </div>
+
+            <div id="listing-approved" class="listing-sub-container">
+                <div class="table-controls">
+                    <input type="text" id="search-approved" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-approved">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-approved"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="tab4" class="container">
+        <header>
+            <h1><i class="fas fa-bullhorn"></i> Lịch Sự Kiện Sắp Tới</h1>
+        </header>
+        <main>
+            <div class="table-controls">
+                <input type="text" id="search-events" placeholder="Tìm kiếm...">
+            </div>
+            <div class="table-wrapper">
+                <table id="table-events">
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="loading-cell">
+                                <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls" id="pagination-events"></div>
+        </main>
+    </div>
+    
+    <div id="tab5" class="container">
+        <header>
+            <h1><i class="fas fa-paper-plane"></i> Tin tức phát hành (UBCKNN)</h1>
+        </header>
+        <main>
+            <div class="button-container">
+                <button class="action-button external-link-button" 
+                        onclick="openSscUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=b%C3%A1o+c%C3%A1o+ph%C3%A1t+h%C3%A0nh+c%E1%BB%95+phi%E1%BA%BFu+%C4%91%E1%BB%83')">
+                    <i class="fas fa-external-link-alt"></i> Tin phát hành (Chia cổ tức)
+                </button>
+                <button class="action-button external-link-button" 
+                        onclick="openSscUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=ch%C3%A0o+b%C3%A1n+c%E1%BB%95+phi%E1%BA%BFu')">
+                    <i class="fas fa-external-link-alt"></i> Tin phát hành (Chào bán)
+                </button>
+            </div>
+             <p class="placeholder-text" style="margin-top: 30px;">Nhấn vào các nút trên để mở trang tin tức tương ứng từ website của Ủy ban Chứng khoán Nhà nước trong một tab mới.</p>
+        </main>
+    </div>
+
     <footer>
         <p>© 2023 Stock Review by Dangvo. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/tab-valuation.js"></script>
+    <script src="js/tab-gdkhq.js"></script>
+    <script src="js/tab-listings.js"></script>
+    <script src="js/tab-events.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
