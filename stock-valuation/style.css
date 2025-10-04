@@ -462,7 +462,117 @@ input[type="number"]:focus {
     text-align: center;
 }
 
+/* ----- New Listing & Event Tabs ----- */
+.listing-sub-container {
+    display: none;
+    animation: fadeIn 0.4s ease-in-out;
+}
 
+.listing-sub-container.active {
+    display: block;
+}
+
+.table-controls {
+    margin-bottom: 15px;
+}
+
+.table-controls input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    max-height: 500px;
+}
+
+#table-registered, #table-approved, #table-events {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+#table-registered th, #table-approved th, #table-events th,
+#table-registered td, #table-approved td, #table-events td {
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+#table-registered th, #table-approved th, #table-events th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    cursor: pointer;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#table-registered th:hover, #table-approved th:hover, #table-events th:hover {
+    background-color: #e9ecef;
+}
+
+#table-registered th .sort-icon,
+#table-approved th .sort-icon,
+#table-events th .sort-icon {
+    margin-left: 5px;
+    color: #ccc;
+    font-size: 0.8em;
+}
+
+#table-registered th.sorted-asc .sort-icon,
+#table-approved th.sorted-asc .sort-icon,
+#table-events th.sorted-asc .sort-icon,
+#table-registered th.sorted-desc .sort-icon,
+#table-approved th.sorted-desc .sort-icon,
+#table-events th.sorted-desc .sort-icon {
+    color: var(--primary-color);
+}
+
+
+.pagination-controls {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination-controls button {
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pagination-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.pagination-controls #page-info {
+    font-weight: 500;
+}
+
+/* ----- CSS cho trạng thái đang tải trong bảng ----- */
+.loading-cell {
+    text-align: center;
+    padding: 40px 20px;
+    font-style: italic;
+    font-size: 1rem;
+    color: #888;
+    border: none !important; /* Ghi đè để không hiển thị đường viền ô */
+}
+
+.loading-cell i {
+    margin-right: 10px;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
 /* ----- Responsive Design ----- */
 
 /* Tablets and smaller desktops */
