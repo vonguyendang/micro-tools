@@ -26,7 +26,7 @@ async function initializeListingTabs() {
         { header: '#', key: 'stt', searchable: false, render: (item, i) => i },
         { header: 'Tên gọi tắt', key: 'brief', searchable: true, render: item => item.listingdbSecuritiesInfo?.[0]?.brief || 'N/A' },
         { header: 'Tên DN', key: 'name', searchable: true, render: item => item.name },
-        { header: 'Địa chỉ', key: 'address', searchable: true, render: item => item.address },
+        // { header: 'Địa chỉ', key: 'address', searchable: true, render: item => item.address },
         { header: 'Ngày nộp HS', key: 'listDate', searchable: true, render: item => formatDate(item.listDate) },
         { header: 'Ngày cập nhật', key: 'updatedDate', searchable: true, render: item => formatDate(item.listingdbSecuritiesInfo?.slice(-1)[0]?.updatedDate) },
         { header: 'KL đăng ký', key: 'listingVolume', searchable: true, render: item => formatNumber(item.listingVolume) }
@@ -37,7 +37,7 @@ async function initializeListingTabs() {
         { header: '#', key: 'stt', searchable: false, render: (item, i) => i },
         { header: 'Mã CK', key: 'code', searchable: true, render: item => item.code },
         { header: 'Tên DN', key: 'name', searchable: true, render: item => item.name },
-        { header: 'Địa chỉ', key: 'address', searchable: true, render: item => item.address },
+        // { header: 'Địa chỉ', key: 'address', searchable: true, render: item => item.address },
         { header: 'KL đăng ký', key: 'listingVolume', searchable: true, render: item => formatNumber(item.listingVolume) },
         { header: 'Ngày nộp HS', key: 'listDate', searchable: true, render: item => formatDate(item.listDate) },
         { header: 'Ngày chấp thuận', key: 'acceptDate', searchable: true, render: item => formatDate(item.acceptDate) },
