@@ -80,12 +80,62 @@ async function fetchStockData() {
     const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg';
     resultDiv.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Đang tải và phân tích dữ liệu...</p>';
 
+    // --- START: UPDATED CODE ---
+    // Helper function to fetch bond data with a fallback mechanism
+    const fetchBondDataWithFallback = async () => {
+        try {
+            // 1. Try primary API
+            const response = await fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json');
+            if (!response.ok) throw new Error('API Trái phiếu chính (investing.com) thất bại');
+            return response.json();
+        } catch (error) {
+            console.warn(error.message, "Đang thử API Trái phiếu dự phòng (worldgovernmentbonds.com).");
+            try {
+                // 2. If primary fails, use fallback API
+                const fallbackUrl = 'https://www.worldgovernmentbonds.com/wp-json/common/v1/historical';
+                const fallbackHeaders = { 'Content-Type': 'application/json; charset=UTF-8' };
+                const fallbackBody = JSON.stringify({
+                    "GLOBALVAR": {
+                        "JS_VARIABLE": "jsGlobalVars", "FUNCTION": "Bond", "DOMESTIC": true,
+                        "ENDPOINT": "https://www.worldgovernmentbonds.com/wp-json/common/v1/historical",
+                        "DATE_RIF": "2099-12-31", "OBJ": { "UNIT": "%", "DECIMAL": 3, "UNIT_DELTA": "bp", "DECIMAL_DELTA": 1 },
+                        "COUNTRY1": { "SYMBOL": "58", "PAESE": "Vietnam", "PAESE_UPPERCASE": "VIETNAM", "BANDIERA": "vn", "URL_PAGE": "vietnam" },
+                        "COUNTRY2": null, "OBJ1": { "DURATA_STRING": "10 Years", "DURATA": 120 }, "OBJ2": null
+                    }
+                });
+
+                const fallbackResponse = await fetch(fallbackUrl, {
+                    method: 'POST',
+                    headers: fallbackHeaders,
+                    body: fallbackBody
+                });
+
+                if (!fallbackResponse.ok) throw new Error('API Trái phiếu dự phòng cũng thất bại');
+
+                const data = await fallbackResponse.json();
+                const yearToFetch = new Date().getFullYear() + 1; // Get data for the upcoming year as per API structure
+                const bondYield = data?.result?.yearly?.[yearToFetch]?.lastVal;
+
+                if (typeof bondYield !== 'number') {
+                    throw new Error('Không thể trích xuất dữ liệu lợi suất từ API dự phòng.');
+                }
+                
+                // Return a custom object that the processing logic can understand
+                return { isFallback: true, value: bondYield };
+
+            } catch (fallbackError) {
+                console.error("Lỗi API Trái phiếu dự phòng:", fallbackError);
+                return {}; // Return empty object on complete failure to prevent crashes
+            }
+        }
+    };
+    // --- END: UPDATED CODE ---
+
     const [dateFrom, dateTo] = getFilterDate();
     const urls = [
         `https://restv2.fireant.vn/symbols/${stockCode}/fundamental`,
         `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`,
         `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`,
-        'https://sbcharts.investing.com/bond_charts/bonds_chart_72.json',
         `https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stockCode}`,
         `https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${dateFrom}&endDate=${dateTo}&offset=0&limit=20`,
         `https://restv2.fireant.vn/symbols/${stockCode}/profile`
@@ -95,35 +145,49 @@ async function fetchStockData() {
     const headersSSI = { 'accept': 'application/json' };
 
     try {
-        const requests = urls.map((url, index) => {
-             const currentHeaders = url.includes('iboard-query.ssi.com.vn') ? headersSSI : headers;
-             if (url.includes('investing.com')) return fetch(url);
-             return fetch(url, { headers: currentHeaders });
-        });
+        const apiRequests = urls.map(url => fetch(url, {
+             headers: url.includes('iboard-query.ssi.com.vn') ? headersSSI : headers
+        }));
 
-        const responses = await Promise.all(requests);
+        const allRequests = [
+            apiRequests[0],
+            apiRequests[1],
+            apiRequests[2],
+            fetchBondDataWithFallback(), // Use the new function for bond data
+            apiRequests[3],
+            apiRequests[4],
+            apiRequests[5]
+        ];
 
-        for (const response of responses) {
+        const responses = await Promise.all(allRequests);
+
+        const dataPromises = responses.map(async (response, index) => {
+            // The bond data is at index 3. It might already be a processed object.
+            if (index === 3) return response; 
+            
             if (!response.ok) {
                  let errorMsg = `Lỗi ${response.status}: ${response.statusText}`;
                  try {
                      const errorData = await response.json();
                      errorMsg += ` - ${errorData.message || JSON.stringify(errorData)}`;
                  } catch (e) { /* Ignore */ }
-                 throw new Error(`Không thể tải dữ liệu cho mã ${stockCode}. ${errorMsg}`);
+                 throw new Error(`Không thể tải dữ liệu. ${errorMsg}`);
             }
-        }
+            return response.json();
+        });
 
+        const allData = await Promise.all(dataPromises);
+        
         // Store data in global variables
         [
             globalStockData,
             globalFinancialDataQuarter,
             globalFinancialDataYear,
-            globalBonds,
+            globalBonds, // This now holds data from the primary or fallback API
             globalStockTransaction,
             globalDividendEvents,
             globalStockProfile
-        ] = await Promise.all(responses.map(res => res.json()));
+        ] = allData;
 
         // --- UPDATED: Smartly select the default period ---
         const q_count = globalFinancialDataQuarter.length;
@@ -134,9 +198,6 @@ async function fetchStockData() {
             return source_count >= p.required;
         });
         
-        // Default to the longest available period, or fallback to 1Q
-        // const defaultPeriod = availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q';
-        // Default to 1Y if available, else longest available, else 1Q
         const defaultPeriod = availablePeriods.find(p => p.id === '1Y') ? '1Y' : (availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q');
 
         updateValuationUI(defaultPeriod);
@@ -155,7 +216,6 @@ function updateValuationUI(period = '4Q') {
         return;
     }
 
-    // --- Check data availability and manage tab states ---
     const q_count = globalFinancialDataQuarter.length;
     const y_count = globalFinancialDataYear.length;
 
@@ -164,7 +224,6 @@ function updateValuationUI(period = '4Q') {
         return source_count >= p.required;
     });
     
-    // If no data is available for any period, show an error.
     if (availablePeriods.length === 0) {
         renderBaseUI(); 
         const assessmentContainer = document.getElementById('assessment-container');
@@ -179,8 +238,6 @@ function updateValuationUI(period = '4Q') {
         period = availablePeriods[availablePeriods.length - 1].id;
     }
 
-
-    // --- Select data based on the chosen period ---
     let dataToProcess = [];
     const selectedPeriodInfo = PERIODS.find(p => p.id === period);
     const periodLabel = selectedPeriodInfo.name;
@@ -191,10 +248,7 @@ function updateValuationUI(period = '4Q') {
         dataToProcess = globalFinancialDataYear.slice(0, selectedPeriodInfo.required);
     }
 
-    // --- Render Base UI (once) ---
     renderBaseUI();
-
-    // --- Calculate and Render Assessment UI ---
     renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods);
 }
 
@@ -327,7 +381,6 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     const safeFormatNumber = (value, decimals = 0) => formatNumber(value ?? 0, decimals);
     const marketPrice = transactionData.matchedPrice ?? 0;
     
-    // --- Calculations ---
     let totalEPS = 0, totalPE = 0, totalPB = 0, totalPS = 0, totalROA = 0, totalROE = 0, totalSalePerShare = 0, totalBookValuePerShare = 0, totalTangibleBookValuePerShare = 0;
     let validPeriods = 0;
 
@@ -368,8 +421,18 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
        const oldestEPS = financialDataYear[4].financialValues.BasicEPS;
        g = Math.pow((latestEPS / oldestEPS), 1 / 4) - 1;
     }
+    
+    // --- START: UPDATED CODE ---
+    let y10;
+    if (bonds && bonds.isFallback && typeof bonds.value === 'number') {
+        y10 = bonds.value; // Use value from fallback API
+    } else if (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') {
+        y10 = bonds.current[5][1]; // Original logic for investing.com
+    } else {
+        y10 = 3.79; // Default value if all fails
+    }
+    // --- END: UPDATED CODE ---
 
-    const y10 = (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') ? bonds.current[5][1] : 4.4;
     const riskFreeRateAdj = (y10 > 0 ? y10 : 4.4) + 0.5;
 
     if (!isNaN(g) && avgEPS > 0) {
@@ -391,7 +454,6 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     if (priceGraham3 > 0 && !isNaN(priceGraham3)) { totalPrice += priceGraham3 * wGraham3; totalWeight += wGraham3; }
     const avgValuationPrice = totalWeight > 0 ? totalPrice / totalWeight : 0;
     
-    // --- Commentary and Scoring ---
     const totalStars = 10;
     let achievedStars = 0;
     let commentary = {};
@@ -473,7 +535,6 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
 
     achievedStars = Math.min(Math.round(achievedStars * 2) / 2, totalStars);
 
-    // --- Generate Period Tabs HTML ---
     const periodTabsHTML = PERIODS.map(p => {
         const isAvailable = availablePeriods.some(ap => ap.id === p.id);
         return `<button 
@@ -484,7 +545,6 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
                 </button>`;
     }).join('');
 
-    // --- Final HTML Rendering ---
     assessmentContainer.innerHTML = `
         <table>
             <thead>
@@ -530,13 +590,9 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     `;
 }
 
-// **FIXED** function
 function openCompanyWebsite(url) {
     if (url) {
-        // Xóa tất cả phần 'www.' và khoảng trắng nếu có
         let cleanUrl = url.replace(/www\./gi, '').replace(/\s+/g, '');
-
-        // Kiểm tra xem url có bắt đầu bằng http:// hoặc https:// không
         if (!/^https?:\/\//i.test(cleanUrl)) {
             cleanUrl = `https://${cleanUrl}`;
         }
@@ -555,7 +611,6 @@ function openTradingView(exchange, code) {
      }
 }
 
-// Hàm tính giá GDKHQ
 async function calculateAdjustedPrice() {
     const preGDKHQInputElem = document.getElementById('preGDKHQInput');
     const paInputElem = document.getElementById('Pa');
@@ -656,12 +711,11 @@ async function calculateAdjustedPrice() {
 
 function parseRatioInput(inputString, type, parValue = 10000) {
     if (!inputString || typeof inputString !== 'string') {
-        return 0; // Return 0 for empty/null input
+        return 0;
     }
     const str = inputString.trim();
-    if (str === "") return 0; // Explicitly handle empty string after trim
+    if (str === "") return 0;
 
-    // 1. Check for percentage format
     if (str.endsWith('%')) {
         const percentage = parseVietnameseFloat(str.slice(0, -1));
         if (isNaN(percentage)) return NaN;
@@ -669,27 +723,22 @@ function parseRatioInput(inputString, type, parValue = 10000) {
         return type === 'cash' ? ratio * parValue : ratio;
     }
 
-    // 2. Check for X:Y or X/Y format
     let delimiter = str.includes(':') ? ':' : (str.includes('/') ? '/' : null);
     if (delimiter) {
         const parts = str.split(delimiter);
         if (parts.length !== 2) return NaN;
         const x = parseVietnameseFloat(parts[0]);
         const y = parseVietnameseFloat(parts[1]);
-        if (isNaN(x) || isNaN(y) || x === 0) return NaN; // Denominator can't be zero
+        if (isNaN(x) || isNaN(y) || x === 0) return NaN;
         
-        // For cash dividend like "1:1500", it should return 1500. For "100:10" (10%) it should return 1000.
-        // The y/x logic covers both. 1500/1=1500. 10/100 * 10000 = 1000
         return y / x * (type === 'cash' && !str.includes('%') ? parValue : 1);
     }
 
-    // 3. Try to parse as a direct number (only for cash dividend)
     const directValue = parseVietnameseFloat(str);
     if (type === 'cash') {
         return isNaN(directValue) ? NaN : directValue;
     }
 
-    // If it's for a ratio and not in %, X:Y, or X/Y format, it's invalid unless it's 0.
     return directValue === 0 ? 0 : NaN;
 }
 
