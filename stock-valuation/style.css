@@ -656,4 +656,29 @@ input[type="number"]:focus {
          padding: 6px 8px;
          font-size: 0.8rem;
     }
+
+    .table-wrapper {
+        overflow-x: visible; /* Bỏ thanh cuộn ngang */
+        max-height: none;    /* Bỏ thanh cuộn dọc */
+    }
+
+    #table-registered,
+    #table-approved,
+    #table-events,
+    #table-dividend,
+    #table-offering {
+        font-size: 0.65rem;   /* Giảm kích thước chữ trong bảng */
+        table-layout: fixed; /* Giúp bảng co giãn tốt hơn */
+        width: 100%;
+    }
+
+    #table-registered th, #table-registered td,
+    #table-approved th, #table-approved td,
+    #table-events th, #table-events td,
+    #table-dividend th, #table-dividend td,
+    #table-offering th, #table-offering td {
+        padding: 8px 5px;       /* Giảm khoảng đệm trong các ô */
+        word-break: break-word; /* Tự động xuống dòng cho nội dung dài */
+        hyphens: auto;          /* Tự động ngắt từ nếu cần */
+    }
 }
