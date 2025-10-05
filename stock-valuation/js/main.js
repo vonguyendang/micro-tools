@@ -4,7 +4,7 @@
  */
 
 // Khai báo các biến cho các bảng ở phạm vi toàn cục của file
-let registeredTable, approvedTable, eventsTable;
+let registeredTable, approvedTable, generalEventsTable, hoseEventsTable;
 
 /**
  * Hiển thị tab được chọn và ẩn các tab khác.
@@ -39,8 +39,8 @@ function showTab(tabId) {
     // Tải dữ liệu cho các tab mới khi được truy cập lần đầu tiên
     if (tabId === 'tab3' && !registeredTable) {
         initializeListingTabs();
-    } else if (tabId === 'tab4' && !eventsTable) {
-        initializeEventsTab();
+    } else if (tabId === 'tab4' && !generalEventsTable && !hoseEventsTable) {
+        initializeEventsTabs();
     }
 }
 
