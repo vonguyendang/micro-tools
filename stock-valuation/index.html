@@ -147,21 +147,46 @@
             <h1><i class="fas fa-bullhorn"></i> Lịch Sự Kiện Sắp Tới</h1>
         </header>
         <main>
-            <div class="table-controls">
-                <input type="text" id="search-events" placeholder="Tìm kiếm...">
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showEventSubTab('events-general')">Tổng hợp</button>
+                <button class="period-tab" onclick="showEventSubTab('events-hose')">HOSE</button>
             </div>
-            <div class="table-wrapper">
-                <table id="table-events">
-                    <tbody>
-                        <tr>
-                            <td colspan="4" class="loading-cell">
-                                <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div id="events-general" class="listing-sub-container active">
+                <div class="table-controls">
+                    <input type="text" id="search-events-general" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-events-general">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-events-general"></div>
             </div>
-            <div class="pagination-controls" id="pagination-events"></div>
+
+            <div id="events-hose" class="listing-sub-container">
+                <div class="table-controls">
+                    <input type="text" id="search-events-hose" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-events-hose">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-events-hose"></div>
+            </div>
         </main>
     </div>
     
