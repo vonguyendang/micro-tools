@@ -489,20 +489,20 @@ input[type="number"]:focus {
     max-height: 500px;
 }
 
-#table-registered, #table-approved, #table-events {
+#table-registered, #table-approved, #table-events-general, #table-events-hose {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.85rem;
 }
 
-#table-registered th, #table-approved th, #table-events th,
-#table-registered td, #table-approved td, #table-events td {
+#table-registered th, #table-approved th, #table-events-general th,#table-events-hose th,
+#table-registered td, #table-approved td, #table-events-general td, #table-events-hose td {
     padding: 8px 10px;
     border: 1px solid var(--border-color);
     text-align: left;
 }
 
-#table-registered th, #table-approved th, #table-events th {
+#table-registered th, #table-approved th, #table-events-general th, #table-events-hose th {
     background-color: #f8f9fa;
     font-weight: 600;
     cursor: pointer;
@@ -511,13 +511,14 @@ input[type="number"]:focus {
     z-index: 1;
 }
 
-#table-registered th:hover, #table-approved th:hover, #table-events th:hover {
+#table-registered th:hover, #table-approved th:hover, #table-events-general th:hover, #table-events-hose th:hover {
     background-color: #e9ecef;
 }
 
 #table-registered th .sort-icon,
 #table-approved th .sort-icon,
-#table-events th .sort-icon {
+#table-events-general th .sort-icon,
+#table-events-hose th .sort-icon {
     margin-left: 5px;
     color: #ccc;
     font-size: 0.8em;
@@ -525,10 +526,12 @@ input[type="number"]:focus {
 
 #table-registered th.sorted-asc .sort-icon,
 #table-approved th.sorted-asc .sort-icon,
-#table-events th.sorted-asc .sort-icon,
+#table-events-general th.sorted-asc .sort-icon,
+#table-events-hose th.sorted-asc .sort-icon,
 #table-registered th.sorted-desc .sort-icon,
 #table-approved th.sorted-desc .sort-icon,
-#table-events th.sorted-desc .sort-icon {
+#table-events-general th.sorted-desc .sort-icon,
+#table-events-hose th.sorted-desc .sort-icon {
     color: var(--primary-color);
 }
 
@@ -664,7 +667,8 @@ input[type="number"]:focus {
 
     #table-registered,
     #table-approved,
-    #table-events,
+    #table-events-general,
+    #table-events-hose,
     #table-dividend,
     #table-offering {
         font-size: 0.65rem;   /* Giảm kích thước chữ trong bảng */
@@ -674,7 +678,8 @@ input[type="number"]:focus {
 
     #table-registered th, #table-registered td,
     #table-approved th, #table-approved td,
-    #table-events th, #table-events td,
+    #table-events-general th, #table-events-general td,
+     #table-events-hose th, #table-events-hose td,
     #table-dividend th, #table-dividend td,
     #table-offering th, #table-offering td {
         padding: 8px 5px;       /* Giảm khoảng đệm trong các ô */
