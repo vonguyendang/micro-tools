@@ -9,7 +9,7 @@
  */
 function getFilterDate() {
     let date = new Date();
-    let fromDate = new Date(date.getFullYear() - 10, 0, 1);
+    let fromDate = new Date(2000, 0, 1);
     let toDate = new Date(date.getFullYear() + 1, 11, 31);
 
     function formatDateToISO(d) {
