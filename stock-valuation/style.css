@@ -687,3 +687,8 @@ input[type="number"]:focus {
         hyphens: auto;          /* Tự động ngắt từ nếu cần */
     }
 }
+/* === CSS MỚI: Định dạng cho phân trang bảng cổ tức === */
+.dividend-pagination {
+    margin-top: 10px; /* Tạo khoảng cách với bảng */
+    padding-bottom: 10px; /* Thêm khoảng đệm dưới nếu có bảng khác theo sau */
+}
