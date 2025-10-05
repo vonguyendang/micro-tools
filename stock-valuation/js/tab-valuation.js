@@ -222,6 +222,7 @@ function renderBaseUI() {
     const stockCode = profileData.symbol;
     const stockExchange = (transactionData.exchange ?? profileData.exchange ?? 'N/A').toUpperCase();
     const stockNameVi = (transactionData.companyNameVi ?? profileData.companyName ?? 'Không rõ').toUpperCase();
+    const stockNameEn = (transactionData.companyNameEn ?? profileData.internationalName ?? 'Không rõ').toUpperCase();
     const companyWebsite = profileData.webAddress ?? '';
     
     const safeFormatNumber = (value, decimals = 0) => formatNumber(value ?? 0, decimals);
@@ -269,13 +270,14 @@ function renderBaseUI() {
         <style>.result .comment { font-style: italic; color: #555; } .error-text { color: var(--error-color); font-weight: bold; }</style>
         <table class="hidden-border">
              <tbody>
-                <tr><th colspan="5" class="center">THÔNG TIN THAM KHẢO THÊM VỀ ${stockNameVi} (${stockCode})</th></tr>
+                <tr><th colspan="5" class="center">THÔNG TIN THAM KHẢO THÊM VỀ ${stockNameVi} (${stockCode} - ${stockNameEn} )</th></tr>
                 <tr><td colspan="5" class="center"><div class="button-container">
                     <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website doanh nghiệp</button>
                     <button class="action-button external-link-button" onclick="openPlatform('fireant','${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
                     <button class="action-button external-link-button" onclick="openPlatform('vietstock','${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
                     <button class="action-button external-link-button" onclick="openPlatform('vcinews','${stockCode}')"><i class="fas fa-external-link-alt"></i> Tin tức</button>
                     <button class="action-button external-link-button" onclick="openPlatform('vcievents','${stockCode}')"><i class="fas fa-external-link-alt"></i> Sự kiện</button>
+                    <button class="action-button external-link-button" onclick="openPlatform('info','${stockCode}')"><i class="fas fa-external-link-alt"></i> Thông tin thêm</button>
                     <button class="action-button external-link-button" onclick="openTradingView('${stockExchange}','${stockCode}')"><i class="fas fa-external-link-alt"></i> TradingView</button>
                 </div></td></tr>
                 <tr><th colspan="5" class="center">GIÁ GIAO DỊCH PHIÊN GẦN NHẤT</th></tr>
@@ -575,6 +577,7 @@ const baseUrls = {
   vietstock: code => `https://finance.vietstock.vn/${code}/tin-moi-nhat.htm`,
   vcinews: code => `https://trading.vietcap.com.vn/ai-news/company?ticker=${code}&newsType=business`,
   vcievents: code => `https://trading.vietcap.com.vn/iq/company?ticker=${code}&tab=events`,
+  info: code => `https://stockbiz.vn/ma-chung-khoan//${code}`,
 };
 
 // Hàm tổng quát thay thế nhiều hàm riêng lẻ
