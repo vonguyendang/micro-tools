@@ -271,9 +271,11 @@ function renderBaseUI() {
              <tbody>
                 <tr><th colspan="5" class="center">THÔNG TIN THAM KHẢO THÊM VỀ ${stockNameVi} (${stockCode})</th></tr>
                 <tr><td colspan="5" class="center"><div class="button-container">
-                    <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website DN</button>
-                    <button class="action-button external-link-button" onclick="openFireant('${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
-                    <button class="action-button external-link-button" onclick="openVietstock('${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
+                    <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website doanh nghiệp</button>
+                    <button class="action-button external-link-button" onclick="openPlatform('fireant','${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
+                    <button class="action-button external-link-button" onclick="openPlatform('vietstock','${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
+                    <button class="action-button external-link-button" onclick="openPlatform('vcinews','${stockCode}')"><i class="fas fa-external-link-alt"></i> Tin tức</button>
+                    <button class="action-button external-link-button" onclick="openPlatform('vcievents','${stockCode}')"><i class="fas fa-external-link-alt"></i> Sự kiện</button>
                     <button class="action-button external-link-button" onclick="openTradingView('${stockExchange}','${stockCode}')"><i class="fas fa-external-link-alt"></i> TradingView</button>
                 </div></td></tr>
                 <tr><th colspan="5" class="center">GIÁ GIAO DỊCH PHIÊN GẦN NHẤT</th></tr>
@@ -566,8 +568,26 @@ function openCompanyWebsite(url) {
         window.open(cleanUrl, '_blank');
     }
 }
-function openFireant(code) { if (code) window.open(`https://fireant.vn/ma-chung-khoan/${code}`, '_blank'); }
-function openVietstock(code) { if (code) window.open(`https://finance.vietstock.vn/${code}/tin-moi-nhat.htm`, '_blank'); }
+
+// Định nghĩa ánh xạ nền tảng → hàm sinh URL
+const baseUrls = {
+  fireant: code => `https://fireant.vn/ma-chung-khoan/${code}`,
+  vietstock: code => `https://finance.vietstock.vn/${code}/tin-moi-nhat.htm`,
+  vcinews: code => `https://trading.vietcap.com.vn/ai-news/company?ticker=${code}&newsType=business`,
+  vcievents: code => `https://trading.vietcap.com.vn/iq/company?ticker=${code}&tab=events`,
+};
+
+// Hàm tổng quát thay thế nhiều hàm riêng lẻ
+function openPlatform(platform, code) {
+  const urlGenerator = baseUrls[platform];
+  if (urlGenerator && code) {
+    window.open(urlGenerator(code), '_blank');
+  } else {
+    console.error(`Nền tảng không hợp lệ hoặc code trống: ${platform}`); 
+  }
+}
+
+
 function openTradingView(exchange, code) {
      if (code && exchange && exchange !== 'N/A') {
          let tvExchange = exchange.toUpperCase() === 'HSX' ? 'HOSE' : exchange.toUpperCase();
