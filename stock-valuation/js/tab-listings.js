@@ -24,7 +24,7 @@ async function initializeListingTabs() {
     // Cấu hình các cột cho bảng "Đăng ký niêm yết"
     const registeredColumns = [
         { header: '#', key: 'stt', searchable: false, render: (item, i) => i },
-        { header: 'Tên gọi tắt', key: 'brief', searchable: true, render: item => item.listingdbSecuritiesInfo?.[0]?.brief || 'N/A' },
+        // { header: 'Tên gọi tắt', key: 'brief', searchable: true, render: item => item.listingdbSecuritiesInfo?.[0]?.brief || 'N/A' },
         { header: 'Tên DN', key: 'name', searchable: true, render: item => item.name },
         // { header: 'Địa chỉ', key: 'address', searchable: true, render: item => item.address },
         { header: 'Ngày nộp HS', key: 'listDate', searchable: true, render: item => formatDate(item.listDate) },
