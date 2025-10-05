@@ -11,6 +11,7 @@ let globalBonds = {};
 let globalStockTransaction = {};
 let globalDividendEvents = [];
 let globalStockProfile = {};
+let dividendCurrentPage = 1; // BIẾN MỚI: Quản lý trang cho bảng cổ tức
 
 // --- Cấu hình các giai đoạn phân tích ---
 const PERIODS = [
@@ -42,11 +43,8 @@ async function fetchStockData() {
     const stockCode = code.toUpperCase();
     const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg';
     resultDiv.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Đang tải và phân tích dữ liệu...</p>';
+    dividendCurrentPage = 1; // Reset lại trang khi tìm mã mới
 
-    /**
-     * Lấy dữ liệu lợi suất trái phiếu với cơ chế dự phòng.
-     * Thử API chính, nếu lỗi thì chuyển sang API dự phòng.
-     */
     const fetchBondDataWithFallback = async () => {
         try {
             const response = await fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json');
@@ -58,33 +56,15 @@ async function fetchStockData() {
                 const fallbackUrl = 'https://www.worldgovernmentbonds.com/wp-json/common/v1/historical';
                 const fallbackHeaders = { 'Content-Type': 'application/json; charset=UTF-8' };
                 const fallbackBody = JSON.stringify({
-                    "GLOBALVAR": {
-                        "JS_VARIABLE": "jsGlobalVars", "FUNCTION": "Bond", "DOMESTIC": true,
-                        "ENDPOINT": "https://www.worldgovernmentbonds.com/wp-json/common/v1/historical",
-                        "DATE_RIF": "2099-12-31", "OBJ": { "UNIT": "%", "DECIMAL": 3, "UNIT_DELTA": "bp", "DECIMAL_DELTA": 1 },
-                        "COUNTRY1": { "SYMBOL": "58", "PAESE": "Vietnam", "PAESE_UPPERCASE": "VIETNAM", "BANDIERA": "vn", "URL_PAGE": "vietnam" },
-                        "COUNTRY2": null, "OBJ1": { "DURATA_STRING": "10 Years", "DURATA": 120 }, "OBJ2": null
-                    }
+                    "GLOBALVAR": { "JS_VARIABLE": "jsGlobalVars", "FUNCTION": "Bond", "DOMESTIC": true, "ENDPOINT": "https://www.worldgovernmentbonds.com/wp-json/common/v1/historical", "DATE_RIF": "2099-12-31", "OBJ": { "UNIT": "%", "DECIMAL": 3, "UNIT_DELTA": "bp", "DECIMAL_DELTA": 1 }, "COUNTRY1": { "SYMBOL": "58", "PAESE": "Vietnam", "PAESE_UPPERCASE": "VIETNAM", "BANDIERA": "vn", "URL_PAGE": "vietnam" }, "COUNTRY2": null, "OBJ1": { "DURATA_STRING": "10 Years", "DURATA": 120 }, "OBJ2": null }
                 });
-
-                const fallbackResponse = await fetch(fallbackUrl, {
-                    method: 'POST',
-                    headers: fallbackHeaders,
-                    body: fallbackBody
-                });
-
+                const fallbackResponse = await fetch(fallbackUrl, { method: 'POST', headers: fallbackHeaders, body: fallbackBody });
                 if (!fallbackResponse.ok) throw new Error('API Trái phiếu dự phòng cũng thất bại');
-
                 const data = await fallbackResponse.json();
                 const yearToFetch = new Date().getFullYear() + 1;
                 const bondYield = data?.result?.yearly?.[yearToFetch]?.lastVal;
-
-                if (typeof bondYield !== 'number') {
-                    throw new Error('Không thể trích xuất dữ liệu lợi suất từ API dự phòng.');
-                }
-                
+                if (typeof bondYield !== 'number') throw new Error('Không thể trích xuất dữ liệu lợi suất từ API dự phòng.');
                 return { isFallback: true, value: bondYield };
-
             } catch (fallbackError) {
                 console.error("Lỗi API Trái phiếu dự phòng:", fallbackError);
                 return {};
@@ -99,7 +79,7 @@ async function fetchStockData() {
         `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`,
         `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`,
         `${proxy}https://iboard-query.ssi.com.vn/stock/${stockCode}`,
-        `https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${dateFrom}&endDate=${dateTo}&offset=0&limit=20`,
+        `https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${dateFrom}&endDate=${dateTo}&offset=0&limit=100`, // Tăng limit để lấy đủ dữ liệu
         `https://restv2.fireant.vn/symbols/${stockCode}/profile`
     ];
 
@@ -107,57 +87,27 @@ async function fetchStockData() {
 
     try {
         const apiRequests = urls.map(url => fetch(url, { headers: !url.startsWith(proxy) ? headers : {} }));
-
-        const allRequests = [
-            apiRequests[0],
-            apiRequests[1],
-            apiRequests[2],
-            fetchBondDataWithFallback(),
-            apiRequests[3],
-            apiRequests[4],
-            apiRequests[5]
-        ];
-
+        const allRequests = [apiRequests[0], apiRequests[1], apiRequests[2], fetchBondDataWithFallback(), apiRequests[3], apiRequests[4], apiRequests[5]];
         const responses = await Promise.all(allRequests);
-
         const dataPromises = responses.map(async (response, index) => {
-            if (index === 3) return response; 
-            
+            if (index === 3) return response;
             if (!response.ok) {
                  let errorMsg = `Lỗi ${response.status}: ${response.statusText}`;
-                 try {
-                     const errorData = await response.json();
-                     errorMsg += ` - ${errorData.message || JSON.stringify(errorData)}`;
-                 } catch (e) { /* Ignore */ }
+                 try { const errorData = await response.json(); errorMsg += ` - ${errorData.message || JSON.stringify(errorData)}`; } catch (e) { /* Ignore */ }
                  throw new Error(`Không thể tải dữ liệu. ${errorMsg}`);
             }
             return response.json();
         });
 
         const allData = await Promise.all(dataPromises);
-        
-        [
-            globalStockData,
-            globalFinancialDataQuarter,
-            globalFinancialDataYear,
-            globalBonds,
-            globalStockTransaction,
-            globalDividendEvents,
-            globalStockProfile
-        ] = allData;
+        [globalStockData, globalFinancialDataQuarter, globalFinancialDataYear, globalBonds, globalStockTransaction, globalDividendEvents, globalStockProfile] = allData;
 
         const q_count = globalFinancialDataQuarter.length;
         const y_count = globalFinancialDataYear.length;
-
-        const availablePeriods = PERIODS.filter(p => {
-            const source_count = p.source === 'q' ? q_count : y_count;
-            return source_count >= p.required;
-        });
-        
+        const availablePeriods = PERIODS.filter(p => (p.source === 'q' ? q_count : y_count) >= p.required);
         const defaultPeriod = availablePeriods.find(p => p.id === '1Y') ? '1Y' : (availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q');
 
         updateValuationUI(defaultPeriod);
-
     } catch (error) {
         console.error("Lỗi khi fetch dữ liệu:", error);
         resultDiv.innerHTML = `<p class="placeholder-text error-text"><i class="fas fa-exclamation-circle"></i> Có lỗi xảy ra: ${error.message}. Vui lòng thử lại hoặc kiểm tra mã cổ phiếu.</p>`;
@@ -177,38 +127,42 @@ function updateValuationUI(period = '4Q') {
 
     const q_count = globalFinancialDataQuarter.length;
     const y_count = globalFinancialDataYear.length;
-
-    const availablePeriods = PERIODS.filter(p => {
-        const source_count = p.source === 'q' ? q_count : y_count;
-        return source_count >= p.required;
-    });
+    const availablePeriods = PERIODS.filter(p => (p.source === 'q' ? q_count : y_count) >= p.required);
     
     if (availablePeriods.length === 0) {
         renderBaseUI(); 
         const assessmentContainer = document.getElementById('assessment-container');
-        if(assessmentContainer) {
-            assessmentContainer.innerHTML = `<p class="placeholder-text error-text" style="margin-top:15px;">Không có đủ dữ liệu tài chính để phân tích. Cổ phiếu có thể quá mới.</p>`;
-        }
+        if(assessmentContainer) assessmentContainer.innerHTML = `<p class="placeholder-text error-text" style="margin-top:15px;">Không có đủ dữ liệu tài chính để phân tích. Cổ phiếu có thể quá mới.</p>`;
         return;
     }
 
     const selectedPeriodIsValid = availablePeriods.some(p => p.id === period);
-    if (!selectedPeriodIsValid) {
-        period = availablePeriods[availablePeriods.length - 1].id;
-    }
+    if (!selectedPeriodIsValid) period = availablePeriods[availablePeriods.length - 1].id;
 
-    let dataToProcess = [];
     const selectedPeriodInfo = PERIODS.find(p => p.id === period);
-    const periodLabel = selectedPeriodInfo.name;
+    const dataToProcess = selectedPeriodInfo.source === 'q'
+        ? globalFinancialDataQuarter.slice(0, selectedPeriodInfo.required)
+        : globalFinancialDataYear.slice(0, selectedPeriodInfo.required);
 
-    if (selectedPeriodInfo.source === 'q') {
-        dataToProcess = globalFinancialDataQuarter.slice(0, selectedPeriodInfo.required);
-    } else {
-        dataToProcess = globalFinancialDataYear.slice(0, selectedPeriodInfo.required);
+    renderBaseUI(); // Render phần tĩnh trước
+    renderAssessmentUI(dataToProcess, period, selectedPeriodInfo.name, availablePeriods); // Render phần phân tích
+}
+
+/**
+ * HÀM MỚI: Xử lý chuyển trang cho bảng sự kiện cổ tức.
+ * @param {number} direction - Hướng chuyển trang (-1 cho lùi, 1 cho tiến).
+ */
+function changeDividendPage(direction) {
+    const sortedEvents = [...globalDividendEvents].sort((a, b) => new Date(b.recordDate) - new Date(a.recordDate));
+    const totalPages = Math.ceil(sortedEvents.length / 5);
+    const newPage = dividendCurrentPage + direction;
+
+    if (newPage >= 1 && newPage <= totalPages) {
+        dividendCurrentPage = newPage;
+        // Chỉ render lại toàn bộ UI để cập nhật bảng và phân trang
+        // Đây là cách đơn giản nhất, tối ưu hơn có thể chỉ render lại phần bảng
+        updateValuationUI(document.querySelector('.period-tab.active')?.getAttribute('onclick').match(/'([^']+)'/)[1] || '4Q');
     }
-
-    renderBaseUI();
-    renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods);
 }
 
 /**
@@ -238,7 +192,7 @@ function renderBaseUI() {
     const priceChange = transactionData.priceChange ?? 0;
     const percentageChange = transactionData.priceChangePercent ?? 0;
     const totalVolume = transactionData.stockVol ?? 0;
-    const totalBuyVolume = transactionData.stockBUVol ?? 0;
+       const totalBuyVolume = transactionData.stockBUVol ?? 0;
     const totalSellVolume = transactionData.stockSDVol ?? 0;
     const totalForeignBuyVolume = transactionData.buyForeignQtty ?? 0;
     const totalForeignSellVolume = transactionData.sellForeignQtty ?? 0;
@@ -255,6 +209,7 @@ function renderBaseUI() {
     const percentForeignSellVolume = totalSellVolume > 0 ? (totalForeignSellVolume / totalSellVolume) * 100 : 0;
     const percentInternalSellVolume = totalSellVolume > 0 ? (totalInternalSellVolume / totalSellVolume) * 100 : 0;
 
+
     let marketPriceClass = getPriceClass(marketPrice, referencePrice, ceilingPrice, floorPrice);
     let openingPriceClass = getPriceClass(openingPrice, referencePrice, ceilingPrice, floorPrice);
     let averagePriceClass = getPriceClass(averagePrice, referencePrice, ceilingPrice, floorPrice);
@@ -264,15 +219,51 @@ function renderBaseUI() {
     let internalNetFlowClass = totalInternalNetFlow > 0 ? 'price-up' : (totalInternalNetFlow < 0 ? 'price-down' : 'reference-price');
     let netFlowClass = totalNetFlow > 0 ? 'price-up' : (totalNetFlow < 0 ? 'price-down' : 'reference-price');
     
+    
     const [dateFrom, dateTo] = getFilterDate();
 
+    // --- LOGIC MỚI: Phân trang cho bảng cổ tức ---
+    let dividendTableHTML = '';
+    if (dividendEvents && dividendEvents.length > 0) {
+        const sortedEvents = [...dividendEvents].sort((a, b) => new Date(b.recordDate) - new Date(a.recordDate));
+        const rowsPerPage = 5;
+        const totalPages = Math.ceil(sortedEvents.length / rowsPerPage);
+        const start = (dividendCurrentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const pageData = sortedEvents.slice(start, end);
+
+        const tableRows = pageData.map(event => `
+            <tr>
+                <td class="center">${formatDate(event.recordDate)}</td>
+                <td>${event.title}</td>
+                <td class="center">${formatDate(event.executionDate)}</td>
+            </tr>`).join('');
+
+        const paginationControls = `
+            <div class="pagination-controls dividend-pagination">
+                <button onclick="changeDividendPage(-1)" ${dividendCurrentPage === 1 ? 'disabled' : ''}>&laquo; Trước</button>
+                <span>Trang ${dividendCurrentPage} / ${totalPages}</span>
+                <button onclick="changeDividendPage(1)" ${dividendCurrentPage === totalPages ? 'disabled' : ''}>Sau &raquo;</button>
+            </div>`;
+
+        dividendTableHTML = `
+            <table>
+                <thead>
+                    <tr><th colspan="3" class="center">SỰ KIỆN CỔ TỨC GẦN ĐÂY (${formatDate(dateFrom)} - ${formatDate(dateTo)})</th></tr>
+                    <tr><th class="center">Ngày GDKHQ</th><th>Nội dung</th><th class="center">Ngày Thực Hiện</th></tr>
+                </thead>
+                <tbody>${tableRows}</tbody>
+            </table>
+            ${totalPages > 1 ? paginationControls : ''}
+        `;
+    }
+
     resultDiv.innerHTML = `
-        <style>.result .comment { font-style: italic; color: #555; } .error-text { color: var(--error-color); font-weight: bold; }</style>
         <table class="hidden-border">
              <tbody>
-                <tr><th colspan="5" class="center">THÔNG TIN THAM KHẢO THÊM VỀ ${stockNameVi} (${stockCode} - ${stockNameEn} )</th></tr>
+                <tr><th colspan="5" class="center">THÔNG TIN THAM KHẢO THÊM VỀ ${stockNameVi} (${stockCode})</th></tr>
                 <tr><td colspan="5" class="center"><div class="button-container">
-                    <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website doanh nghiệp</button>
+                    <button class="action-button external-link-button" onclick="openCompanyWebsite('${companyWebsite}')"><i class="fas fa-external-link-alt"></i> Website</button>
                     <button class="action-button external-link-button" onclick="openPlatform('fireant','${stockCode}')"><i class="fas fa-external-link-alt"></i> Fireant</button>
                     <button class="action-button external-link-button" onclick="openPlatform('vietstock','${stockCode}')"><i class="fas fa-external-link-alt"></i> Vietstock</button>
                     <button class="action-button external-link-button" onclick="openPlatform('vcinews','${stockCode}')"><i class="fas fa-external-link-alt"></i> Tin tức</button>
@@ -288,7 +279,7 @@ function renderBaseUI() {
                     <td class="reference-price">Giá Tham Chiếu<br><strong>${safeFormatNumber(referencePrice)}</strong></td>
                     <td class="floor-price">Giá Sàn<br><strong>${safeFormatNumber(floorPrice)}</strong></td>
                 </tr>
-                <tr>
+                 <tr>
                     <td class="${openingPriceClass}">Mở cửa<br><strong>${safeFormatNumber(openingPrice)}</strong></td>
                     <td class="${averagePriceClass}">Trung bình<br><strong>${safeFormatNumber(averagePrice)}</strong></td>
                     <td class="${highestPriceClass}">Cao nhất<br><strong>${safeFormatNumber(highestPrice)}</strong></td>
@@ -317,24 +308,11 @@ function renderBaseUI() {
                 </tr>
              </tbody>
          </table>
-        ${dividendEvents && dividendEvents.length > 0 ? `
-        <table>
-            <thead>
-                <tr><th colspan="3" class="center">SỰ KIỆN CỔ TỨC GẦN ĐÂY (${formatDate(dateFrom)} - ${formatDate(dateTo)})</th></tr>
-                <tr><th class="center">Ngày GDKHQ</th><th>Nội dung</th><th class="center">Ngày Thực Hiện</th></tr>
-            </thead>
-            <tbody>
-                ${dividendEvents.map(event => `
-                    <tr>
-                        <td class="center">${formatDate(event.recordDate)}</td>
-                        <td>${event.title}</td>
-                        <td class="center">${formatDate(event.executionDate)}</td>
-                    </tr>`).join('')}
-            </tbody>
-        </table>` : ''}
+        ${dividendTableHTML}
         <div id="assessment-container"></div>
     `;
 }
+
 
 /**
  * Tính toán các chỉ số tài chính, định giá và hiển thị kết quả phân tích.
@@ -395,13 +373,9 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     }
     
     let y10;
-    if (bonds && bonds.isFallback && typeof bonds.value === 'number') {
-        y10 = bonds.value;
-    } else if (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') {
-        y10 = bonds.current[5][1];
-    } else {
-        y10 = 4.4;
-    }
+    if (bonds && bonds.isFallback && typeof bonds.value === 'number') y10 = bonds.value;
+    else if (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') y10 = bonds.current[5][1];
+    else y10 = 3.79; // Mặc định nếu không có dữ liệu
 
     const riskFreeRateAdj = (y10 > 0 ? y10 : 4.4) + 0.5;
 
@@ -409,9 +383,7 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
         const cappedG = Math.min(Math.max(g, 0), 0.15);
         priceGraham1 = avgEPS * (8.5 + 2 * cappedG) * (4.4 / riskFreeRateAdj);
         priceGraham2 = avgEPS * (8.5 + 2 * cappedG);
-        if (avgBookValuePerShare > 0) {
-             priceGraham3 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
-        }
+        if (avgBookValuePerShare > 0) priceGraham3 = Math.sqrt(20 * avgEPS * avgBookValuePerShare * 0.85);
     }
 
     const wPE_EPS = 0.20, wPS_SPS = 0.15, wPB_BVPS = 0.15, wGraham1 = 0.25, wGraham2 = 0.10, wGraham3 = 0.15;
@@ -429,63 +401,60 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     let commentary = {};
 
     commentary.marketPrice = `Giá trị tham khảo tại thời điểm phân tích.`;
-    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt (${safeFormatNumber(avgEPS)}đ). Cho thấy hiệu quả sinh lời cao trên mỗi cổ phần.`; }
-    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt (${safeFormatNumber(avgEPS)}đ). Công ty tạo ra lợi nhuận đáng kể.`; }
-    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá (${safeFormatNumber(avgEPS)}đ). Khả năng sinh lời ở mức chấp nhận được.`; }
-    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp (${safeFormatNumber(avgEPS)}đ). Lợi nhuận trên cổ phần còn hạn chế.`; }
-    else { commentary.avgEPS = `Âm (${safeFormatNumber(avgEPS)}đ). Công ty đang thua lỗ.`; }
+    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt (${safeFormatNumber(avgEPS)}đ).`; }
+    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt (${safeFormatNumber(avgEPS)}đ).`; }
+    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá (${safeFormatNumber(avgEPS)}đ).`; }
+    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp (${safeFormatNumber(avgEPS)}đ).`; }
+    else { commentary.avgEPS = `Âm (${safeFormatNumber(avgEPS)}đ).`; }
 
-    if (avgPE <= 0) { commentary.avgPE = `Âm/0 (${safeFormatNumber(avgPE, 2)}x). Công ty đang thua lỗ, khó định giá.`; }
-    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Thấp (${safeFormatNumber(avgPE, 2)}x). Hấp dẫn nếu nền tảng tốt.`; }
-    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý (${safeFormatNumber(avgPE, 2)}x). Phản ánh mức định giá vừa phải.`; }
-    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao (${safeFormatNumber(avgPE, 2)}x). Cho thấy kỳ vọng tăng trưởng.`; }
-    else { achievedStars += 0.25; commentary.avgPE = `Cao (${safeFormatNumber(avgPE, 2)}x). Rủi ro điều chỉnh cao.`; }
+    if (avgPE <= 0) { commentary.avgPE = `Âm/0 (${safeFormatNumber(avgPE, 2)}x).`; }
+    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Thấp (${safeFormatNumber(avgPE, 2)}x).`; }
+    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý (${safeFormatNumber(avgPE, 2)}x).`; }
+    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao (${safeFormatNumber(avgPE, 2)}x).`; }
+    else { achievedStars += 0.25; commentary.avgPE = `Cao (${safeFormatNumber(avgPE, 2)}x).`; }
 
-    if (avgPB <= 0) { commentary.avgPB = `Âm/0 (${safeFormatNumber(avgPB, 2)}x). Tình hình tài chính rất xấu.`; }
-    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Thấp (<1) (${safeFormatNumber(avgPB, 2)}x). Giá thấp hơn giá trị sổ sách.`; }
-    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý (${safeFormatNumber(avgPB, 2)}x). Mức định giá cân bằng.`; }
-    else { achievedStars += 0.5; commentary.avgPB = `Khá cao (${safeFormatNumber(avgPB, 2)}x). Thị trường đánh giá cao hơn giá trị sổ sách.`; }
+    if (avgPB <= 0) { commentary.avgPB = `Âm/0 (${safeFormatNumber(avgPB, 2)}x).`; }
+    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Thấp (<1) (${safeFormatNumber(avgPB, 2)}x).`; }
+    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý (${safeFormatNumber(avgPB, 2)}x).`; }
+    else { achievedStars += 0.5; commentary.avgPB = `Khá cao (${safeFormatNumber(avgPB, 2)}x).`; }
 
     if (avgPS <= 0) { commentary.avgPS = `Âm/0 (${safeFormatNumber(avgPS, 2)}x).`; }
-    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Thấp (<0.8) (${safeFormatNumber(avgPS, 2)}x). Giá rẻ so với doanh thu.`; }
-    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Hợp lý (${safeFormatNumber(avgPS, 2)}x). Mức định giá cân bằng.`; }
+    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Thấp (<0.8) (${safeFormatNumber(avgPS, 2)}x).`; }
+    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Hợp lý (${safeFormatNumber(avgPS, 2)}x).`; }
     else { achievedStars += 0.5; commentary.avgPS = `Khá cao (${safeFormatNumber(avgPS, 2)}x).`; }
     
     const betaStock = stockData.beta ?? 0;
-    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `Thấp hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Ít biến động hơn thị trường.`; }
-    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Cao hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}). Biến động mạnh hơn thị trường.`; }
-    else { achievedStars += 0.75; commentary.betaStock = `Trung bình (β ≈ ${safeFormatNumber(betaStock, 2)}). Biến động tương đương thị trường.`; }
+    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `Thấp hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}).`; }
+    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Cao hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}).`; }
+    else { achievedStars += 0.75; commentary.betaStock = `Trung bình (β ≈ ${safeFormatNumber(betaStock, 2)}).`; }
 
     const floatingShareRatio = stockData.sharesOutstanding > 0 ? stockData.freeShares / stockData.sharesOutstanding : 0;
     const fsrPercent = floatingShareRatio * 100;
-    if (fsrPercent < 20) { achievedStars += 0.5; commentary.floatingShareRatio = `Thấp (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản có thể thấp.`; }
-    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Trung bình (${safeFormatNumber(fsrPercent, 1)}%). Mức độ cô đặc vừa phải.`; }
-    else { achievedStars += 0.75; commentary.floatingShareRatio = `Cao (${safeFormatNumber(fsrPercent, 1)}%). Thanh khoản tốt.`; }
+    if (fsrPercent < 20) { achievedStars += 0.5; commentary.floatingShareRatio = `Thấp (${safeFormatNumber(fsrPercent, 1)}%).`; }
+    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Trung bình (${safeFormatNumber(fsrPercent, 1)}%).`; }
+    else { achievedStars += 0.75; commentary.floatingShareRatio = `Cao (${safeFormatNumber(fsrPercent, 1)}%).`; }
 
     const avgROAPercent = avgROA * 100;
-    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Rất tốt (${safeFormatNumber(avgROAPercent, 1)}%). Hiệu quả sử dụng tài sản rất cao.`; }
+    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Rất tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
     else if (avgROAPercent >= 5) { achievedStars += 0.75; commentary.avgROA = `Tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
     else if (avgROAPercent > 0) { achievedStars += 0.5; commentary.avgROA = `Trung bình (${safeFormatNumber(avgROAPercent, 1)}%).`; }
     else { commentary.avgROA = `Thấp/Âm (${safeFormatNumber(avgROAPercent, 1)}%).`; }
 
     const avgROEPercent = avgROE * 100;
-    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Rất tốt (${safeFormatNumber(avgROEPercent, 1)}%). Sinh lời trên vốn chủ sở hữu vượt trội.`; }
+    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Rất tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
     else if (avgROEPercent >= 15) { achievedStars += 0.75; commentary.avgROE = `Tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
     else if (avgROEPercent > 0) { achievedStars += 0.5; commentary.avgROE = `Trung bình (${safeFormatNumber(avgROEPercent, 1)}%).`; }
     else { commentary.avgROE = `Thấp/Âm (${safeFormatNumber(avgROEPercent, 1)}%).`; }
 
-    commentary.avgSalePerShare = `Mỗi cổ phiếu đại diện cho ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
-    commentary.avgBookValuePerShare = `Giá trị sổ sách là ${safeFormatNumber(avgBookValuePerShare)}đ. `;
-    if (marketPrice > 0 && avgBookValuePerShare > marketPrice) {
-         achievedStars += 0.75;
-         commentary.avgBookValuePerShare += `Cao hơn thị giá.`;
-    }
-    commentary.avgTangibleBookValuePerShare = `GT sổ sách hữu hình là ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
+    commentary.avgSalePerShare = `Mỗi CP ứng với ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
+    commentary.avgBookValuePerShare = `Giá trị sổ sách ${safeFormatNumber(avgBookValuePerShare)}đ. `;
+    if (marketPrice > 0 && avgBookValuePerShare > marketPrice) { achievedStars += 0.75; commentary.avgBookValuePerShare += `Cao hơn thị giá.`; }
+    commentary.avgTangibleBookValuePerShare = `GTSS hữu hình ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
 
     const valuationMethodComment = (price, method) => {
-        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu hoặc kết quả âm cho phương pháp ${method}.`;
+        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu cho ${method}.`;
         let comparison = (price / marketPrice - 1) * 100;
-        return `Định giá ${safeFormatNumber(price)}đ/cp (${comparison > 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
+        return `Ước tính ${safeFormatNumber(price)}đ/cp (${comparison > 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
     };
 
     commentary.pricePE_EPS = valuationMethodComment(pricePE_EPS, 'P/E*EPS');
@@ -495,24 +464,19 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     commentary.priceGraham2 = valuationMethodComment(priceGraham2, 'Graham (rút gọn)');
     commentary.priceGraham3 = valuationMethodComment(priceGraham3, 'Graham (căn)');
 
-    commentary.avgValuationPrice = `Giá trị hợp lý ước tính là ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
+    commentary.avgValuationPrice = `Giá trị hợp lý ước tính ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
     if (avgValuationPrice > 0 && marketPrice > 0) {
         const diffPercent = (avgValuationPrice / marketPrice - 1) * 100;
-         if (diffPercent > 10) { achievedStars += 1; commentary.avgValuationPrice += `Cao hơn ${safeFormatNumber(diffPercent, 1)}% so với thị giá (tiềm năng).`; }
-         else if (diffPercent < -10) { achievedStars += 0.1; commentary.avgValuationPrice += `Thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% so với thị giá (có thể đắt).`; }
-         else { achievedStars += 0.5; commentary.avgValuationPrice += `Quanh (${safeFormatNumber(diffPercent, 1)}%) mức thị giá (hợp lý).`; }
+         if (diffPercent > 10) { achievedStars += 1; commentary.avgValuationPrice += `Cao hơn ${safeFormatNumber(diffPercent, 1)}% (tiềm năng).`; }
+         else if (diffPercent < -10) { achievedStars += 0.1; commentary.avgValuationPrice += `Thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% (có thể đắt).`; }
+         else { achievedStars += 0.5; commentary.avgValuationPrice += `Quanh (${safeFormatNumber(diffPercent, 1)}%) thị giá (hợp lý).`; }
     }
 
     achievedStars = Math.min(Math.round(achievedStars * 2) / 2, totalStars);
 
     const periodTabsHTML = PERIODS.map(p => {
         const isAvailable = availablePeriods.some(ap => ap.id === p.id);
-        return `<button 
-                    class="period-tab ${p.id === period ? 'active' : ''}" 
-                    onclick="updateValuationUI('${p.id}')" 
-                    ${!isAvailable ? 'disabled title="Không đủ dữ liệu"' : ''}>
-                    ${p.name}
-                </button>`;
+        return `<button class="period-tab ${p.id === period ? 'active' : ''}" onclick="updateValuationUI('${p.id}')" ${!isAvailable ? 'disabled title="Không đủ dữ liệu"' : ''}>${p.name}</button>`;
     }).join('');
 
     assessmentContainer.innerHTML = `
@@ -524,7 +488,7 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
                     <th class="center" style="width:15%;">${achievedStars} / ${totalStars}</th>
                     <th class="center" id="star-rating" style="width:45%;">${generateStarRating(achievedStars, totalStars)}</th>
                 </tr>
-                <tr><th>Chỉ số Phân tích</th><th class="center">Giá trị</th><th>Nhận định Chi tiết</th></tr>
+                <tr><th>Chỉ số Phân tích</th><th class="center">Giá trị</th><th>Nhận định</th></tr>
             </thead>
             <tbody>
                 <tr><td><i class="fas fa-dollar-sign icon"></i> Giá thị trường</td><td class="value">${safeFormatNumber(marketPrice)} đ</td><td><span class="comment">${commentary.marketPrice}</span></td></tr>
@@ -532,41 +496,38 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
                 <tr><td><i class="fas fa-percentage icon"></i> P/E (${periodLabel})</td><td class="value">${safeFormatNumber(avgPE, 2)} x</td><td><span class="comment">${commentary.avgPE}</span></td></tr>
                 <tr><td><i class="fas fa-book icon"></i> P/B (${periodLabel})</td><td class="value">${safeFormatNumber(avgPB, 2)} x</td><td><span class="comment">${commentary.avgPB}</span></td></tr>
                 <tr><td><i class="fas fa-receipt icon"></i> P/S (${periodLabel})</td><td class="value">${safeFormatNumber(avgPS, 2)} x</td><td><span class="comment">${commentary.avgPS}</span></td></tr>
-                <tr><td><i class="fas fa-wave-square icon"></i> Hệ số Beta</td><td class="value">${safeFormatNumber(betaStock, 2)}</td><td><span class="comment">${commentary.betaStock}</span></td></tr>
-                <tr><td><i class="fas fa-users icon"></i> Tỷ lệ CP trôi nổi (FSR)</td><td class="value">${safeFormatNumber(floatingShareRatio * 100, 1)} %</td><td><span class="comment">${commentary.floatingShareRatio}</span></td></tr>
+                <tr><td><i class="fas fa-wave-square icon"></i> Hệ số Beta</td><td class="value">${safeFormatNumber(stockData.beta, 2)}</td><td><span class="comment">${commentary.betaStock}</span></td></tr>
+                <tr><td><i class="fas fa-users icon"></i> Tỷ lệ CP thả nổi</td><td class="value">${safeFormatNumber((stockData.freeShares / stockData.sharesOutstanding) * 100, 1)} %</td><td><span class="comment">${commentary.floatingShareRatio}</span></td></tr>
                 <tr><td><i class="fas fa-landmark icon"></i> ROA (${periodLabel})</td><td class="value">${safeFormatNumber(avgROA * 100, 1)} %</td><td><span class="comment">${commentary.avgROA}</span></td></tr>
                 <tr><td><i class="fas fa-gem icon"></i> ROE (${periodLabel})</td><td class="value">${safeFormatNumber(avgROE * 100, 1)} %</td><td><span class="comment">${commentary.avgROE}</span></td></tr>
                 <tr><td><i class="fas fa-file-invoice icon"></i> Doanh thu/CP (${periodLabel})</td><td class="value">${safeFormatNumber(avgSalePerShare)} đ</td><td><span class="comment">${commentary.avgSalePerShare}</span></td></tr>
                 <tr><td><i class="fas fa-balance-scale icon"></i> GT Sổ sách/CP (${periodLabel})</td><td class="value">${safeFormatNumber(avgBookValuePerShare)} đ</td><td><span class="comment">${commentary.avgBookValuePerShare}</span></td></tr>
                 <tr><td><i class="fas fa-building icon"></i> GTSS Hữu hình/CP (${periodLabel})</td><td class="value">${safeFormatNumber(avgTangibleBookValuePerShare)} đ</td><td><span class="comment">${commentary.avgTangibleBookValuePerShare}</span></td></tr>
-                <tr><td colspan="3" style="background-color: #f0f0f0; text-align:center; font-weight:bold;">ƯỚC TÍNH GIÁ TRỊ HỢP LÝ THEO CÁC PHƯƠNG PHÁP (Dựa trên ${periodLabel})</td></tr>
-                <tr><td><i class="fas fa-calculator icon"></i> Định giá theo P/E * EPS</td><td class="value">${safeFormatNumber(pricePE_EPS)} đ</td><td><span class="comment">${commentary.pricePE_EPS}</span></td></tr>
-                <tr><td><i class="fas fa-calculator icon"></i> Định giá theo P/S * SPS</td><td class="value">${safeFormatNumber(pricePS_SPS)} đ</td><td><span class="comment">${commentary.pricePS_SPS}</span></td></tr>
-                <tr><td><i class="fas fa-calculator icon"></i> Định giá theo P/B * BVPS</td><td class="value">${safeFormatNumber(pricePB_BVPS)} đ</td><td><span class="comment">${commentary.pricePB_BVPS}</span></td></tr>
-                <tr><td><i class="fas fa-graduation-cap icon"></i> Định giá theo Graham (đầy đủ)</td><td class="value">${!isNaN(priceGraham1) ? safeFormatNumber(priceGraham1) + ' đ' : 'N/A'}</td><td><span class="comment">${commentary.priceGraham1}</span></td></tr>
-                <tr><td><i class="fas fa-graduation-cap icon"></i> Định giá theo Graham (rút gọn)</td><td class="value">${!isNaN(priceGraham2) ? safeFormatNumber(priceGraham2) + ' đ' : 'N/A'}</td><td><span class="comment">${commentary.priceGraham2}</span></td></tr>
-                <tr><td><i class="fas fa-graduation-cap icon"></i> Định giá theo Graham (căn)</td><td class="value">${!isNaN(priceGraham3) ? safeFormatNumber(priceGraham3) + ' đ' : 'N/A'}</td><td><span class="comment">${commentary.priceGraham3}</span></td></tr>
-                <tr><td colspan="3" style="background-color: #e9f5ff; text-align:center; font-weight:bold;">KẾT LUẬN GIÁ TRỊ HỢP LÝ ƯỚC TÍNH</td></tr>
+                
+                <tr><td colspan="3" style="background-color: #f0f0f0; text-align:center; font-weight:bold;">ƯỚC TÍNH GIÁ TRỊ HỢP LÝ (${periodLabel})</td></tr>
+                <tr><td><i class="fas fa-calculator icon"></i> Định giá P/E * EPS</td><td class="value">${safeFormatNumber(pricePE_EPS)} đ</td><td><span class="comment">${commentary.pricePE_EPS}</span></td></tr>
+                <tr><td><i class="fas fa-calculator icon"></i> Định giá P/S * SPS</td><td class="value">${safeFormatNumber(pricePS_SPS)} đ</td><td><span class="comment">${commentary.pricePS_SPS}</span></td></tr>
+                <tr><td><i class="fas fa-calculator icon"></i> Định giá P/B * BVPS</td><td class="value">${safeFormatNumber(pricePB_BVPS)} đ</td><td><span class="comment">${commentary.pricePB_BVPS}</span></td></tr>
+                <tr><td><i class="fas fa-graduation-cap icon"></i> Graham (đầy đủ)</td><td class="value">${!isNaN(priceGraham1) ? safeFormatNumber(priceGraham1) + ' đ' : 'N/A'}</td><td><span class="comment">${commentary.priceGraham1}</span></td></tr>
+                <tr><td colspan="3" style="background-color: #e9f5ff; text-align:center; font-weight:bold;">KẾT LUẬN GIÁ TRỊ HỢP LÝ</td></tr>
                 <tr>
-                    <td><i class="fas fa-check-circle icon" style="color: var(--secondary-darker)"></i> Định giá Trung bình Trọng số</td>
+                    <td><i class="fas fa-check-circle icon"></i> Định giá TB Trọng số</td>
                     <td class="value" style="font-weight: bold; font-size: 1.1em;">${safeFormatNumber(avgValuationPrice)} đ</td>
                     <td><span class="comment" style="font-weight: bold;">${commentary.avgValuationPrice}</span></td>
                 </tr>
             </tbody>
         </table>
         <p style="text-align: center; font-size: 0.8em; color: #777; margin-top: 20px;">
-            <i><strong>Lưu ý:</strong> Các thông tin trên chỉ nhằm mục đích tham khảo, <strong>không phải là khuyến nghị đầu tư</strong>. Nhà đầu tư cần tự chịu trách nhiệm về quyết định của mình.</i>
+            <i><strong>Lưu ý:</strong> Các thông tin trên chỉ nhằm mục đích tham khảo, <strong>không phải là khuyến nghị đầu tư</strong>.</i>
         </p>
     `;
 }
 
-// Mở các trang web liên quan trong tab mới
+// Các hàm tiện ích khác
 function openCompanyWebsite(url) {
     if (url) {
         let cleanUrl = url.replace(/www\./gi, '').replace(/\s+/g, '');
-        if (!/^https?:\/\//i.test(cleanUrl)) {
-            cleanUrl = `https://${cleanUrl}`;
-        }
+        if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = `https://${cleanUrl}`;
         window.open(cleanUrl, '_blank');
     }
 }
@@ -582,14 +543,8 @@ const baseUrls = {
 
 // Hàm tổng quát thay thế nhiều hàm riêng lẻ
 function openPlatform(platform, code) {
-  const urlGenerator = baseUrls[platform];
-  if (urlGenerator && code) {
-    window.open(urlGenerator(code), '_blank');
-  } else {
-    console.error(`Nền tảng không hợp lệ hoặc code trống: ${platform}`); 
-  }
+  if (baseUrls[platform] && code) window.open(baseUrls[platform](code), '_blank');
 }
-
 
 function openTradingView(exchange, code) {
      if (code && exchange && exchange !== 'N/A') {
