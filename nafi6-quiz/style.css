@@ -31,7 +31,7 @@ h1 {
     padding-top: 10px; /* Thêm padding trên để cân bằng */
 }
 
-/* ĐỊNH VỊ MỚI: Nút Quản lý Câu hỏi ở góc trên bên phải */
+/* ĐỊNH VỊ CHO MÀN HÌNH LỚN: Nút Quản lý Câu hỏi ở góc trên bên phải */
 .manage-button {
     position: absolute;
     top: 5px; /* Khoảng cách từ đỉnh Header */
@@ -41,6 +41,25 @@ h1 {
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Giữ lại đổ bóng nhẹ */
 }
+
+/* SỬA LỖI HIỂN THỊ TRÊN THIẾT BỊ DI ĐỘNG */
+@media (max-width: 600px) {
+    h1 {
+        text-align: center; /* Đưa tiêu đề về giữa */
+        padding-right: 0;   /* Bỏ padding để tiêu đề chiếm hết không gian */
+    }
+
+    /* ĐỊNH VỊ CHO MÀN HÌNH NHỎ: Nút nằm dưới tiêu đề và căn giữa */
+    .manage-button {
+        position: static; /* Thay đổi thành vị trí tĩnh */
+        display: block;   /* Biến thành phần tử khối */
+        width: 90%;       /* Chiếm gần hết chiều rộng */
+        margin: 15px auto 0 auto; /* Đẩy xuống dưới, căn giữa */
+        font-size: 1em;   /* Kích thước chữ to hơn */
+    }
+}
+/* KẾT THÚC PHẦN SỬA LỖI */
+
 
 /* Xóa/Đặt lại các style nav cũ */
 nav {
