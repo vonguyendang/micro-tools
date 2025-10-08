@@ -22,6 +22,7 @@
             <button class="tab" onclick="showTab('tab3')"><i class="fas fa-list-alt"></i> NIÊM YẾT MỚI</button>
             <button class="tab" onclick="showTab('tab4')"><i class="fas fa-bullhorn"></i> LỊCH SỰ KIỆN</button>
             <button class="tab" onclick="showTab('tab5')"><i class="fas fa-paper-plane"></i> PHÁT HÀNH</button>
+            <button class="tab" onclick="showTab('tab6')"><i class="fas fa-th-large"></i> PTKT</button>
         </div>
     </div>
 
@@ -96,7 +97,7 @@
 
     <div id="tab3" class="container">
         <header>
-            <h1><i class="fas fa-list-alt"></i> Niêm Yết Mới trên HSX</h1>
+            <h1><i class="fas fa-list-alt"></i> Niêm Yết Mới trên HOSE</h1>
         </header>
         <main>
             <div class="period-tabs">
@@ -197,16 +198,32 @@
         <main>
             <div class="button-container">
                 <button class="action-button external-link-button" 
-                        onclick="openSscUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=b%C3%A1o+c%C3%A1o+ph%C3%A1t+h%C3%A0nh')">
+                        onclick="openWebUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=b%C3%A1o+c%C3%A1o+ph%C3%A1t+h%C3%A0nh')">
                     <i class="fas fa-external-link-alt"></i> Tin phát hành (Chia cổ tức)
                 </button>
                 <button class="action-button external-link-button" 
-                        onclick="openSscUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=%C4%91%C4%83ng+k%C3%BD+ch%C3%A0o+b%C3%A1n')">
+                        onclick="openWebUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=%C4%91%C4%83ng+k%C3%BD+ch%C3%A0o+b%C3%A1n')">
                     <i class="fas fa-external-link-alt"></i> Tin phát hành (Chào bán)
                 </button>
             </div>
              <p class="placeholder-text" style="margin-top: 30px;">Nhấn vào các nút trên để mở trang tin tức tương ứng từ website của Ủy ban Chứng khoán Nhà nước trong một tab mới.</p>
         </main>
+    </div>
+
+    <div id="tab6" class="container">
+        <header>
+            <h1><i class="fas fa-th-large"></i> Phân tích PTKT</h1>
+        </header>
+        <main>
+            <div class="button-container main-actions">
+                 <button class="action-button external-link-button" onclick="openWebUrl('https://ptkt.dangvo.io.vn/')">
+                    <i class="fas fa-external-link-alt"></i> Mở công cụ PTKT
+                 </button>
+            </div>
+            <div class="iframe-container">
+                <iframe src="https://smoney.vodang2702.workers.dev/phan-tich-ky-thuat" frameborder="0"></iframe>
+            </div>
+         </main>
     </div>
 
     <footer>
