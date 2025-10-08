@@ -45,10 +45,10 @@ function showTab(tabId) {
 }
 
 /**
- * Hàm mới để mở URL của SSC trong một tab mới.
- * @param {string} url - Đường dẫn đến trang SSC.
+ * Hàm mới để mở URL của web trong một tab mới.
+ * @param {string} url - Đường dẫn đến trang web.
  */
-function openSscUrl(url) {
+function openWebUrl(url) {
     window.open(url, '_blank');
 }
 
