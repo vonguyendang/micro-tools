@@ -576,6 +576,27 @@ input[type="number"]:focus {
     color: var(--primary-color);
     font-size: 1.2rem;
 }
+/* ----- Iframe PTKT ----- */
+.iframe-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 75%; /* Tỷ lệ 4:3 Aspect Ratio (75%) - Có thể điều chỉnh nếu cần */
+    margin-top: 25px; /* Khoảng cách với nút bấm ở trên */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
 /* ----- Responsive Design ----- */
 
 /* Tablets and smaller desktops */
@@ -685,6 +706,10 @@ input[type="number"]:focus {
         padding: 8px 5px;       /* Giảm khoảng đệm trong các ô */
         word-break: break-word; /* Tự động xuống dòng cho nội dung dài */
         hyphens: auto;          /* Tự động ngắt từ nếu cần */
+    }
+    
+    .iframe-container {
+        padding-top: 100%; /* Tỷ lệ 1:1 cho màn hình điện thoại */
     }
 }
 /* === CSS MỚI: Định dạng cho phân trang bảng cổ tức === */
