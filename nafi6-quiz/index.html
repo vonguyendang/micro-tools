@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm tra Trắc nghiệm Đấu thầu (70 câu)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="quiz-container">
+        <header>
+            <h1>Bài Kiểm Tra Luật Đấu Thầu</h1>
+            <button id="nav-manage-btn" class="btn btn-primary manage-button" onclick="window.open('manage.html', '_blank')">Quản Lý Câu Hỏi</button>
+        </header>
+        
+        <section id="quiz-main-section" class="active-section">
+            <section id="timer-controls">
+                <div id="timer-box" class="info-box">
+                    ⏱️ Thời gian: <span id="timer">Không giới hạn</span>
+                </div>
+                <div class="control-buttons">
+                    <button id="start-timer-btn" class="btn btn-warning" onclick="startTimer(DEFAULT_QUIZ_DURATION)">Bắt đầu Tính giờ (40 phút)</button>
+                    <button id="set-timer-btn" class="btn btn-info" onclick="openSetTimeModal()">Đặt thời gian</button>
+                </div>
+            </section>
+
+            <main>
+                <form id="quiz-form" onsubmit="event.preventDefault(); submitQuiz();">
+                </form>
+                <button id="submit-btn" class="btn btn-success submit-btn" onclick="submitQuiz()">Nộp bài</button>
+            </main>
+
+            <section id="results" class="hidden">
+                <h2>📝 Kết Quả Bài Làm</h2>
+                <div class="score-display">
+                    <p>Tổng điểm: <span id="score"></span> / <span id="total-available-questions"></span></p> 
+                </div>
+                <div id="review-area" class="review-area">
+                </div>
+                <button class="btn btn-primary new-quiz-btn" onclick="window.location.reload()">Làm bài mới</button>
+            </section>
+        </section>
+        
+        <div id="setTimeModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeSetTimeModal()">&times;</span>
+                <h3>Đặt Thời Gian Làm Bài</h3>
+                <label for="timeInput">Nhập số phút:</label>
+                <input type="number" id="timeInput" min="1" max="180" value="40" placeholder="Số phút">
+                <button class="btn btn-primary" onclick="setCustomTime()">Xác nhận</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="data.js"></script> 
+    <script src="script.js"></script>
+</body>
+</html>
