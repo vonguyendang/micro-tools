@@ -19,6 +19,7 @@
         <div class="tabs">
             <button class="tab active" onclick="showTab('tab1')"><i class="fas fa-chart-pie"></i> ĐỊNH GIÁ CỔ PHIẾU</button>
             <button class="tab" onclick="showTab('tab2')"><i class="fas fa-calendar-alt"></i> GIÁ NGÀY GDKHQ</button>
+            <button class="tab" onclick="showTab('tab7')"><i class="fas fa-hands-helping"></i> HỖ TRỢ NĐT</button>
             <button class="tab" onclick="showTab('tab3')"><i class="fas fa-list-alt"></i> NIÊM YẾT MỚI</button>
             <button class="tab" onclick="showTab('tab4')"><i class="fas fa-bullhorn"></i> LỊCH SỰ KIỆN</button>
             <button class="tab" onclick="showTab('tab5')"><i class="fas fa-paper-plane"></i> PHÁT HÀNH</button>
@@ -92,6 +93,128 @@
              <div id="loadingGDKHQ" style="display: none; text-align: center; margin-top: 15px;">
                  <i class="fas fa-spinner fa-spin"></i> Đang lấy giá cổ phiếu...
              </div>
+        </main>
+    </div>
+
+    <div id="tab7" class="container">
+        <header>
+            <h1><i class="fas fa-hands-helping"></i> Hỗ trợ Nhà Đầu Tư</h1>
+        </header>
+        <main>
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showInvestorSubTab('investor-profit-loss')">Tính Lãi/Lỗ</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-avg-price')">Giá Vốn Trung Bình</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-portfolio')">Danh Mục Đầu Tư</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-target')">Lợi Nhuận Mục Tiêu</button>
+            </div>
+
+            <div id="investor-profit-loss" class="investor-sub-container active">
+                <h2><i class="fas fa-balance-scale-right"></i> Tính Lãi/Lỗ & ROI</h2>
+                <div class="table-wrapper">
+                    <table id="profit-loss-table">
+                        <thead>
+                            <tr>
+                                <th>Mã CK</th>
+                                <th>Khối lượng</th>
+                                <th>Giá mua</th>
+                                <th>Giá bán / Hiện tại</th>
+                                <th>Phí GD (%)</th>
+                                <th>Lãi/Lỗ</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="addProfitLossRow()"><i class="fas fa-plus"></i> Thêm lệnh</button>
+                    <button class="action-button calculate-button" onclick="updateLivePricesAndCalculate()"><i class="fas fa-sync-alt"></i> Cập nhật giá hiện tại</button>
+                </div>
+                 <div id="profit-loss-summary" class="summary-container">
+                    <div class="fee-toggle-container">
+                        <span>Bao gồm phí giao dịch?</span>
+                        <label class="switch">
+                            <input type="checkbox" id="fee-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    </div>
+            </div>
+
+            <div id="investor-avg-price" class="investor-sub-container">
+                <h2><i class="fas fa-chart-line"></i> Tính Giá Vốn Trung Bình</h2>
+                <div class="input-group">
+                    <label for="avg-price-stock-code"><i class="fas fa-tag"></i> Mã cổ phiếu:</label>
+                    <input type="text" id="avg-price-stock-code" placeholder="Nhập mã (VD: HPG)">
+                </div>
+                <div class="table-wrapper">
+                    <table id="avg-price-table">
+                        <thead>
+                            <tr>
+                                <th>Khối lượng</th>
+                                <th>Giá mua</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="addAvgPriceRow()"><i class="fas fa-plus"></i> Thêm lệnh mua</button>
+                </div>
+                 <div id="avg-price-summary" class="summary-container">
+                    </div>
+            </div>
+
+            <div id="investor-portfolio" class="investor-sub-container">
+                 <h2><i class="fas fa-briefcase"></i> Theo Dõi Danh Mục</h2>
+                 <div class="button-container">
+                     <button class="action-button" onclick="exportPortfolio()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
+                 </div>
+                 <div class="table-wrapper">
+                    <table id="portfolio-table">
+                        <thead>
+                            <tr>
+                                <th>Mã CK</th>
+                                <th>Tổng KL</th>
+                                <th>Giá vốn TB</th>
+                                <th>Giá hiện tại</th>
+                                <th>Lãi/Lỗ</th>
+                                <th>ROI (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                 <div id="portfolio-summary" class="summary-container">
+                    </div>
+            </div>
+
+            <div id="investor-target" class="investor-sub-container">
+                <h2><i class="fas fa-bullseye"></i> Ước Tính Lợi Nhuận Mục Tiêu</h2>
+                 <div class="input-group">
+                    <label for="target-stock-code">Mã cổ phiếu:</label>
+                    <input type="text" id="target-stock-code" placeholder="Nhập mã (VD: HPG)">
+                </div>
+                <div class="input-group">
+                    <label for="target-buy-price">Giá mua của bạn:</label>
+                    <input type="number" id="target-buy-price" placeholder="Giá bạn đã mua">
+                </div>
+                 <div class="input-group">
+                    <label for="target-price">Giá mục tiêu:</label>
+                    <input type="number" id="target-price" placeholder="Nhập giá bán mong muốn">
+                </div>
+                <div class="button-container">
+                    <button class="action-button calculate-button" onclick="calculateTargetProfitSessions()">
+                        <i class="fas fa-calculator"></i> Ước tính số phiên đạt mục tiêu
+                    </button>
+                </div>
+                <div id="target-summary" class="summary-container">
+                    </div>
+            </div>
         </main>
     </div>
 
@@ -233,6 +356,7 @@
     <script src="js/utils.js"></script>
     <script src="js/tab-valuation.js"></script>
     <script src="js/tab-gdkhq.js"></script>
+    <script src="js/tab-investor-support.js"></script>
     <script src="js/tab-listings.js"></script>
     <script src="js/tab-events.js"></script>
     <script src="js/main.js"></script>
