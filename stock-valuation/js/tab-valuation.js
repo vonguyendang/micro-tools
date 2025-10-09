@@ -400,63 +400,61 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     let achievedStars = 0;
     let commentary = {};
 
-    commentary.marketPrice = `Giá trị tham khảo tại thời điểm phân tích.`;
-    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt (${safeFormatNumber(avgEPS)}đ).`; }
-    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt (${safeFormatNumber(avgEPS)}đ).`; }
-    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá (${safeFormatNumber(avgEPS)}đ).`; }
-    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp (${safeFormatNumber(avgEPS)}đ).`; }
-    else { commentary.avgEPS = `Âm (${safeFormatNumber(avgEPS)}đ).`; }
+    commentary.marketPrice = `Đây là giá khớp lệnh gần nhất, dùng để so sánh với giá trị hợp lý.`;
+    if (avgEPS >= 5000) { achievedStars += 1; commentary.avgEPS = `Rất tốt. Mỗi cổ phiếu làm ra trên 5,000đ lợi nhuận, cho thấy hiệu quả kinh doanh cao.`; }
+    else if (avgEPS >= 3000) { achievedStars += 0.75; commentary.avgEPS = `Tốt. Lợi nhuận trên mỗi cổ phiếu ở mức khá, là một dấu hiệu tích cực.`; }
+    else if (avgEPS >= 1000) { achievedStars += 0.5; commentary.avgEPS = `Khá. Công ty có lãi nhưng chưa thực sự đột phá.`; }
+    else if (avgEPS > 0) { achievedStars += 0.25; commentary.avgEPS = `Thấp. Lợi nhuận còn khiêm tốn, cần xem xét thêm các yếu tố khác.`; }
+    else { commentary.avgEPS = `Âm. Công ty đang kinh doanh thua lỗ, cần cẩn trọng.`; }
 
-    if (avgPE <= 0) { commentary.avgPE = `Âm/0 (${safeFormatNumber(avgPE, 2)}x).`; }
-    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Thấp (${safeFormatNumber(avgPE, 2)}x).`; }
-    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý (${safeFormatNumber(avgPE, 2)}x).`; }
-    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao (${safeFormatNumber(avgPE, 2)}x).`; }
-    else { achievedStars += 0.25; commentary.avgPE = `Cao (${safeFormatNumber(avgPE, 2)}x).`; }
+    if (avgPE <= 0) { commentary.avgPE = `Không áp dụng. EPS âm nên chỉ số P/E không có ý nghĩa.`; }
+    else if (avgPE < 10) { achievedStars += 1; commentary.avgPE = `Hấp dẫn. Bạn chỉ mất chưa đến 10 năm để hoàn vốn nếu lợi nhuận không đổi.`; }
+    else if (avgPE < 15) { achievedStars += 0.75; commentary.avgPE = `Hợp lý. Mức định giá phổ biến cho các công ty tăng trưởng ổn định.`; }
+    else if (avgPE < 25) { achievedStars += 0.5; commentary.avgPE = `Khá cao. Thị trường đang kỳ vọng nhiều vào sự tăng trưởng trong tương lai.`; }
+    else { achievedStars += 0.25; commentary.avgPE = `Rất cao. Định giá này đi kèm rủi ro lớn nếu công ty không đạt kỳ vọng.`; }
 
-    if (avgPB <= 0) { commentary.avgPB = `Âm/0 (${safeFormatNumber(avgPB, 2)}x).`; }
-    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Thấp (<1) (${safeFormatNumber(avgPB, 2)}x).`; }
-    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý (${safeFormatNumber(avgPB, 2)}x).`; }
-    else { achievedStars += 0.5; commentary.avgPB = `Khá cao (${safeFormatNumber(avgPB, 2)}x).`; }
+    if (avgPB <= 0) { commentary.avgPB = `Rất xấu. Giá trị sổ sách của công ty đang là số âm.`; }
+    else if (avgPB < 1) { achievedStars += 1; commentary.avgPB = `Rẻ. Bạn đang mua cổ phiếu với giá thấp hơn giá trị sổ sách của công ty.`; }
+    else if (avgPB < 1.5) { achievedStars += 0.75; commentary.avgPB = `Hợp lý. Mức giá phản ánh tương đối đúng giá trị tài sản của công ty.`; }
+    else { achievedStars += 0.5; commentary.avgPB = `Khá cao. Thị trường đang trả giá cao hơn giá trị ghi sổ của tài sản.`; }
 
-    if (avgPS <= 0) { commentary.avgPS = `Âm/0 (${safeFormatNumber(avgPS, 2)}x).`; }
-    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Thấp (<0.8) (${safeFormatNumber(avgPS, 2)}x).`; }
-    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Hợp lý (${safeFormatNumber(avgPS, 2)}x).`; }
-    else { achievedStars += 0.5; commentary.avgPS = `Khá cao (${safeFormatNumber(avgPS, 2)}x).`; }
+    if (avgPS <= 0) { commentary.avgPS = `Không áp dụng.`; }
+    else if (avgPS < 0.8) { achievedStars += 1; commentary.avgPS = `Rất tốt. Mỗi đồng bạn bỏ ra mua cổ phiếu tạo ra hơn 1.25 đồng doanh thu.`; }
+    else if (avgPS < 1.5) { achievedStars += 0.75; commentary.avgPS = `Khá. Doanh thu tạo ra trên giá cổ phiếu ở mức chấp nhận được.`; }
+    else { achievedStars += 0.5; commentary.avgPS = `Khá cao. Cần doanh thu tăng trưởng mạnh để biện minh cho mức giá này.`; }
     
     const betaStock = stockData.beta ?? 0;
-    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `Thấp hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}).`; }
-    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Cao hơn thị trường (β = ${safeFormatNumber(betaStock, 2)}).`; }
-    else { achievedStars += 0.75; commentary.betaStock = `Trung bình (β ≈ ${safeFormatNumber(betaStock, 2)}).`; }
+    if (betaStock < 1 && betaStock > 0) { achievedStars += 1; commentary.betaStock = `An toàn hơn thị trường. Cổ phiếu có xu hướng biến động ít hơn VN-Index.`; }
+    else if (betaStock > 1) { achievedStars += 0.5; commentary.betaStock = `Biến động mạnh. Rủi ro cao hơn nhưng tiềm năng lợi nhuận cũng lớn hơn VN-Index.`; }
+    else { achievedStars += 0.75; commentary.betaStock = `Tương đương thị trường. Biến động của cổ phiếu khá sát với VN-Index.`; }
 
-    const floatingShareRatio = stockData.sharesOutstanding > 0 ? stockData.freeShares / stockData.sharesOutstanding : 0;
-    const fsrPercent = floatingShareRatio * 100;
-    if (fsrPercent < 20) { achievedStars += 0.5; commentary.floatingShareRatio = `Thấp (${safeFormatNumber(fsrPercent, 1)}%).`; }
-    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Trung bình (${safeFormatNumber(fsrPercent, 1)}%).`; }
-    else { achievedStars += 0.75; commentary.floatingShareRatio = `Cao (${safeFormatNumber(fsrPercent, 1)}%).`; }
+    const fsrPercent = (stockData.freeShares / stockData.sharesOutstanding) * 100;
+    if (fsrPercent < 30) { achievedStars += 0.5; commentary.floatingShareRatio = `Cô đặc. Lượng cổ phiếu trôi nổi thấp, giá có thể dễ bị chi phối.`; }
+    else if (fsrPercent < 60) { achievedStars += 1; commentary.floatingShareRatio = `Cân bằng. Mức độ cô đặc vừa phải, thanh khoản tốt.`; }
+    else { achievedStars += 0.75; commentary.floatingShareRatio = `Pha loãng. Lượng cổ phiếu trôi nổi lớn, khó có biến động giá đột ngột.`; }
 
     const avgROAPercent = avgROA * 100;
-    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Rất tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-    else if (avgROAPercent >= 5) { achievedStars += 0.75; commentary.avgROA = `Tốt (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-    else if (avgROAPercent > 0) { achievedStars += 0.5; commentary.avgROA = `Trung bình (${safeFormatNumber(avgROAPercent, 1)}%).`; }
-    else { commentary.avgROA = `Thấp/Âm (${safeFormatNumber(avgROAPercent, 1)}%).`; }
+    if (avgROAPercent >= 10) { achievedStars += 1; commentary.avgROA = `Sử dụng tài sản hiệu quả. Cứ 100 đồng tài sản tạo ra ${safeFormatNumber(avgROAPercent, 1)}đ lợi nhuận.`; }
+    else if (avgROAPercent >= 5) { achievedStars += 0.75; commentary.avgROA = `Tốt. Khả năng chuyển đổi tài sản thành lợi nhuận ở mức khá.`; }
+    else if (avgROAPercent > 0) { achievedStars += 0.5; commentary.avgROA = `Trung bình. Cần cải thiện thêm hiệu quả sử dụng tài sản.`; }
+    else { commentary.avgROA = `Yếu. Hiệu quả sử dụng tài sản thấp hoặc đang thua lỗ.`; }
 
     const avgROEPercent = avgROE * 100;
-    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Rất tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-    else if (avgROEPercent >= 15) { achievedStars += 0.75; commentary.avgROE = `Tốt (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-    else if (avgROEPercent > 0) { achievedStars += 0.5; commentary.avgROE = `Trung bình (${safeFormatNumber(avgROEPercent, 1)}%).`; }
-    else { commentary.avgROE = `Thấp/Âm (${safeFormatNumber(avgROEPercent, 1)}%).`; }
+    if (avgROEPercent >= 20) { achievedStars += 1; commentary.avgROE = `Hiệu quả sử dụng vốn vượt trội. 100 đồng vốn chủ sở hữu tạo ra ${safeFormatNumber(avgROEPercent, 1)}đ lợi nhuận.`; }
+    else if (avgROEPercent >= 15) { achievedStars += 0.75; commentary.avgROE = `Tốt. Đây là mức sinh lời trên vốn mong muốn của nhiều nhà đầu tư.`; }
+    else if (avgROEPercent > 0) { achievedStars += 0.5; commentary.avgROE = `Trung bình. Khả năng sinh lời trên vốn ở mức cơ bản.`; }
+    else { commentary.avgROE = `Yếu/Âm. Công ty đang không tạo ra lợi nhuận cho cổ đông.`; }
 
-    commentary.avgSalePerShare = `Mỗi CP ứng với ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
-    commentary.avgBookValuePerShare = `Giá trị sổ sách ${safeFormatNumber(avgBookValuePerShare)}đ. `;
+    commentary.avgSalePerShare = `Mỗi cổ phiếu đang gánh ${safeFormatNumber(avgSalePerShare)}đ doanh thu.`;
+    commentary.avgBookValuePerShare = `Giá trị tài sản ròng trên mỗi cổ phiếu là ${safeFormatNumber(avgBookValuePerShare)}đ. `;
     if (marketPrice > 0 && avgBookValuePerShare > marketPrice) { achievedStars += 0.75; commentary.avgBookValuePerShare += `Cao hơn thị giá.`; }
-    commentary.avgTangibleBookValuePerShare = `GTSS hữu hình ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
+    commentary.avgTangibleBookValuePerShare = `Nếu trừ đi tài sản vô hình, giá trị còn ${safeFormatNumber(avgTangibleBookValuePerShare)}đ/cp.`;
 
     const valuationMethodComment = (price, method) => {
-        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu cho ${method}.`;
+        if (isNaN(price) || price <= 0) return `Không đủ dữ liệu cho phương pháp ${method}.`;
         let comparison = (price / marketPrice - 1) * 100;
-        return `Ước tính ${safeFormatNumber(price)}đ/cp (${comparison > 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
+        return `Ước tính ${safeFormatNumber(price)}đ/cp (${comparison >= 0 ? '+' : ''}${safeFormatNumber(comparison, 1)}% so với thị giá).`;
     };
-
     commentary.pricePE_EPS = valuationMethodComment(pricePE_EPS, 'P/E*EPS');
     commentary.pricePS_SPS = valuationMethodComment(pricePS_SPS, 'P/S*SPS');
     commentary.pricePB_BVPS = valuationMethodComment(pricePB_BVPS, 'P/B*BVPS');
@@ -464,12 +462,12 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     commentary.priceGraham2 = valuationMethodComment(priceGraham2, 'Graham (rút gọn)');
     commentary.priceGraham3 = valuationMethodComment(priceGraham3, 'Graham (căn)');
 
-    commentary.avgValuationPrice = `Giá trị hợp lý ước tính ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
+    commentary.avgValuationPrice = `Giá trị hợp lý ước tính là ${safeFormatNumber(avgValuationPrice)}đ/cp. `;
     if (avgValuationPrice > 0 && marketPrice > 0) {
         const diffPercent = (avgValuationPrice / marketPrice - 1) * 100;
-         if (diffPercent > 10) { achievedStars += 1; commentary.avgValuationPrice += `Cao hơn ${safeFormatNumber(diffPercent, 1)}% (tiềm năng).`; }
-         else if (diffPercent < -10) { achievedStars += 0.1; commentary.avgValuationPrice += `Thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% (có thể đắt).`; }
-         else { achievedStars += 0.5; commentary.avgValuationPrice += `Quanh (${safeFormatNumber(diffPercent, 1)}%) thị giá (hợp lý).`; }
+         if (diffPercent > 15) { achievedStars += 1; commentary.avgValuationPrice += `Rẻ, cao hơn ${safeFormatNumber(diffPercent, 1)}% so với thị giá.`; }
+         else if (diffPercent < -15) { achievedStars += 0.1; commentary.avgValuationPrice += `Đắt, thấp hơn ${safeFormatNumber(Math.abs(diffPercent), 1)}% so với thị giá.`; }
+         else { achievedStars += 0.5; commentary.avgValuationPrice += `Hợp lý, chênh lệch ${safeFormatNumber(diffPercent, 1)}% so với thị giá.`; }
     }
 
     achievedStars = Math.min(Math.round(achievedStars * 2) / 2, totalStars);
