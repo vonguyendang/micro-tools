@@ -41,6 +41,9 @@ function showTab(tabId) {
         initializeListingTabs();
     } else if (tabId === 'tab4' && !generalEventsTable && !hoseEventsTable) {
         initializeEventsTabs();
+    } else if (tabId === 'tab7') {
+        // Có thể thêm hàm khởi tạo cho tab Hỗ trợ NĐT nếu cần
+        // Ví dụ: loadPortfolioFromLocalStorage();
     }
 }
 
