@@ -23,12 +23,12 @@
 
     --font-family: 'Poppins', 'Arial', sans-serif;
     --base-font-size: 20px;
-    --header-font-size: 1.9rem; /* ~30px */
-    --label-font-size: 1.1rem;  /* ~17.5px */
-    --input-font-size: 1.1rem;  /* ~17.5px */
-    --button-font-size: 1.1rem; /* ~17.5px */
-    --result-font-size: 1rem;   /* ~16px */
-    --small-font-size: 0.9rem;  /* ~14.5px */
+    --header-font-size: 1.9rem;
+    --label-font-size: 1.1rem;
+    --input-font-size: 1.1rem;
+    --button-font-size: 1.1rem;
+    --result-font-size: 1rem;
+    --small-font-size: 0.9rem;
     --border-radius: 8px;
     --transition-speed: 0.3s;
 }
@@ -40,7 +40,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 10px; /* Thêm padding trên dưới */
+    padding: 20px 10px;
     margin: 0;
     line-height: 1.6;
 }
@@ -49,41 +49,41 @@ body {
 .tabs-container {
     width: 95%;
     max-width: 1000px;
-    margin-bottom: 20px; /* Khoảng cách giữa tabs và container */
-    display: flex; /* Canh giữa tabs */
+    margin-bottom: 20px;
+    display: flex;
     justify-content: center;
 }
 
 .tabs {
     display: flex;
-    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    flex-wrap: wrap;
     background-color: var(--container-bg);
     border-radius: var(--border-radius);
     box-shadow: 0 2px 5px var(--shadow-color);
-    overflow: hidden; /* Đảm bảo border-radius hoạt động */
-    padding: 5px; /* Khoảng đệm nhỏ bên trong tabs */
+    overflow: hidden;
+    padding: 5px;
 }
 
 .tab {
     padding: 12px 25px;
     cursor: pointer;
-    background-color: var(--light-text-color); /* Màu nền mặc định */
+    background-color: var(--light-text-color);
     color: var(--primary-color);
     border: none;
-    border-radius: var(--border-radius); /* Bo tròn nhẹ */
+    border-radius: var(--border-radius);
     margin: 5px;
     font-weight: 600;
     font-size: 1rem;
     transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-    flex-grow: 1; /* Các tab chia đều không gian */
+    flex-grow: 1;
     text-align: center;
-    white-space: nowrap; /* Ngăn text xuống dòng không cần thiết */
+    white-space: nowrap;
 }
 
 .tab:hover {
-    background-color: #e9f5ff; /* Màu nền nhạt hơn khi hover */
+    background-color: #e9f5ff;
     color: var(--primary-darker);
-    transform: translateY(-2px); /* Hiệu ứng nhấc lên nhẹ */
+    transform: translateY(-2px);
 }
 
 .tab.active {
@@ -106,13 +106,13 @@ body {
     width: 95%;
     max-width: 1000px;
     box-sizing: border-box;
-    display: none; /* Mặc định ẩn các container */
-    margin-top: 0; /* Bỏ margin-top vì đã có từ .tabs-container */
+    display: none;
+    margin-top: 0;
     animation: fadeIn 0.5s ease-in-out;
 }
 
 .container.active-container {
-    display: block; /* Hiển thị container active */
+    display: block;
 }
 
 @keyframes fadeIn {
@@ -145,10 +145,10 @@ h1 i {
 }
 
 label {
-    font-weight: 500; /* Medium weight */
+    font-weight: 500;
     font-size: var(--label-font-size);
     display: block;
-    margin-bottom: 8px; /* Khoảng cách giữa label và input */
+    margin-bottom: 8px;
     color: var(--text-color);
 }
 
@@ -163,12 +163,12 @@ select {
     width: 100%;
     font-size: var(--input-font-size);
     padding: 12px 15px;
-    margin: 0; /* Bỏ margin mặc định */
+    margin: 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-sizing: border-box;
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    background-color: #f8f9fa; /* Màu nền input nhẹ */
+    background-color: #f8f9fa;
 }
 
 input[type="text"]:focus,
@@ -176,46 +176,21 @@ input[type="number"]:focus,
 select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Hiệu ứng focus */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-/* Placeholder style */
 ::placeholder {
     color: #aaa;
-    opacity: 1; /* Firefox */
-}
-
-/* ----- Inline Groups (for ratios) ----- */
-.inline-group {
-    display: flex;
-    align-items: center; /* Căn giữa các item theo chiều dọc */
-    gap: 10px; /* Khoảng cách giữa các input và dấu ':' */
-    margin-bottom: 20px; /* Khoảng cách dưới nhóm */
-}
-
-.inline-item {
-    flex: 1; /* Chia đều không gian */
-}
-
-.inline-item input[type="number"] {
-    margin: 0; /* Bỏ margin vì đã có gap */
-}
-
-.divider {
-    font-size: 1.2rem; /* Kích thước dấu ':' */
-    font-weight: bold;
-    color: var(--text-color);
-    padding: 0 5px; /* Khoảng đệm quanh dấu ':' */
-    margin-bottom: 0; /* Reset margin */
+    opacity: 1;
 }
 
 /* ----- Buttons ----- */
 .button-container {
     display: flex;
-    gap: 15px; /* Khoảng cách giữa các nút */
-    margin-top: 25px; /* Khoảng cách trên */
-    justify-content: center; /* Căn giữa các nút trong container */
-    flex-wrap: wrap; /* Cho phép nút xuống dòng nếu không đủ chỗ */
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .action-button {
@@ -231,7 +206,7 @@ select:focus {
     white-space: normal;
     word-wrap: break-word;
     text-align: center;
-    display: inline-flex; /* Sử dụng inline-flex để icon và text căn chỉnh tốt */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -243,7 +218,7 @@ select:focus {
 
 .action-button:hover {
     background-color: var(--primary-darker);
-    transform: translateY(-2px); /* Hiệu ứng nhấc lên */
+    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -252,7 +227,6 @@ select:focus {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Specific button styles if needed */
 .calculate-button {
     background-color: var(--secondary-color);
 }
@@ -265,7 +239,7 @@ select:focus {
     color: var(--light-text-color);
 }
 .external-link-button:hover {
-    background-color: #d35400; /* Darker Orange */
+    background-color: #d35400;
 }
 
 
@@ -290,78 +264,37 @@ select:focus {
 .result table {
     width: 100%;
     border-collapse: collapse;
-    font-size: var(--small-font-size); /* Smaller font for tables */
-    margin-bottom: 20px; /* Space between tables */
+    font-size: var(--small-font-size);
+    margin-bottom: 20px;
     box-shadow: 0 1px 3px var(--shadow-color);
-    border-radius: var(--border-radius); /* Bo góc cho table */
-    overflow: hidden; /* Cần thiết cho border-radius trên table */
+    border-radius: var(--border-radius);
+    overflow: hidden;
 }
 
 .result th, .result td {
     border: 1px solid var(--border-color);
-    padding: 10px 12px; /* Tăng padding nhẹ */
+    padding: 10px 12px;
     text-align: left;
-    vertical-align: middle; /* Căn giữa nội dung theo chiều dọc */
+    vertical-align: middle;
 }
 
 .result th {
-    background-color: #f8f9fa; /* Màu nền header nhạt */
-    font-weight: 600; /* Header đậm hơn */
+    background-color: #f8f9fa;
+    font-weight: 600;
     color: var(--primary-darker);
 }
 
-.result th.center, .result td.center {
-    text-align: center;
-}
-.result td.center-content {
-    text-align: center;
-}
+.result th.center, .result td.center { text-align: center; }
+.result .value { text-align: right; font-weight: 500; white-space: nowrap; }
+.result tbody tr:nth-child(even) { background-color: #fdfdfe; }
+.result tbody tr:hover { background-color: #e9f5ff; }
 
-.result .value {
-    text-align: right;
-    font-weight: 500; /* Giá trị đậm hơn một chút */
-    white-space: nowrap;
-}
-
-/* Alternating row colors for better readability */
-.result tbody tr:nth-child(even) {
-    background-color: #fdfdfe;
-}
-.result tbody tr:hover {
-    background-color: #e9f5ff; /* Highlight row on hover */
-}
-
-/* Specific table for hidden border look (like price info) */
-.hidden-border {
-    border: none;
-    box-shadow: none; /* Bỏ shadow cho bảng này */
-    margin-bottom: 25px;
-}
-
-.hidden-border td, .hidden-border th {
-    border: none;
-    padding: 8px;
-    text-align: center;
-    font-weight: 500;
-    font-size: var(--small-font-size);
-    background-color: transparent !important; /* Ghi đè màu nền */
-}
-.hidden-border th {
-     font-weight: 600;
-     color: var(--primary-darker);
-     padding-bottom: 15px;
-}
-.hidden-border tr:hover {
-    background-color: transparent !important; /* Bỏ hover effect */
-}
-.hidden-border .button-container {
-    margin-top: 10px; /* Giảm margin top cho nút trong bảng này */
-    margin-bottom: 20px;
-}
-.hidden-border .external-link-button { /* Style riêng cho nút link ngoài */
-     padding: 8px 15px;
-     font-size: 0.9rem;
-}
+.hidden-border { border: none; box-shadow: none; margin-bottom: 25px; }
+.hidden-border td, .hidden-border th { border: none; padding: 8px; text-align: center; font-weight: 500; font-size: var(--small-font-size); background-color: transparent !important; }
+.hidden-border th { font-weight: 600; color: var(--primary-darker); padding-bottom: 15px; }
+.hidden-border tr:hover { background-color: transparent !important; }
+.hidden-border .button-container { margin-top: 10px; margin-bottom: 20px; }
+.hidden-border .external-link-button { padding: 8px 15px; font-size: 0.9rem; }
 
 /* Price color classes */
 .price-up { color: var(--price-up-color); font-weight: bold; }
@@ -371,527 +304,147 @@ select:focus {
 .floor-price { color: var(--floor-price-color); font-weight: bold; }
 
 /* Star Rating */
-#star-rating {
-    color: var(--star-color);
-    font-size: 1.1rem; /* Kích thước sao */
-}
-#star-rating i {
-    margin: 0 1px; /* Khoảng cách nhỏ giữa các sao */
-}
-.assessment-header th {
-    font-size: 1rem; /* Tăng kích thước font cho header đánh giá */
-}
+#star-rating { color: var(--star-color); font-size: 1.1rem; }
+#star-rating i { margin: 0 1px; }
+.assessment-header th { font-size: 1rem; }
 
 /* ----- Period Tabs (Sub-tabs) ----- */
-.period-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 25px; /* Space below the tabs */
-}
+.period-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 25px; }
+.period-tab { padding: 8px 16px; font-size: 0.9rem; font-weight: 500; color: var(--primary-color); background-color: #e9f5ff; border: 1px solid var(--primary-color); border-radius: var(--border-radius); cursor: pointer; transition: background-color var(--transition-speed), color var(--transition-speed); }
+.period-tab:hover { background-color: #d4eaf7; }
+.period-tab.active { background-color: var(--primary-color); color: var(--light-text-color); border-color: var(--primary-darker); }
+.period-tab:disabled { background-color: #f0f0f0; color: #a0a0a0; cursor: not-allowed; border-color: #d0d0d0; }
+.period-tab:disabled:hover { background-color: #f0f0f0; }
 
-.period-tab {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--primary-color);
-    background-color: #e9f5ff;
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color var(--transition-speed), color var(--transition-speed);
-}
+/* ----- Loading & Result Placeholders ----- */
+.fa-spinner { font-size: 1.5rem; color: var(--primary-color); display: block; text-align: center; margin: 20px auto; }
+.result .icon { margin-right: 8px; color: var(--primary-color); width: 18px; text-align: center; }
 
-.period-tab:hover {
-    background-color: #d4eaf7;
-}
-
-.period-tab.active {
-    background-color: var(--primary-color);
-    color: var(--light-text-color);
-    border-color: var(--primary-darker);
-}
-
-.period-tab:disabled {
-    background-color: #f0f0f0;
-    color: #a0a0a0;
-    cursor: not-allowed;
-    border-color: #d0d0d0;
-}
-
-.period-tab:disabled:hover {
-    background-color: #f0f0f0; /* No change on hover */
-}
-
-
-/* ----- Result GDKHQ ----- */
-#resultGDKHQ {
-    text-align: center;
-    font-size: 1.3rem; /* Tăng kích thước font */
-    font-weight: 600; /* Đậm hơn */
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: var(--border-radius);
-    color: var(--secondary-darker);
-    background-color: #eafaf1; /* Nền xanh lá cây nhạt hơn */
-    border: 1px solid var(--secondary-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    opacity: 0;
-    transform: translateY(10px) scale(0.98); /* Bắt đầu từ dưới lên và nhỏ hơn */
-    transition: opacity var(--transition-speed) ease-out, transform var(--transition-speed) ease-out;
-}
-
-#resultGDKHQ.show {
-    opacity: 1;
-    transform: translateY(0) scale(1); /* Trở về vị trí và kích thước bình thường */
-}
-
-/* ----- Loading Spinner ----- */
-.fa-spinner {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    display: block;
-    text-align: center;
-    margin: 20px auto;
-}
-
-/* ----- Icons in Table ----- */
-.result .icon {
-    margin-right: 8px;
-    color: var(--primary-color);
-    width: 18px; /* Đảm bảo icon chiếm không gian nhất định */
-    text-align: center;
-}
-
-/* ----- New Listing & Event Tabs ----- */
-.listing-sub-container {
-    display: none;
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.listing-sub-container.active {
-    display: block;
-}
-
-.table-controls {
-    margin-bottom: 15px;
-}
-
-.table-controls input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 0.95rem;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-    max-height: 500px;
-    margin-top: 15px;
-}
+/* ----- Sub-containers for Tabs 3, 4, 7 ----- */
+.listing-sub-container, .investor-sub-container { display: none; animation: fadeIn 0.4s ease-in-out; }
+.listing-sub-container.active, .investor-sub-container.active { display: block; }
+.table-controls { margin-bottom: 15px; }
+.table-controls input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 0.95rem; }
+.table-wrapper { overflow-x: auto; max-height: 500px; margin-top: 15px; }
 
 #table-registered, #table-approved, #table-events-general, #table-events-hose,
-#profit-loss-table, #avg-price-table, #portfolio-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-}
+#profit-loss-table, #avg-price-table, #portfolio-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 
-#table-registered th, #table-approved th, #table-events-general th,#table-events-hose th,
-#table-registered td, #table-approved td, #table-events-general td, #table-events-hose td,
-#profit-loss-table th, #profit-loss-table td,
-#avg-price-table th, #avg-price-table td,
-#portfolio-table th, #portfolio-table td {
-    padding: 8px 10px;
-    border: 1px solid var(--border-color);
-    text-align: left;
-    vertical-align: middle;
+#table-registered th, #table-approved th, #table-events-general th,#table-events-hose th, #table-registered td, #table-approved td, #table-events-general td, #table-events-hose td,
+#profit-loss-table th, #profit-loss-table td, #avg-price-table th, #avg-price-table td, #portfolio-table th, #portfolio-table td {
+    padding: 8px 10px; border: 1px solid var(--border-color); text-align: left; vertical-align: middle;
 }
 
 #table-registered th, #table-approved th, #table-events-general th, #table-events-hose th,
 #profit-loss-table th, #avg-price-table th, #portfolio-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    background-color: #f8f9fa; font-weight: 600; position: sticky; top: 0; z-index: 1;
 }
 
-#table-registered th:hover, #table-approved th:hover, #table-events-general th:hover, #table-events-hose th:hover {
-    background-color: #e9ecef;
-}
+.pagination-controls { margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+.pagination-controls button { padding: 5px 10px; border: 1px solid var(--border-color); background-color: #fff; cursor: pointer; border-radius: 4px; }
+.pagination-controls button:disabled { cursor: not-allowed; opacity: 0.5; }
+.pagination-controls #page-info { font-weight: 500; }
+.loading-cell { text-align: center; padding: 40px 20px; font-style: italic; font-size: 1rem; color: #888; border: none !important; }
+.loading-cell i { margin-right: 10px; color: var(--primary-color); font-size: 1.2rem; }
 
-#table-registered th .sort-icon,
-#table-approved th .sort-icon,
-#table-events-general th .sort-icon,
-#table-events-hose th .sort-icon {
-    margin-left: 5px;
-    color: #ccc;
-    font-size: 0.8em;
-}
-
-#table-registered th.sorted-asc .sort-icon,
-#table-approved th.sorted-asc .sort-icon,
-#table-events-general th.sorted-asc .sort-icon,
-#table-events-hose th.sorted-asc .sort-icon,
-#table-registered th.sorted-desc .sort-icon,
-#table-approved th.sorted-desc .sort-icon,
-#table-events-general th.sorted-desc .sort-icon,
-#table-events-hose th.sorted-desc .sort-icon {
-    color: var(--primary-color);
-}
-
-
-.pagination-controls {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.pagination-controls button {
-    padding: 5px 10px;
-    border: 1px solid var(--border-color);
-    background-color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.pagination-controls button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.pagination-controls #page-info {
-    font-weight: 500;
-}
-
-/* ----- CSS cho trạng thái đang tải trong bảng ----- */
-.loading-cell {
-    text-align: center;
-    padding: 40px 20px;
-    font-style: italic;
-    font-size: 1rem;
-    color: #888;
-    border: none !important; /* Ghi đè để không hiển thị đường viền ô */
-}
-
-.loading-cell i {
-    margin-right: 10px;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-}
 /* ----- Iframe PTKT ----- */
-.iframe-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    padding-top: 75%; /* Tỷ lệ 4:3 Aspect Ratio (75%) - Có thể điều chỉnh nếu cần */
-    margin-top: 25px; /* Khoảng cách với nút bấm ở trên */
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-}
-
-.iframe-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-}
+.iframe-container { position: relative; overflow: hidden; width: 100%; padding-top: 75%; margin-top: 25px; border: 1px solid var(--border-color); border-radius: var(--border-radius); }
+.iframe-container iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
 
 /* ----- Investor Support Tab ----- */
-.investor-sub-container {
-    display: none;
-    animation: fadeIn 0.4s ease-in-out;
-}
-.investor-sub-container.active {
-    display: block;
-}
-.investor-sub-container h2 {
-    font-size: 1.4rem;
-    color: var(--primary-darker);
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
-}
-.investor-sub-container h2 i {
-    margin-right: 10px;
-}
-.summary-container {
-    margin-top: 25px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    text-align: center;
-}
-.summary-container p {
-    margin: 8px 0;
-    font-size: 1.1rem;
-}
-.summary-container .total-profit {
-    color: var(--price-up-color);
-    font-weight: bold;
-}
-.summary-container .total-loss {
-    color: var(--price-down-color);
-    font-weight: bold;
-}
-.summary-container .avg-price-result {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--primary-darker);
-}
-.delete-btn {
-    background: none;
-    border: none;
-    color: var(--error-color);
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-#profit-loss-table input, #avg-price-table input {
-    padding: 6px 8px;
-    font-size: 0.9rem;
-    max-width: 120px; /* Giới hạn chiều rộng input trong bảng */
-}
-.breakeven-highlight {
-    color: var(--accent-color);
-    font-weight: bold;
-}
+.investor-sub-container h2 { font-size: 1.4rem; color: var(--primary-darker); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+.investor-sub-container h2 i { margin-right: 10px; }
+.summary-container { margin-top: 25px; padding: 20px; background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: var(--border-radius); text-align: center; }
+.summary-container p { margin: 8px 0; font-size: 1.1rem; }
+.summary-container .total-profit { color: var(--price-up-color); font-weight: bold; }
+.summary-container .total-loss { color: var(--price-down-color); font-weight: bold; }
+.summary-container .avg-price-result { font-size: 1.4rem; font-weight: 600; color: var(--primary-darker); }
+.delete-btn { background: none; border: none; color: var(--error-color); cursor: pointer; font-size: 1.2rem; }
+#profit-loss-table input, #avg-price-table input { padding: 6px 8px; font-size: 0.9rem; max-width: 120px; }
+.breakeven-highlight { color: var(--accent-color); font-weight: bold; }
 
-/* ----- Toggle Switch for Fees ----- */
-.fee-toggle-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-}
-input:checked + .slider {
-  background-color: var(--secondary-color);
-}
-input:focus + .slider {
-  box-shadow: 0 0 1px var(--secondary-color);
-}
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-.slider.round {
-  border-radius: 34px;
-}
-.slider.round:before {
-  border-radius: 50%;
-}
+/* Toggle Switch for Fees */
+.fee-toggle-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
+.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
+input:checked + .slider { background-color: var(--secondary-color); }
+input:focus + .slider { box-shadow: 0 0 1px var(--secondary-color); }
+input:checked + .slider:before { transform: translateX(26px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+
+/* Target Profit Results */
+.target-summary-header { font-size: 1.2rem; margin-bottom: 20px; }
+.target-roadmap { margin-top: 25px; padding: 0; list-style: none; position: relative; border-left: 3px solid var(--border-color); margin-left: 30px; text-align: left; }
+.roadmap-step { margin-bottom: 25px; padding-left: 40px; position: relative; }
+.roadmap-step::before { content: attr(data-session); position: absolute; left: -22px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background-color: white; border: 3px solid var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-color); font-size: 0.9rem; }
+.roadmap-step:last-child { margin-bottom: 0; }
+.roadmap-step.final-step::before { background-color: var(--secondary-color); border-color: var(--secondary-darker); color: white; }
+.roadmap-step h5 { font-weight: 600; color: var(--primary-darker); margin: 0 0 8px 0; font-size: 1.1rem; }
+.roadmap-step p { margin: 4px 0; font-size: 0.95rem; color: var(--text-color); }
+.roadmap-step .price-change { color: var(--price-up-color); font-weight: 500; }
+.roadmap-step .final-price { font-weight: bold; font-size: 1.05rem; }
+.dividend-pagination { margin-top: 10px; padding-bottom: 10px; }
 
 
 /* ----- Responsive Design ----- */
-
-/* Tablets and smaller desktops */
 @media (max-width: 768px) {
-    body {
-        padding: 15px 5px;
-    }
-    .container {
-        width: 98%;
-        padding: 20px;
-    }
-    h1 {
-        font-size: 1.6rem; /* ~25px */
-    }
-    .tab {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    .inline-group {
-        flex-direction: column; /* Stack items vertically */
-        align-items: stretch; /* Make items full width */
-        gap: 5px;
-    }
-    .divider {
-        display: none; /* Hide divider on small screens */
-    }
-    .result th, .result td {
-        padding: 8px 10px;
-    }
-    .result table {
-        font-size: 0.8rem; /* Further reduce font size */
-    }
+    body { padding: 15px 5px; }
+    .container { width: 98%; padding: 20px; }
+    h1 { font-size: 1.6rem; }
+    .tab { padding: 10px 15px; font-size: 0.9rem; }
+    .result th, .result td { padding: 8px 10px; }
+    .result table { font-size: 0.8rem; }
 }
 
-/* Mobile phones */
 @media (max-width: 480px) {
-    body {
-        padding: 10px 5px;
-    }
-    .container {
-        padding: 15px;
-    }
-    h1 {
-        font-size: 1.4rem; /* ~22px */
-    }
-    .tab {
-        padding: 8px 10px;
-        font-size: 0.85rem;
-    }
-    .button-container {
-        flex-direction: column; /* Stack buttons vertically */
-        gap: 10px;
-    }
-    .action-button {
-        width: 100%; /* Make buttons full width */
-        padding: 10px 15px;
-        font-size: 1rem;
-    }
-    input[type="text"],
-    input[type="number"],
-    select {
-        padding: 10px 12px;
-        font-size: 0.95rem;
-    }
-     label {
-        font-size: 0.95rem;
-    }
-    #resultGDKHQ {
-        font-size: 1.1rem;
-        padding: 15px;
-    }
-    .hidden-border td, .hidden-border th {
-         font-size: 0.75rem; /* Font nhỏ hơn cho bảng giá */
-         padding: 5px;
-    }
-    .hidden-border .button-container {
-        flex-direction: row; /* Giữ các nút link ngoài hàng ngang */
-        gap: 5px;
-    }
-     .hidden-border .external-link-button {
-         flex-grow: 1; /* Chia đều không gian */
-         padding: 6px 8px;
-         font-size: 0.8rem;
-    }
+    body { padding: 10px 5px; }
+    .container { padding: 15px; }
+    h1 { font-size: 1.4rem; }
+    .tab { padding: 8px 10px; font-size: 0.85rem; }
+    .button-container { flex-direction: column; gap: 10px; }
+    .action-button { width: 100%; padding: 10px 15px; font-size: 1rem; }
+    input[type="text"], input[type="number"], select { padding: 10px 12px; font-size: 0.95rem; }
+    label { font-size: 0.95rem; }
+    .hidden-border td, .hidden-border th { font-size: 0.75rem; padding: 5px; }
+    .hidden-border .button-container { flex-direction: row; gap: 5px; }
+    .hidden-border .external-link-button { flex-grow: 1; padding: 6px 8px; font-size: 0.8rem; }
+    .iframe-container { padding-top: 100%; }
 
+    /* === PHẦN SỬA LỖI CHO BẢNG TRÊN ĐIỆN THOẠI === */
     .table-wrapper {
-        overflow-x: auto;
+        overflow-x: auto; /* Bật tính năng cuộn ngang */
     }
-    
-    .iframe-container {
-        padding-top: 100%; /* Tỷ lệ 1:1 cho màn hình điện thoại */
+
+    /* Áp dụng cho các bảng cần cuộn ngang */
+    #profit-loss-table,
+    #avg-price-table,
+    #portfolio-table,
+    #table-registered,
+    #table-approved,
+    #table-events-general,
+    #table-events-hose {
+        font-size: 0.85rem; /* Giữ kích thước chữ dễ đọc */
+        width: 100%; /* Bảng sẽ chiếm đủ không gian cần thiết */
+        table-layout: auto; /* Cho phép trình duyệt tự điều chỉnh độ rộng cột */
     }
-}
-/* === CSS MỚI: Định dạng cho phân trang bảng cổ tức === */
-.dividend-pagination {
-    margin-top: 10px; /* Tạo khoảng cách với bảng */
-    padding-bottom: 10px; /* Thêm khoảng đệm dưới nếu có bảng khác theo sau */
-}
 
-/* ----- Investor Support Tab - Target Profit Results ----- */
-.target-summary-header {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-}
+    /* Ngăn các ô trong bảng bị ngắt dòng, buộc bảng phải mở rộng */
+    /* #profit-loss-table th, #profit-loss-table td,
+    #avg-price-table th, #avg-price-table td,
+    #portfolio-table th, #portfolio-table td,
+    #table-registered th, #table-registered td,
+    #table-approved th, #table-approved td,
+    #table-events-general th, #table-events-general td,
+    #table-events-hose th, #table-events-hose td {
+        white-space: nowrap; Quan trọng nhất: không cho phép xuống dòng
+    } */
 
-.target-roadmap {
-    margin-top: 25px;
-    padding: 0;
-    list-style: none;
-    position: relative;
-    border-left: 3px solid var(--border-color); /* The timeline track */
-    margin-left: 30px;
-    text-align: left;
-}
-
-.roadmap-step {
-    margin-bottom: 25px;
-    padding-left: 40px;
-    position: relative;
-}
-
-.roadmap-step::before {
-    content: attr(data-session); /* Display session number */
-    position: absolute;
-    left: -22px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: white;
-    border: 3px solid var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-.roadmap-step:last-child {
-    margin-bottom: 0;
-}
-
-/* Highlight the final step that reaches the goal */
-.roadmap-step.final-step::before {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-darker);
-    color: white;
-}
-
-.roadmap-step h5 {
-    font-weight: 600;
-    color: var(--primary-darker);
-    margin: 0 0 8px 0;
-    font-size: 1.1rem;
-}
-
-.roadmap-step p {
-    margin: 4px 0;
-    font-size: 0.95rem;
-    color: var(--text-color);
-}
-
-.roadmap-step .price-change {
-    color: var(--price-up-color);
-    font-weight: 500;
-}
-
-.roadmap-step .final-price {
-    font-weight: bold;
-    font-size: 1.05rem;
+    /* Đảm bảo ô nhập liệu không bị quá nhỏ */
+    #profit-loss-table input,
+    #avg-price-table input {
+        min-width: 100px;
+    }
 }
