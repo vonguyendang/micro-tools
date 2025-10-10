@@ -461,6 +461,19 @@ input:checked + .slider:before { transform: translateX(26px); }
     #avg-price-table input {
         min-width: 100px;
     }
+    /* Bổ sung để làm cho iframe PTKT chiếm tối đa chiều cao còn lại trên mobile */
+    #tab6 .iframe-container {
+        padding-top: 0 !important; /* Loại bỏ giới hạn tỷ lệ khung hình */
+        margin-top: 15px; /* Điều chỉnh margin */
+        /* 100vh trừ đi khoảng ước tính của tabs, header, buttons và padding/margin */
+        height: calc(100vh - 250px); 
+        min-height: 400px; /* Đảm bảo đủ lớn */
+    }
+
+    /* Đảm bảo iframe con lấp đầy chiều cao của container */
+    #tab6 .iframe-container iframe {
+        height: 100%; 
+    }
 }
 
 /* ----- GDKHQ Result Box Styles (Tab 2) ----- */
