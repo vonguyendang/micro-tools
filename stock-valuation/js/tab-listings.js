@@ -45,7 +45,7 @@ async function initializeListingTabs() {
     ];
 
     // Khởi tạo các đối tượng DataTable
-    registeredTable = new DataTable('table-registered', 'search-registered', 'pagination-registered', registeredColumns, 'updatedDate');
+    registeredTable = new DataTable('table-registered', 'search-registered', 'pagination-registered', registeredColumns, 'listDate');
     approvedTable = new DataTable('table-approved', 'search-approved', 'pagination-approved', approvedColumns, 'acceptDate');
 
     try {
