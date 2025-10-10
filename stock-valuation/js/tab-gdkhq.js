@@ -110,7 +110,22 @@ async function calculateAdjustedPrice() {
     }
 
     let P_prime = Math.max(0, (P + (paValue * a) - C) / denominator);
-    resultDiv.innerText = `Giá tham chiếu điều chỉnh: ${formatNumber(P_prime, 0)} VNĐ`;
+    
+    // Cải thiện giao diện phần kết quả
+    resultDiv.innerHTML = `
+        <div class="gdkhq-result-box">
+            <p class="gdkhq-label">GIÁ THAM CHIẾU SAU ĐIỀU CHỈNH</p>
+            <p class="gdkhq-price price-up">${formatNumber(P_prime, 0)} VNĐ</p>
+            <p class="gdkhq-formula">Công thức: (P + Pa*a - C) / (1 + a + B)</p>
+            <p class="gdkhq-formula-detail">
+                P: ${formatNumber(P, 0)} | 
+                Pa: ${formatNumber(paValue, 0)} | 
+                a: ${a.toFixed(4)} | 
+                C: ${formatNumber(C, 0)} | 
+                B: ${B.toFixed(4)}
+            </p>
+        </div>
+    `;
     resultDiv.classList.add('show');
 }
 

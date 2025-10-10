@@ -55,6 +55,24 @@ function openWebUrl(url) {
     window.open(url, '_blank');
 }
 
+/**
+ * Hàm mới để mở iframe PTKT ở chế độ toàn màn hình.
+ */
+function openFullscreenPTKT() {
+    const iframe = document.getElementById('ptkt-iframe');
+    if (iframe) {
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) { /* Safari */
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) { /* IE11 */
+            iframe.msRequestFullscreen();
+        } else {
+             alert('Trình duyệt của bạn không hỗ trợ chế độ toàn màn hình.');
+        }
+    }
+}
+
 
 // Lắng nghe sự kiện khi toàn bộ nội dung trang đã được tải xong
 document.addEventListener('DOMContentLoaded', () => {

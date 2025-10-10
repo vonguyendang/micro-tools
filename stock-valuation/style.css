@@ -351,6 +351,31 @@ select:focus {
 .iframe-container { position: relative; overflow: hidden; width: 100%; padding-top: 75%; margin-top: 25px; border: 1px solid var(--border-color); border-radius: var(--border-radius); }
 .iframe-container iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
 
+/* Thêm gợi ý thoát Full Screen (chỉ hiển thị khi ở chế độ Fullscreen) */
+.iframe-container::after {
+    content: "Nhấn ESC để thoát chế độ Toàn màn hình";
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    z-index: 10000;
+    opacity: 0; /* Mặc định ẩn */
+    transition: opacity 0.3s;
+}
+
+/* Hiển thị khi iframe ở chế độ fullscreen */
+/* Thêm các tiền tố để đảm bảo tương thích */
+.iframe-container:fullscreen::after,
+.iframe-container:-webkit-full-screen::after,
+.iframe-container:-moz-full-screen::after,
+.iframe-container:-ms-full-screen::after {
+    opacity: 1;
+}
+
 /* ----- Investor Support Tab ----- */
 .investor-sub-container h2 { font-size: 1.4rem; color: var(--primary-darker); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
 .investor-sub-container h2 i { margin-right: 10px; }
@@ -426,25 +451,52 @@ input:checked + .slider:before { transform: translateX(26px); }
     #table-approved,
     #table-events-general,
     #table-events-hose {
-        font-size: 0.85rem; /* Giữ kích thước chữ dễ đọc */
+        font-size: 0.8rem; /* Giảm cỡ chữ cho giao diện mobile */
         width: 100%; /* Bảng sẽ chiếm đủ không gian cần thiết */
         table-layout: auto; /* Cho phép trình duyệt tự điều chỉnh độ rộng cột */
     }
-
-    /* Ngăn các ô trong bảng bị ngắt dòng, buộc bảng phải mở rộng */
-    /* #profit-loss-table th, #profit-loss-table td,
-    #avg-price-table th, #avg-price-table td,
-    #portfolio-table th, #portfolio-table td,
-    #table-registered th, #table-registered td,
-    #table-approved th, #table-approved td,
-    #table-events-general th, #table-events-general td,
-    #table-events-hose th, #table-events-hose td {
-        white-space: nowrap; Quan trọng nhất: không cho phép xuống dòng
-    } */
 
     /* Đảm bảo ô nhập liệu không bị quá nhỏ */
     #profit-loss-table input,
     #avg-price-table input {
         min-width: 100px;
     }
+}
+
+/* ----- GDKHQ Result Box Styles (Tab 2) ----- */
+.gdkhq-result-box {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    background-color: var(--success-bg);
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.gdkhq-label {
+    font-size: var(--label-font-size);
+    font-weight: 600;
+    color: var(--primary-darker);
+    margin-bottom: 10px;
+}
+
+.gdkhq-price {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 5px 0;
+}
+
+.gdkhq-formula {
+    font-size: var(--small-font-size);
+    color: #555;
+    margin-top: 15px;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+.gdkhq-formula-detail {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 5px;
 }

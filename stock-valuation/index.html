@@ -118,7 +118,7 @@
                                 <th>Khối lượng</th>
                                 <th>Giá mua</th>
                                 <th>Giá bán / Hiện tại</th>
-                                <th>Phí GD (%)</th>
+                                <th class="fee-header">Phí GD (%)</th>
                                 <th>Lãi/Lỗ</th>
                                 <th>Xóa</th>
                             </tr>
@@ -342,9 +342,12 @@
                  <button class="action-button external-link-button" onclick="openWebUrl('https://ptkt.dangvo.io.vn/')">
                     <i class="fas fa-external-link-alt"></i> Mở công cụ PTKT
                  </button>
+                 <button class="action-button calculate-button" onclick="openFullscreenPTKT()">
+                    <i class="fas fa-expand"></i> Mở Full Màn hình
+                 </button>
             </div>
             <div class="iframe-container">
-                <iframe src="https://smoney.vodang2702.workers.dev/phan-tich-ky-thuat" frameborder="0"></iframe>
+                <iframe id="ptkt-iframe" src="https://smoney.vodang2702.workers.dev/phan-tich-ky-thuat" frameborder="0"></iframe>
             </div>
          </main>
     </div>
