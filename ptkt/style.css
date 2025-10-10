@@ -116,9 +116,10 @@ body {
     overflow: hidden;
 }
 /* Viền nhẹ quanh mỗi iframe */
-/* .panel {
-    border: 1px solid #ccc; 
-} */
+.panel {
+    border: 0px transparent; /* Viền trong suốt để tránh ảnh hưởng đến bố cục */
+    padding: 0;
+}
 iframe {
     width: 100%;
     height: 100%;
