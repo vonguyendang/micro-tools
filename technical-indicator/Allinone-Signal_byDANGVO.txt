@@ -1,0 +1,515 @@
+//@version=6
+indicator('AIO_SR_Trendline_Candles', shorttitle='AIOv2', overlay=true, max_bars_back=501)
+
+// =====================================================================================================================
+// PHẦN 0: MASTER TOGGLES (NÚT BẬT/TẮT CHÍNH)
+// =====================================================================================================================
+var g_master = "MASTER TOGGLES ⚙️"
+show_sr_channels = input.bool(true, title="Show SR Channels", group=g_master)
+show_trendlines = input.bool(true, title="Show Trendlines", group=g_master)
+show_candles = input.bool(true, title="Show Candlestick Patterns", group=g_master)
+
+// =====================================================================================================================
+// PHẦN 1: AIO INDICATOR
+// =====================================================================================================================
+
+// --- AIO: Inputs ---
+var g_aio = "AIO: Indicator Sections"
+Shortterm = input.bool(true, title='1. Short-Term Signal (RSI/MACD)', group = g_aio, inline = "g1")
+Midterm = input.bool(true, title='2. Mid-Term Signal (Range Filter)', group = g_aio, inline = "g2")
+Longterm = input.bool(true, title='3. Long-Term Signal (SuperTrend)', group = g_aio, inline = "g3")
+A = input.bool(true, title='4. EMA Set', group = g_aio, inline = "g4")
+BB = input.bool(true, title='5. Bollinger Bands', group = g_aio, inline = "g5")
+IC = input.bool(true, title='6. Ichimoku Cloud', group = g_aio, inline = "g6")
+
+
+// --- AIO: 1. Short-term Signal (RSI/MACD) ---
+var g_short = "AIO: 1. Short-Term Settings"
+// RSI
+srcRSI = input(defval=close, title='RSI Source', group = g_short)
+lenRSI = input.int(14, minval=1, title='RSI Length', group = g_short)
+upRSI = ta.rma(math.max(ta.change(srcRSI), 0), lenRSI)
+downRSI = ta.rma(-math.min(ta.change(srcRSI), 0), lenRSI)
+rsi = downRSI == 0 ? 100 : upRSI == 0 ? 0 : 100 - 100 / (1 + upRSI / downRSI)
+osold = input.int(20, minval=1, title='RSI Oversold', group = g_short)
+obought = input.int(80, minval=1, title='RSI Overbought', group = g_short)
+oversold = rsi < osold
+overbought = rsi > obought
+barcolor(Shortterm and oversold ? color.red : na, title='Barcolor Oversold')
+barcolor(Shortterm and overbought ? color.green : na, title='Barcolor Overbought')
+// MACD
+srcMACD = input(defval=close, title='MACD Source', group = g_short)
+fast = input.int(12, minval=1, title='MACD Fast', group = g_short)
+slow = input.int(26, minval=1, title='MACD Slow', group = g_short)
+smoothing = input.int(9, minval=1, title='MACD Smoothing', group = g_short)
+fastMA = ta.ema(srcMACD, fast)
+slowMA = ta.ema(srcMACD, slow)
+macd = fastMA - slowMA
+signal = ta.sma(macd, smoothing)
+crossup = ta.crossover(macd, signal)
+crossdown = ta.crossover(signal, macd)
+plotshape(Shortterm and (crossdown or overbought), title='AIO Down Signal', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), size=size.tiny)
+plotshape(Shortterm and (crossup or oversold), title='AIO Up Signal', style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 0), size=size.tiny)
+
+// --- AIO: 2. Mid-term Signal (Range Filter) ---
+var g_mid = "AIO: 2. Mid-Term Settings"
+srcMT = input(defval=close, title='Source', group = g_mid)
+per = input.int(defval=100, minval=1, title='Sampling Period', group = g_mid)
+multMT = input.float(defval=3.0, minval=0.1, title='Range Multiplier', group = g_mid)
+smoothrng(x, t, m) =>
+    wper = t * 2 - 1
+    avrng = ta.ema(math.abs(x - x[1]), t)
+    smoothrng = ta.ema(avrng, wper) * m
+    smoothrng
+smrng = smoothrng(srcMT, per, multMT)
+rngfilt(x, r) =>
+    rngfilt = x
+    rngfilt := x > nz(rngfilt[1]) ? x - r < nz(rngfilt[1]) ? nz(rngfilt[1]) : x - r : x + r > nz(rngfilt[1]) ? nz(rngfilt[1]) : x + r
+    rngfilt
+filt = rngfilt(srcMT, smrng)
+upward = 0.0
+upward := filt > filt[1] ? nz(upward[1]) + 1 : filt < filt[1] ? 0 : nz(upward[1])
+downward = 0.0
+downward := filt < filt[1] ? nz(downward[1]) + 1 : filt > filt[1] ? 0 : nz(downward[1])
+filtcolor = upward > 0 ? color.lime : downward > 0 ? color.red : color.orange
+plot(Midterm ? filt : na, color=filtcolor, linewidth=3, title='Range Filter Line')
+longCond = srcMT > filt and srcMT > srcMT[1] and upward > 0 or srcMT > filt and srcMT < srcMT[1] and upward > 0
+shortCond = srcMT < filt and srcMT < srcMT[1] and downward > 0 or srcMT < filt and srcMT > srcMT[1] and downward > 0
+CondIni = 0
+CondIni := longCond ? 1 : shortCond ? -1 : CondIni[1]
+longCondition = longCond and CondIni[1] == -1
+shortCondition = shortCond and CondIni[1] == 1
+plotshape(Midterm and longCondition, title='Mid-Term Buy Signal', text='B', textcolor=color.new(color.white, 0), style=shape.labelup, size=size.tiny, location=location.belowbar, color=color.new(color.green, 0))
+plotshape(Midterm and shortCondition, title='Mid-Term Sell Signal', text='S', textcolor=color.new(color.white, 0), style=shape.labeldown, size=size.tiny, location=location.abovebar, color=color.new(color.red, 0))
+alertcondition(Midterm and longCondition, title='AIO Mid-Term Buy Alert', message='AIO: BUY')
+alertcondition(Midterm and shortCondition, title='AIO Mid-Term Sell Alert', message='AIO: SELL')
+
+// --- AIO: 3. Long-term Signal (SuperTrend) ---
+var g_long = "AIO: 3. Long-Term Settings"
+Periods = input.int(10, title='ATR Period', group = g_long)
+srcST = input(hl2, title='Source', group = g_long)
+Multiplier = input.float(3.0, title='ATR Multiplier', step=0.1, group = g_long)
+changeATR = input.bool(true, title='Change ATR Calculation Method', group = g_long)
+showsignals = input.bool(true, title='Show Buy/Sell Signals', group = g_long)
+highlighting = input.bool(true, title='Signal Highlighter', group = g_long)
+atr2 = ta.sma(ta.tr, Periods)
+atr = changeATR ? ta.atr(Periods) : atr2
+up = srcST - Multiplier * atr
+up1 = nz(up[1], up)
+up := close[1] > up1 ? math.max(up, up1) : up
+dn = srcST + Multiplier * atr
+dn1 = nz(dn[1], dn)
+dn := close[1] < dn1 ? math.min(dn, dn1) : dn
+trend = 1
+trend := nz(trend[1], trend)
+trend := trend == -1 and close > dn1 ? 1 : trend == 1 and close < up1 ? -1 : trend
+upPlot = plot(Longterm and trend == 1 ? up : na, title='SuperTrend Up Trend', style=plot.style_linebr, linewidth=2, color=color.new(color.green, 0))
+buySignal = trend == 1 and trend[1] == -1
+plotshape(Longterm and buySignal, title='UpTrend Begins', location=location.absolute, style=shape.circle, size=size.tiny, color=color.new(color.green, 0))
+plotshape(Longterm and buySignal and showsignals, title='ST Buy Label', text='Buy', location=location.absolute, style=shape.labelup, size=size.tiny, color=color.new(color.green, 0), textcolor=color.new(color.white, 0))
+dnPlot = plot(Longterm and trend == -1 ? dn : na, title='SuperTrend Down Trend', style=plot.style_linebr, linewidth=2, color=color.new(color.red, 0))
+sellSignal = trend == -1 and trend[1] == 1
+plotshape(Longterm and sellSignal, title='DownTrend Begins', location=location.absolute, style=shape.circle, size=size.tiny, color=color.new(color.red, 0))
+plotshape(Longterm and sellSignal and showsignals, title='ST Sell Label', text='Sell', location=location.absolute, style=shape.labeldown, size=size.tiny, color=color.new(color.red, 0), textcolor=color.new(color.white, 0))
+mPlot = plot(ohlc4, title='ST_Fill_Plot', style=plot.style_circles, linewidth=1, display = display.none)
+longFillColor = Longterm and highlighting ? color.new(color.green, 90) : color.new(color.white, 100)
+shortFillColor = Longterm and highlighting ? color.new(color.red, 90) : color.new(color.white, 100)
+fill(mPlot, upPlot, title='UpTrend Highlighter', color=longFillColor)
+fill(mPlot, dnPlot, title='DownTrend Highlighter', color=shortFillColor)
+alertcondition(Longterm and buySignal, title='SuperTrend Buy', message='SuperTrend Buy!')
+alertcondition(Longterm and sellSignal, title='SuperTrend Sell', message='SuperTrend Sell!')
+
+// --- AIO: 4. EMAs ---
+var g_ema = "AIO: 4. EMA Settings"
+lenA = input.int(13, minval=1, title='EMA 1 Length', group=g_ema)
+srcA = input(close, title='Source', group=g_ema)
+outA = ta.ema(srcA, lenA)
+plot(A ? outA : na, title='EMA 1', color=color.new(color.blue, 0), linewidth = 2)
+
+lenB = input.int(28, minval=1, title='EMA 2 Length', group=g_ema)
+srcB = input(close, title='Source', group=g_ema)
+outB = ta.ema(srcB, lenB)
+plot(A ? outB : na, title='EMA 2', color=color.new(color.orange, 0),linewidth = 2)
+
+lenC = input.int(50, minval=1, title='EMA 3 Length', group=g_ema)
+srcC = input(close, title='Source', group=g_ema)
+outC = ta.ema(srcC, lenC)
+plot(A ? outC : na, title='EMA 3', color=color.new(color.green, 0))
+
+lenD = input.int(100, minval=1, title='EMA 4 Length', group=g_ema)
+srcD = input(close, title='Source', group=g_ema)
+outD = ta.ema(srcD, lenD)
+plot(A ? outD : na, title='EMA 4', color=color.new(color.red, 0))
+
+lenE = input.int(200, minval=1, title='EMA 5 Length', group=g_ema)
+srcE = input(close, title='Source', group=g_ema)
+outE = ta.ema(srcE, lenE)
+plot(A ? outE : na, title='EMA 5', color=color.new(color.purple, 0))
+
+// --- AIO: 5. Bollinger Bands ---
+var g_bb = "AIO: 5. Bollinger Bands Settings"
+lenBB = input.int(20, minval=1, title='Length', group=g_bb)
+srcBB = input(close, title='Source', group=g_bb)
+multBB = input.float(2.0, minval=0.001, maxval=50, title='StdDev', group=g_bb)
+offsetBB = input.int(0, 'Offset', minval=-500, maxval=500, group=g_bb)
+basis = ta.sma(srcBB, lenBB)
+dev = multBB * ta.stdev(srcBB, lenBB)
+upper = basis + dev
+lower = basis - dev
+plot(BB ? basis : na, 'BB Basis', color=color.new(color.black, 0), offset=offsetBB)
+p1 = plot(BB ? upper : na, 'BB Upper', color=color.new(#2962FF, 0), offset=offsetBB)
+p2 = plot(BB ? lower : na, 'BB Lower', color=color.new(#2962FF, 0), offset=offsetBB)
+fill(p1, p2, title='BB Background', color= BB ? color.rgb(33, 150, 243, 95) : na)
+
+// --- AIO: 6. Ichimoku Cloud ---
+var g_ic = "AIO: 6. Ichimoku Cloud Settings"
+conversionPeriods = input.int(9, minval=1, title='Conversion Line Length', group=g_ic)
+basePeriods = input.int(26, minval=1, title='Base Line Length', group=g_ic)
+laggingSpan2Periods = input.int(52, minval=1, title='Leading Span B Length', group=g_ic)
+displacement = input.int(26, minval=1, title='Displacement', group=g_ic)
+donchian(len) => math.avg(ta.lowest(len), ta.highest(len))
+conversionLine = donchian(conversionPeriods)
+baseLine = donchian(basePeriods)
+leadLine1 = math.avg(conversionLine, baseLine)
+leadLine2 = donchian(laggingSpan2Periods)
+plot(IC ? conversionLine : na, color=color.new(#2962FF, 0), title='IC Conversion Line')
+plot(IC ? baseLine : na, color=color.new(#B71C1C, 0), title='IC Base Line')
+plot(IC ? close : na, offset=-displacement + 1, color=color.new(#43A047, 0), title='IC Lagging Span')
+pIC1 = plot(IC ? leadLine1 : na, offset=displacement - 1, color=color.new(#A5D6A7, 0), title='IC Leading Span A')
+pIC2 = plot(IC ? leadLine2 : na, offset=displacement - 1, color=color.new(#EF9A9A, 0), title='IC Leading Span B')
+fill(pIC1, pIC2, title='IC Background', color=leadLine1 > leadLine2 ? color.new(color.green, 90) : color.new(color.red, 90))
+
+
+// =====================================================================================================================
+// PHẦN 2: SR CHANNELS INDICATOR
+// =====================================================================================================================
+
+// --- SR Channels: Inputs ---
+var g_src_settings = "SR Channels: Settings 🔨"
+var g_src_colors = "SR Channels: Colors 🟡🟢🟣"
+var g_src_extras = "SR Channels: Extras ⏶⏷"
+var g_src_ma = "SR Channels: Optional MAs"
+
+prd = input.int(defval = 10, title = 'Pivot Period', minval = 4, maxval = 30, group = g_src_settings, tooltip = 'Used while calculating Pivot Points, checks left&right bars')
+ppsrc = input.string(defval = 'High/Low', title = 'Source', options = ['High/Low', 'Close/Open'], group = g_src_settings, tooltip = 'Source for Pivot Points')
+ChannelW = input.int(defval = 5, title = 'Maximum Channel Width %', minval = 1, maxval = 8, group = g_src_settings, tooltip = 'Calculated using Highest/Lowest levels in 300 bars')
+minstrength = input.int(defval = 1, title = 'Minimum Strength', minval = 1, group = g_src_settings, tooltip = 'Channel must contain at least 2 Pivot Points')
+maxnumsr = input.int(defval = 6, title = 'Maximum Number of S/R', minval = 1, maxval = 10, group = g_src_settings, tooltip = 'Maximum number of Support/Resistance Channels to Show') - 1
+loopback = input.int(defval = 290, title = 'Loopback Period', minval = 100, maxval = 400, group = g_src_settings, tooltip = 'While calculating S/R levels it checks Pivots in Loopback Period')
+
+res_col = input.color(defval = color.new(color.red, 75), title = 'Resistance Color', group = g_src_colors)
+sup_col = input.color(defval = color.new(color.lime, 75), title = 'Support Color', group = g_src_colors)
+inch_col = input.color(defval = color.new(color.gray, 75), title = 'Color When Price in Channel', group = g_src_colors)
+
+showpp = input.bool(defval = false, title = 'Show Pivot Points', group = g_src_extras)
+showsrbroken = input.bool(defval = false, title = 'Show Broken Support/Resistance', group = g_src_extras)
+
+showthema1en = input.bool(defval = false, title = 'MA 1', inline = 'ma1', group = g_src_ma)
+showthema1len = input.int(defval = 50, title = '', inline = 'ma1', group = g_src_ma)
+showthema1type = input.string(defval = 'SMA', title = '', options = ['SMA', 'EMA'], inline = 'ma1', group = g_src_ma)
+showthema2en = input.bool(defval = false, title = 'MA 2', inline = 'ma2', group = g_src_ma)
+showthema2len = input.int(defval = 200, title = '', inline = 'ma2', group = g_src_ma)
+showthema2type = input.string(defval = 'SMA', title = '', options = ['SMA', 'EMA'], inline = 'ma2', group = g_src_ma)
+
+// --- SR Channels: Calculations & Plots ---
+ma1 = showthema1en ? showthema1type == 'SMA' ? ta.sma(close, showthema1len) : ta.ema(close, showthema1len) : na
+ma2 = showthema2en ? showthema2type == 'SMA' ? ta.sma(close, showthema2len) : ta.ema(close, showthema2len) : na
+plot(show_sr_channels and showthema1en ? ma1 : na, "SR MA1", color = not na(ma1) ? color.blue : na)
+plot(show_sr_channels and showthema2en ? ma2 : na, "SR MA2", color = not na(ma2) ? color.red : na)
+
+float src1_sr = ppsrc == 'High/Low' ? high : math.max(close, open)
+float src2_sr = ppsrc == 'High/Low' ? low : math.min(close, open)
+float ph = ta.pivothigh(src1_sr, prd, prd)
+float pl = ta.pivotlow(src2_sr, prd, prd)
+
+plotshape(show_sr_channels and bool(ph) and showpp, text = 'H', style = shape.labeldown, color = na, textcolor = color.new(color.red, 0), location = location.abovebar, offset = -prd, title = "SR Pivot High")
+plotshape(show_sr_channels and bool(pl) and showpp, text = 'L', style = shape.labelup, color = na, textcolor = color.new(color.lime, 0), location = location.belowbar, offset = -prd, title = "SR Pivot Low")
+
+prdhighest = ta.highest(300)
+prdlowest = ta.lowest(300)
+cwidth = (prdhighest - prdlowest) * ChannelW / 100
+
+var pivotvals = array.new_float(0)
+var pivotlocs = array.new_int(0)
+if bool(ph) or bool(pl)
+    array.unshift(pivotvals, bool(ph) ? ph : pl)
+    array.unshift(pivotlocs, bar_index)
+    for x = array.size(pivotvals) - 1 to 0 by 1
+        if bar_index - array.get(pivotlocs, x) > loopback
+            array.pop(pivotvals)
+            array.pop(pivotlocs)
+            continue
+        break
+
+get_sr_vals(ind) =>
+    float lo = array.get(pivotvals, ind)
+    float hi = lo
+    int numpp = 0
+    for y = 0 to array.size(pivotvals) - 1 by 1
+        float cpp = array.get(pivotvals, y)
+        float wdth = cpp <= hi ? hi - cpp : cpp - lo
+        if wdth <= cwidth
+            if cpp <= hi
+                lo := math.min(lo, cpp)
+            else
+                hi := math.max(hi, cpp)
+            numpp += 20
+    [hi, lo, numpp]
+
+var suportresistance = array.new_float(20, 0)
+var stren = array.new_float(10, 0)
+
+changeit(x, y) =>
+    tmp = array.get(suportresistance, y * 2)
+    array.set(suportresistance, y * 2, array.get(suportresistance, x * 2))
+    array.set(suportresistance, x * 2, tmp)
+    tmp := array.get(suportresistance, y * 2 + 1)
+    array.set(suportresistance, y * 2 + 1, array.get(suportresistance, x * 2 + 1))
+    array.set(suportresistance, x * 2 + 1, tmp)
+
+if bool(ph) or bool(pl)
+    supres = array.new_float(0) 
+    array.fill(stren, 0)
+    for x = 0 to array.size(pivotvals) - 1 by 1
+        [hi, lo, strength] = get_sr_vals(x)
+        array.push(supres, strength)
+        array.push(supres, hi)
+        array.push(supres, lo)
+    for x = 0 to array.size(pivotvals) - 1 by 1
+        h = array.get(supres, x * 3 + 1)
+        l = array.get(supres, x * 3 + 2)
+        s = 0
+        for y = 0 to loopback by 1
+            if high[y] <= h and high[y] >= l or low[y] <= h and low[y] >= l
+                s += 1
+        array.set(supres, x * 3, array.get(supres, x * 3) + s)
+    array.fill(suportresistance, 0)
+    src = 0
+    for x = 0 to array.size(pivotvals) - 1 by 1
+        stv = -1.
+        stl = -1 
+        for y = 0 to array.size(pivotvals) - 1 by 1
+            if array.get(supres, y * 3) > stv and array.get(supres, y * 3) >= minstrength * 20
+                stv := array.get(supres, y * 3)
+                stl := y
+        if stl >= 0
+            hh = array.get(supres, stl * 3 + 1)
+            ll = array.get(supres, stl * 3 + 2)
+            array.set(suportresistance, src * 2, hh)
+            array.set(suportresistance, src * 2 + 1, ll)
+            array.set(stren, src, array.get(supres, stl * 3))
+            for y = 0 to array.size(pivotvals) - 1 by 1
+                if array.get(supres, y * 3 + 1) <= hh and array.get(supres, y * 3 + 1) >= ll or array.get(supres, y * 3 + 2) <= hh and array.get(supres, y * 3 + 2) >= ll
+                    array.set(supres, y * 3, -1)
+            src += 1
+            if src >= 10
+                break
+    for x = 0 to 8 by 1
+        for y = x + 1 to 9 by 1
+            if array.get(stren, y) > array.get(stren, x)
+                tmp = array.get(stren, y)
+                array.set(stren, y, array.get(stren, x))
+                array.set(stren, x, tmp)
+                changeit(x, y)
+
+get_level(ind) =>
+    ret = float(na)
+    if ind < array.size(suportresistance)
+        if array.get(suportresistance, ind) != 0
+            ret := array.get(suportresistance, ind)
+    ret
+
+get_color(ind) =>
+    ret = color(na)
+    if ind < array.size(suportresistance)
+        if array.get(suportresistance, ind) != 0
+            ret := array.get(suportresistance, ind) > close and array.get(suportresistance, ind + 1) > close ? res_col : array.get(suportresistance, ind) < close and array.get(suportresistance, ind + 1) < close ? sup_col : inch_col
+    ret
+
+var srchannels = array.new_box(10)
+if show_sr_channels
+    for x = 0 to math.min(9, maxnumsr) by 1
+        box.delete(array.get(srchannels, x))
+        srcol = get_color(x * 2)
+        if not na(srcol)
+            array.set(srchannels, x, box.new(left = bar_index, top = get_level(x * 2), right = bar_index + 1, bottom = get_level(x * 2 + 1), border_color = srcol, border_width = 1, extend = extend.both, bgcolor = srcol))
+else
+    for x = 0 to 9 by 1
+        box.delete(array.get(srchannels, x))
+
+
+resistancebroken = false
+supportbroken = false
+not_in_a_channel = true
+
+if show_sr_channels
+    for x = 0 to math.min(9, maxnumsr) by 1
+        top_box = get_level(x * 2)
+        bot_box = get_level(x * 2 + 1)
+        if not na(top_box) and not na(bot_box)
+            if close <= top_box and close >= bot_box
+                not_in_a_channel := false
+    if not_in_a_channel
+        for x = 0 to math.min(9, maxnumsr) by 1
+            top_box = get_level(x * 2)
+            bot_box = get_level(x * 2 + 1)
+            if not na(top_box) and not na(bot_box)
+                if close[1] <= top_box and close > top_box
+                    resistancebroken := true
+                if close[1] >= bot_box and close < bot_box
+                    supportbroken := true
+
+alertcondition(show_sr_channels and resistancebroken, title = 'SR Resistance Broken', message = 'SR Resistance Broken')
+alertcondition(show_sr_channels and supportbroken, title = 'SR Support Broken', message = 'SR Support Broken')
+plotshape(show_sr_channels and showsrbroken and resistancebroken, style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 0), size = size.tiny, title="SR Resistance Broken Signal")
+plotshape(show_sr_channels and showsrbroken and supportbroken, style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 0), size = size.tiny, title="SR Support Broken Signal")
+
+// =====================================================================================================================
+// PHẦN 3: Trendlines with Breaks (LuxAlgo Style)
+// =====================================================================================================================
+var g_tl = "Trendlines"
+lengthTL = input.int(14, 'Swing Detection Lookback', group=g_tl)
+multTL = input.float(1.0, 'Slope', minval=0, step=0.1, group=g_tl)
+calcMethod = input.string('Atr', 'Slope Calc Method', options=['Atr','Stdev','Linreg'], group=g_tl)
+backpaint = input.bool(true, tooltip='Hiển thị trễ dữ liệu trong quá khứ', group=g_tl)
+upColor = input.color(color.teal, 'Up Trendline Color', group=g_tl)
+dnColor = input.color(color.red, 'Down Trendline Color', group=g_tl)
+showExt = input.bool(true, 'Show Extended Lines', group=g_tl)
+
+var upperTL = 0.0
+var lowerTL = 0.0
+var slope_ph = 0.0
+var slope_pl = 0.0
+var offsetTL = backpaint ? lengthTL : 0
+n = bar_index
+src_tl = close
+
+phTL = ta.pivothigh(lengthTL, lengthTL)
+plTL = ta.pivotlow(lengthTL, lengthTL)
+
+slope = switch calcMethod
+    'Atr' => ta.atr(lengthTL) / lengthTL * multTL
+    'Stdev' => ta.stdev(src_tl,lengthTL) / lengthTL * multTL
+    'Linreg' => math.abs(ta.sma(src_tl * n, lengthTL) - ta.sma(src_tl, lengthTL) * ta.sma(n, lengthTL)) / ta.variance(n, lengthTL) / 2 * multTL
+
+if show_trendlines
+    slope_ph := not na(phTL) ? slope : slope_ph
+    slope_pl := not na(plTL) ? slope : slope_pl // Corrected from phTL
+    upperTL := not na(phTL) ? phTL : upperTL - slope_ph
+    lowerTL := not na(plTL) ? plTL : lowerTL + slope_pl
+
+var upos = 0
+var dnos = 0
+upos := not na(phTL) ? 0 : close > upperTL - slope_ph * lengthTL ? 1 : upos
+dnos := not na(plTL) ? 0 : close < lowerTL + slope_pl * lengthTL ? 1 : dnos
+
+var line uptl = line.new(na,na,na,na, color=upColor, style=line.style_dashed, extend=extend.right, width = 2)
+var line dntl = line.new(na,na,na,na, color=dnColor, style=line.style_dashed, extend=extend.right, width = 2)
+
+if show_trendlines and showExt
+    if not na(phTL)
+        uptl.set_xy1(n - offsetTL, backpaint ? phTL : upperTL - slope_ph * lengthTL)
+        uptl.set_xy2(n - offsetTL + 1, backpaint ? phTL - slope : upperTL - slope_ph * (lengthTL + 1))
+    if not na(plTL)
+        dntl.set_xy1(n - offsetTL, backpaint ? plTL : lowerTL + slope_pl * lengthTL)
+        dntl.set_xy2(n - offsetTL + 1, backpaint ? plTL + slope : lowerTL + slope_pl * (lengthTL + 1)) // Corrected from pl
+else
+    line.delete(uptl)
+    line.delete(dntl)
+
+
+plot(show_trendlines ? (backpaint ? upperTL : upperTL - slope_ph * lengthTL) : na, 'Upper TL', color = not na(phTL) ? na : upColor, offset=-offsetTL, linewidth = 2)
+plot(show_trendlines ? (backpaint ? lowerTL : lowerTL + slope_pl * lengthTL) : na, 'Lower TL', color = not na(plTL) ? na : dnColor, offset=-offsetTL, linewidth = 2)
+
+plotshape(show_trendlines and (upos > upos[1]) ? low : na, title="Upper Break", style=shape.labelup, location=location.absolute, color=upColor, text="B", textcolor=color.white, size=size.tiny)
+plotshape(show_trendlines and (dnos > dnos[1]) ? high : na, title="Lower Break", style=shape.labeldown, location=location.absolute, color=dnColor, text="S", textcolor=color.white, size=size.tiny)
+
+alertcondition(show_trendlines and upos > upos[1], 'Upward Breakout', 'Price broke the down-trendline upward')
+alertcondition(show_trendlines and dnos > dnos[1], 'Downward Breakout', 'Price broke the up-trendline downward')
+
+
+// =====================================================================================================================
+// PHẦN 4: Candlestick Patterns
+// =====================================================================================================================
+
+var g_candles = "Candlestick Patterns"
+DojiSize = input.float(0.05, minval=0.01, title='Doji size', group=g_candles)
+
+// Mảng để quản lý các labels, giúp xóa chúng khi tắt chỉ báo
+var label[] candle_labels = array.new_label()
+
+// Xóa các labels của thanh nến trước đó
+if array.size(candle_labels) > 0
+    for l in candle_labels
+        label.delete(l)
+    array.clear(candle_labels)
+
+// *** SỬA LỖI CẢNH BÁO: Tách hàm ra để tính toán trên mọi nến ***
+lowest_10 = ta.lowest(10) // Tính toán giá trị này ở phạm vi toàn cục của script
+
+// Chỉ vẽ labels nếu người dùng bật tùy chọn
+if show_candles
+    // Doji
+    data = (math.abs(open - close) <= (high - low) * DojiSize)
+    if data
+        array.push(candle_labels, label.new(bar_index, high, "Doji", style=label.style_label_down, textcolor=color.white, color=color.gray))
+    // Evening Star
+    data2 = (close[2] > open[2] and math.min(open[1], close[1]) > close[2] and open < math.min(open[1], close[1]) and close < open)
+    if data2
+        array.push(candle_labels, label.new(bar_index, high, "Evening\nStar", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Morning Star
+    data3 = (close[2] < open[2] and math.max(open[1], close[1]) < close[2] and open > math.max(open[1], close[1]) and close > open)
+    if data3
+        array.push(candle_labels, label.new(bar_index, low, "Morning\nStar", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Shooting Star
+    data4 = (open[1] < close[1] and open > close[1] and high - math.max(open, close) >= math.abs(open - close) * 3 and math.min(close, open) - low <= math.abs(open - close))
+    if data4
+        array.push(candle_labels, label.new(bar_index, high, "Shooting\nStar", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Hammer
+    data5 = (((high - low) > 3 * (open - close)) and ((close - low)/(.001 + high - low) > 0.6) and ((open - low)/(.001 + high - low) > 0.6))
+    if data5
+        array.push(candle_labels, label.new(bar_index, low, "Hammer", style=label.style_label_up, color=color.yellow, textcolor=color.black))
+    // Inverted Hammer
+    data5b = (((high - low) > 3 * (open - close)) and ((high - close)/(.001 + high - low) > 0.6) and ((high - open)/(.001 + high - low) > 0.6))
+    if data5b
+        array.push(candle_labels, label.new(bar_index, low, "Inverted\nHammer", style=label.style_label_up, color=color.yellow, textcolor=color.black))
+    // Bearish Harami
+    data6 = (close[1] > open[1] and open > close and open <= close[1] and open[1] <= close and open - close < close[1] - open[1])
+    if data6
+        array.push(candle_labels, label.new(bar_index, high, "Bearish\nHarami", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Bullish Harami
+    data7 = (open[1] > close[1] and close > open and close <= open[1] and close[1] <= open and close - open < open[1] - close[1])
+    if data7
+        array.push(candle_labels, label.new(bar_index, low, "Bullish\nHarami", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Bearish Engulfing
+    data8 = (close[1] > open[1] and open > close and open >= close[1] and open[1] >= close and open - close > close[1] - open[1])
+    if data8
+        array.push(candle_labels, label.new(bar_index, high, "Bearish\nEngulfing", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Bullish Engulfing
+    data9 = (open[1] > close[1] and close > open and close >= open[1] and close[1] >= open and close - open > open[1] - close[1])
+    if data9
+        array.push(candle_labels, label.new(bar_index, low, "Bullish\nEngulfing", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Piercing Line
+    data10 = (close[1] < open[1] and open < low[1] and close > close[1] + ((open[1] - close[1])/2) and close < open[1])
+    if data10
+        array.push(candle_labels, label.new(bar_index, low, "Piercing\nLine", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Bullish Belt
+    data11 = (low == open and open < lowest_10[1] and open < close and close > ((high[1] - low[1]) / 2) + low[1])
+    if data11
+        array.push(candle_labels, label.new(bar_index, low, "Bullish\nBelt", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Bullish Kicker
+    data12 = (open[1] > close[1] and open >= open[1] and close > open)
+    if data12
+        array.push(candle_labels, label.new(bar_index, low, "Bullish\nKicker", style=label.style_label_up, color=color.lime, textcolor=color.white))
+    // Bearish Kicker
+    data13 = (open[1] < close[1] and open <= open[1] and close <= open)
+    if data13
+        array.push(candle_labels, label.new(bar_index, high, "Bearish\nKicker", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Hanging Man
+    data14 = (((high - low > 4 * (open - close)) and ((close - low)/(.001 + high - low) >= 0.75) and ((open - low)/(.001 + high - low) >= 0.75)) and high[1] < open and high[2] < open)
+    if data14
+        array.push(candle_labels, label.new(bar_index, high, "Hanging\nMan", style=label.style_label_down, color=color.red, textcolor=color.white))
+    // Dark Cloud Cover
+    data15 = ((close[1] > open[1]) and (((close[1] + open[1])/2) > close) and (open > close) and (open > close[1]) and (close > open[1]) and ((open - close)/(.001 + (high - low)) > 0.6))
+    if data15
+        array.push(candle_labels, label.new(bar_index, high, "Dark\nCloudCover", style=label.style_label_down, color=color.red, textcolor=color.white))
