@@ -1,0 +1,109 @@
+//@version=6
+indicator(title="Oscillator Dashboard (MFI/RSI/KDJ/MOM)", shorttitle="Oscillator DB", format=format.price, precision=2)
+
+// =============================================================================
+//  INPUTS & SETTINGS
+// =============================================================================
+
+// --- General Toggles ---
+var g_toggles = "1. Show/Hide Indicators"
+showMOM = input.bool(true, "Momentum (MOM)", group = g_toggles, inline = "line1")
+showMFI = input.bool(true, "Money Flow Index (MFI)", group = g_toggles, inline = "line1")
+showRSI = input.bool(true, "Relative Strength Index (RSI)", group = g_toggles, inline = "line2")
+showKDJ = input.bool(true, "KDJ", group = g_toggles, inline = "line2")
+
+// --- Shared Settings ---
+var g_shared = "2. General Settings"
+lenShared = input.int(title="Shared Length (for MFI, RSI)", defval=14, minval=1, group = g_shared)
+srcShared = input(close, "Shared Source (for MFI, RSI, MOM)", group = g_shared)
+
+// --- MOM Settings ---
+var g_mom = "3. Momentum (MOM) Settings"
+lenMOM = input.int(10, minval=1, title="Length", group=g_mom)
+
+// --- KDJ Settings ---
+var g_kdj = "4. KDJ Settings"
+lenKDJ = input.int(9, title="Period", group=g_kdj)
+sigKDJ = input.int(3, title="Signal", group=g_kdj)
+
+// --- Alert Settings ---
+var g_alerts = "5. Alert Settings"
+enableAlerts = input.bool(true, "Enable Alerts", group = g_alerts)
+buyRsiMax = input.float(60.0, "Buy Signal: RSI must be below", group = g_alerts)
+buyMfiMax = input.float(80.0, "Buy Signal: MFI must be below", group = g_alerts)
+sellRsiMin = input.float(60.0, "Sell Signal: RSI must be above", group = g_alerts)
+sellMfiMin = input.float(20.0, "Sell Signal: MFI must be above", group = g_alerts)
+
+// =============================================================================
+//  CALCULATIONS
+// =============================================================================
+
+// --- Momentum (MOM) ---
+mom = (srcShared - srcShared[lenMOM]) / 100
+
+// --- Money Flow Index (MFI) ---
+mf = ta.mfi(srcShared, lenShared)
+
+// --- Relative Strength Index (RSI) ---
+upRSI = ta.rma(math.max(ta.change(srcShared), 0), lenShared)
+downRSI = ta.rma(-math.min(ta.change(srcShared), 0), lenShared)
+rsi = downRSI == 0 ? 100 : upRSI == 0 ? 0 : 100 - (100 / (1 + upRSI / downRSI))
+
+// --- KDJ ---
+bcwsma(s, l, m) =>
+    _s = s
+    _l = l
+    _m = m
+    _bcwsma = 0.0
+    _bcwsma := (_m * _s + (_l - _m) * nz(_bcwsma[1])) / _l
+    _bcwsma
+
+highestKDJ = ta.highest(high, lenKDJ)
+lowestKDJ = ta.lowest(low, lenKDJ)
+rsv = 100 * ((close - lowestKDJ) / (highestKDJ - lowestKDJ))
+pK = bcwsma(rsv, sigKDJ, 1)
+pD = bcwsma(pK, sigKDJ, 1)
+pJ = 3 * pK - 2 * pD
+
+// =============================================================================
+//  PLOTTING
+// =============================================================================
+
+// --- Plot MOM ---
+plot(showMOM ? mom : na, "MOM", color.new(color.black, 0), 2)
+
+// --- Plot MFI ---
+mfiPlot = plot(showMFI ? mf : na, "MFI", color.new(#FBC02C, 0), 2)
+mfiOb = hline(80, title="Overbought MFI", color=#787B86, linestyle=hline.style_dashed)
+mfiOs = hline(20, title="Oversold MFI", color=#787B86, linestyle=hline.style_dashed)
+fill(mfiOb, mfiOs, color=color.new(#FBC02C, 85), title="MFI Background")
+
+// --- Plot RSI ---
+rsiPlot = plot(showRSI ? rsi : na, "RSI", color.new(#2A62FF, 0), 2)
+rsiOb = hline(70, "Upper Band RSI", color=#787B86)
+rsiMid = hline(50, "Middle Band RSI", color=color.new(#787B86, 50))
+rsiOs = hline(30, "Lower Band RSI", color=#787B86)
+fill(rsiOb, rsiOs, color=color.new(#2A62FF, 85), title="RSI Background")
+
+// --- Plot KDJ ---
+plot(showKDJ ? pK : na, "K", color.new(color.teal, 0))
+plot(showKDJ ? pD : na, "D", color.new(color.orange, 0))
+plot(showKDJ ? pJ : na, "J", color.new(color.fuchsia, 0), 2)
+kdjFillColor = pJ > pD ? color.new(color.teal, 85) : color.new(color.red, 85)
+fill(rsiOb, rsiOs, color = showKDJ ? kdjFillColor : na, title="KDJ Background Fill") // Re-uses RSI bands for fill area
+
+// =============================================================================
+//  ALERTS
+// =============================================================================
+
+// --- Buy Condition ---
+buyCondition = ta.crossover(pJ, pD) and rsi < buyRsiMax and mf < buyMfiMax
+alertcondition(enableAlerts and buyCondition, 
+     title="Oscillator Buy Signal", 
+     message="{{ticker}}, {{interval}}: Oscillator BUY Signal (KDJ Crossover Up, RSI & MFI OK)")
+
+// --- Sell Condition ---
+sellCondition = ta.crossunder(pJ, pD) and rsi > sellRsiMin and mf > sellMfiMin
+alertcondition(enableAlerts and sellCondition, 
+     title="Oscillator Sell Signal", 
+     message="{{ticker}}, {{interval}}: Oscillator SELL Signal (KDJ Crossover Down, RSI & MFI OK)")
