@@ -85,13 +85,22 @@ async function initializeHoseEventsTab() {
     
     hoseEventsTable = new DataTable('table-events-hose', 'search-events-hose', 'pagination-events-hose', hoseEventColumns, 'postedDate');
 
-    const today = new Date();
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(today.getDate() - 3);
+    // Lấy ngày hôm nay và ngày ba ngày trước đó
+    // const today = new Date();
+    // const threeDaysAgo = new Date();
+    // threeDaysAgo.setDate(today.getDate() - 3);
+    // const startDate = `${threeDaysAgo.getFullYear()}-${String(threeDaysAgo.getMonth() + 1).padStart(2, '0')}-${String(threeDaysAgo.getDate()).padStart(2, '0')}`;
+    // const endDate = `${today.getFullYear()}-12-31`; // Kết thúc vào cuối năm hiện tại
 
-    const startDate = `${threeDaysAgo.getFullYear()}-${String(threeDaysAgo.getMonth() + 1).padStart(2, '0')}-${String(threeDaysAgo.getDate()).padStart(2, '0')}`;
-    const endDate = `${today.getFullYear()}-12-31`;
-    
+    const today = new Date(); // Ngày hôm nay
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(today.getMonth() - 3); // Bắt đầu từ 3 tháng trước từ ngày hôm nay
+    const startDate = `${threeMonthsAgo.getFullYear()}-${String(threeMonthsAgo.getMonth() + 1).padStart(2, '0')}-${String(threeMonthsAgo.getDate()).padStart(2, '0')}`;
+
+    const sixMonthsLater = new Date(); // Kết thúc sau 6 tháng từ hôm nay
+    sixMonthsLater.setMonth(today.getMonth() + 6);
+    const endDate = `${sixMonthsLater.getFullYear()}-${String(sixMonthsLater.getMonth() + 1).padStart(2, '0')}-${String(sixMonthsLater.getDate()).padStart(2, '0')}`;
+
     const url = `${proxy}https://api.hsx.vn/n/api/v1/1/news/newstype/0/3?pageIndex=1&pageSize=200&startDate=${startDate}&endDate=${endDate}&aliasCate=su-kien`;
 
     try {
