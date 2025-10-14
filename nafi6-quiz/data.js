@@ -60,10 +60,10 @@ const originalQuestions = [
         "id": 6,
         "question": "Theo quy định pháp luật về đấu thầu, đấu thầu là gì?",
         "answers": {
-            "A": "Là quá trình lựa chọn nhà thầu để ký kết, thực hiện hợp đồng cung cấp dịch vụ tư vấn, dịch vụ phi tư vấn, mua sắm hàng hóa, xây lắp trên cơ sở bảo đảm cạnh tranh, công bằng, minh bạch, hiệu quả kinh tế và trách nhiệm giải trình",
-            "B": "Là quá trình lựa chọn nhà đầu tư để ký kết, thực hiện hợp đồng dự án đầu tư kinh doanh trên cơ sở bảo đảm cạnh tranh, công bằng, minh bạch, hiệu quả kinh tế và trách nhiệm giải trình",
-            "C": "Là quá trình lựa chọn đơn vị để thực hiện hợp đồng thông qua các quy trình, thủ tục do pháp luật đấu thầu quy định.",
-            "D": "Phương án A và B đều đúng"
+            "A": "Là quá trình lựa chọn nhà thầu để ký kết, thực hiện hợp đồng cung cấp dịch vụ tư vấn, dịch vụ phi tư vấn, mua sắm hàng hóa, xây lắp trên cơ sở bảo đảm cạnh tranh, công bằng, minh bạch, hiệu quả kinh tế và trách nhiệm giải trình (1)",
+            "B": "Là quá trình lựa chọn nhà đầu tư để ký kết, thực hiện hợp đồng dự án đầu tư kinh doanh trên cơ sở bảo đảm cạnh tranh, công bằng, minh bạch, hiệu quả kinh tế và trách nhiệm giải trình (2)",
+            "C": "Là quá trình lựa chọn đơn vị để thực hiện hợp đồng thông qua các quy trình, thủ tục do pháp luật đấu thầu quy định. (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -93,10 +93,10 @@ const originalQuestions = [
         "id": 9,
         "question": "Theo quy định pháp luật về đấu thầu, hàng hóa gồm?",
         "answers": {
-            "A": "Máy móc, thiết bị, nguyên liệu, nhiên liệu, vật liệu, vật tư, phụ tùng; sản phẩm; phương tiện; hàng tiêu dùng, phần mềm thương mại",
-            "B": "Thuốc, hóa chất, vật tư xét nghiệm, thiết bị y tế",
-            "C": "Phương án A và B đều đúng",
-            "D": "Logistics, bảo hiểm, quảng cáo, nghiệm thu chạy thử, chụp ảnh vệ tinh"
+            "A": "Máy móc, thiết bị, nguyên liệu, nhiên liệu, vật liệu, vật tư, phụ tùng; sản phẩm; phương tiện; hàng tiêu dùng, phần mềm thương mại (1)",
+            "B": "Thuốc, hóa chất, vật tư xét nghiệm, thiết bị y tế (2)",
+            "C": "Phương án (1) và (2) đều đúng",
+            "D": "Logistics, bảo hiểm, quảng cáo, nghiệm thu chạy thử, chụp ảnh vệ tinh (3)"
         },
         "correctAnswer": "C"
     },
@@ -216,8 +216,8 @@ const originalQuestions = [
         "answers": {
             "A": "HSMT được phát hành trên Hệ thống mạng đấu thầu quốc gia; Nhà thầu nộp tiền mua bản điện tử hồ sơ mời thầu khi nộp hồ sơ dự thầu",
             "B": "HSMT được bán vào giờ hành chính từ thứ 2 tới thứ 6 tại địa chỉ do Chủ đầu tư quy định",
-            "C": "Phương án A và B đều đúng",
-            "D": "Phương án A và B đều sai"
+            "C": "Cả 2 phương án đều đúng",
+            "D": "Cả 2 phương án đều sai"
         },
         "correctAnswer": "A"
     },
@@ -390,10 +390,10 @@ const originalQuestions = [
         "id": 36,
         "question": "Kế hoạch lựa chọn nhà thầu của dự án thuộc đối tượng áp dụng của Luật Đấu\nthầu bắt buộc phải đăng tải ở đâu?",
         "answers": {
-            "A": "Hệ thống mạng đấu thầu quốc gia",
-            "B": "Báo Tài chính-Đầu tư",
-            "C": "Cổng Thông tin điện tử của Bộ, ngành",
-            "D": "Phương án A và B đều đúng"
+            "A": "Hệ thống mạng đấu thầu quốc gia (1)",
+            "B": "Báo Tài chính-Đầu tư (2)",
+            "C": "Cổng Thông tin điện tử của Bộ, ngành (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -566,10 +566,10 @@ const originalQuestions = [
         "id": 52,
         "question": "Một trong các căn cứ lập hồ sơ mời thầu là?",
         "answers": {
-            "A": "Báo giá của nhà thầu",
-            "B": "Quyết định mua sắm được phê duyệt",
-            "C": "Kế hoạch lựa chọn nhà thầu được duyệt",
-            "D": "Phương án A và B đều đúng"
+            "A": "Báo giá của nhà thầu (1)",
+            "B": "Quyết định mua sắm được phê duyệt (2)",
+            "C": "Kế hoạch lựa chọn nhà thầu được duyệt (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -687,10 +687,10 @@ const originalQuestions = [
         "id": 63,
         "question": "Đối với gói thầu mua sắm hàng hóa áp dụng hình thức chào hàng cạnh tranh,\ntrường hợp hồ sơ mời thầu không yêu cầu về năng lực, kinh nghiệm thì việc đánh giá được thực hiện như thế nào?",
         "answers": {
-            "A": "Không phải đánh giá về năng lực, kinh nghiệm nhưng nhà thầu phải cam kết đáp ứng năng lực, kinh nghiệm trong đơn dự thầu",
-            "B": "Trường hợp nhà thầu đính kèm tài liệu về năng lực, kinh nghiệm thì chủ đầu tư bắt buộc phải đánh giá về năng lực, kinh nghiệm của nhà thầu",
-            "C": "Bắt buộc phải đánh giá năng lực, kinh nghiệm của nhà thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Không phải đánh giá về năng lực, kinh nghiệm nhưng nhà thầu phải cam kết đáp ứng năng lực, kinh nghiệm trong đơn dự thầu (1)",
+            "B": "Trường hợp nhà thầu đính kèm tài liệu về năng lực, kinh nghiệm thì chủ đầu tư bắt buộc phải đánh giá về năng lực, kinh nghiệm của nhà thầu (2)",
+            "C": "Bắt buộc phải đánh giá năng lực, kinh nghiệm của nhà thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -742,10 +742,10 @@ const originalQuestions = [
         "id": 68,
         "question": "Trường hợp tại thời điểm đóng thầu đối với gói thầu áp dụng hình thức đấu thầu rộng rãi (không áp dụng sơ tuyển, mời quan tâm, không cấp bách cần thực hiện ngay do yêu cầu về tiến độ) mà chỉ có 01 nhà thầu nộp hồ sơ dự thầu thì xử lý như thế nào?",
         "answers": {
-            "A": "Mở thầu ngay để tiến hành đánh giá",
-            "B": "Gia hạn thời điểm đóng thầu tối thiểu 10 ngày",
-            "C": "Báo cáo người có thẩm quyền xem xét, quyết định",
-            "D": "Phương án A và C đều đúng"
+            "A": "Mở thầu ngay để tiến hành đánh giá (1)",
+            "B": "Gia hạn thời điểm đóng thầu tối thiểu 10 ngày (2)",
+            "C": "Báo cáo người có thẩm quyền xem xét, quyết định (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -1017,10 +1017,10 @@ const originalQuestions = [
         "id": 93,
         "question": "Thời hạn của thỏa thuận khung:",
         "answers": {
-            "A": "Thời hạn áp dụng thỏa thuận khung được quy định là 40 tháng",
-            "B": "Thời hạn áp dụng thỏa thuận khung được quy định trong kế hoạch lựa chọn nhà thầu nhưng không quá 36 tháng",
-            "C": "Thời hạn áp dụng thỏa thuận khung do người có thẩm quyền quyết định trong kế hoạch lựa chọn nhà thầu",
-            "D": "Phương án B và C đều đúng"
+            "A": "Thời hạn áp dụng thỏa thuận khung được quy định là 40 tháng (1)",
+            "B": "Thời hạn áp dụng thỏa thuận khung được quy định trong kế hoạch lựa chọn nhà thầu nhưng không quá 36 tháng (2)",
+            "C": "Thời hạn áp dụng thỏa thuận khung do người có thẩm quyền quyết định trong kế hoạch lựa chọn nhà thầu (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -1270,10 +1270,10 @@ const originalQuestions = [
         "id": 116,
         "question": "Biện pháp nào sau đây được thực hiện trong quá trình thực hiện hợp đồng?",
         "answers": {
-            "A": "Hủy thầu",
-            "B": "Đình chỉ cuộc thầu",
-            "C": "Không công nhận kết quả lựa chọn nhà thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Hủy thầu (1)",
+            "B": "Đình chỉ cuộc thầu (2)",
+            "C": "Không công nhận kết quả lựa chọn nhà thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -1325,10 +1325,10 @@ const originalQuestions = [
         "id": 121,
         "question": "Các trường hợp nào sau đây nhà thầu không được hoàn trả chi phí giải quyết kiến nghị",
         "answers": {
-            "A": "Kiến nghị của nhà thầu được kết luận là đúng",
-            "B": "Một hoặc các nội dung kiến nghị của nhà thầu được kết luận là không đúng",
-            "C": "Nhà thầu rút đơn kiến nghị trong quá trình giải quyết kiến nghị",
-            "D": "Phương án B và C đều đúng"
+            "A": "Kiến nghị của nhà thầu được kết luận là đúng (1)",
+            "B": "Một hoặc các nội dung kiến nghị của nhà thầu được kết luận là không đúng (2)",
+            "C": "Nhà thầu rút đơn kiến nghị trong quá trình giải quyết kiến nghị (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -1350,7 +1350,7 @@ const originalQuestions = [
             "A": "Hội đồng giải quyết kiến nghị do Sở Tài chính thành lập có trách nhiệm giải quyết kiến nghị cho gói thầu",
             "B": "Hội đồng giải quyết kiến nghị do Bộ trưởng Bộ Tài chính thành lập có trách nhiệm giải quyết kiến nghị cho gói thầu",
             "C": "Người đứng đầu doanh nghiệp nhà nước tự ban hành điều kiện, quy trình về giải quyết kiến nghị trong đơn vị mình",
-            "D": "Tất cả phương án A, B, C đều sai"
+            "D": "Tất cả phương án đều đều sai"
         },
         "correctAnswer": "C"
     },
@@ -1402,10 +1402,10 @@ const originalQuestions = [
         "id": 128,
         "question": "Đối với kiến nghị về quá trình tổ chức lựa chọn nhà thầu (không phải kiến nghị về nội dung hồ sơ mời thầu), đơn kiến nghị phải là của chủ thể nào?",
         "answers": {
-            "A": "Cá nhân quan tâm đến gói thầu",
-            "B": "Nhà thầu tham dự thầu",
-            "C": "Cơ quan, tổ chức quan tâm đến gói thầu",
-            "D": "Phương án B và C đều đúng"
+            "A": "Cá nhân quan tâm đến gói thầu (1)",
+            "B": "Nhà thầu tham dự thầu (2)",
+            "C": "Cơ quan, tổ chức quan tâm đến gói thầu (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -1468,10 +1468,10 @@ const originalQuestions = [
         "id": 134,
         "question": "Đối với gói thầu chia phần, trường hợp một phần của gói thầu không có nhà thầu tham dự thầu thì chủ đầu tư xử lý thế nào?",
         "answers": {
-            "A": "Tách phần đó ra thành gói thầu riêng biệt để tổ chức lựa chọn nhà thầu theo quy định",
-            "B": "Hủy thầu",
-            "C": "Đàm phán với nhà thầu trúng thầu của phần khác để thực hiện",
-            "D": "Phương án B và C đều đúng"
+            "A": "Tách phần đó ra thành gói thầu riêng biệt để tổ chức lựa chọn nhà thầu theo quy định (1)",
+            "B": "Hủy thầu (2)",
+            "C": "Đàm phán với nhà thầu trúng thầu của phần khác để thực hiện (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -1655,10 +1655,10 @@ const originalQuestions = [
         "id": 151,
         "question": "Tài khoản nghiệp vụ trên Hệ thống mạng đấu thầu quốc gia là gì?",
         "answers": {
-            "A": "Tài khoản do người sử dụng đăng ký và được phê duyệt trên Hệ thống mạng đấu thầu quốc gia",
-            "B": "Tài khoản do Trung tâm Đấu thầu qua mạng quốc gia cấp phép theo quy định",
-            "C": "Tài khoản do Tài khoản tham gia hệ thống tạo ra",
-            "D": "Phương án A và B đều đúng"
+            "A": "Tài khoản do người sử dụng đăng ký và được phê duyệt trên Hệ thống mạng đấu thầu quốc gia (1)",
+            "B": "Tài khoản do Trung tâm Đấu thầu qua mạng quốc gia cấp phép theo quy định (2)",
+            "C": "Tài khoản do Tài khoản tham gia hệ thống tạo ra (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -1732,10 +1732,10 @@ const originalQuestions = [
         "id": 158,
         "question": "Chọn phương án đúng về thời gian áp dụng mua sắm trực tuyến đối với các hạng mục trong danh mục hàng hóa, dịch vụ mua sắm tập trung?",
         "answers": {
-            "A": "Thời gian áp dụng là thời gian thực hiện hợp đồng trong trường hợp không ký thỏa thuận khung nhưng không quá 24 tháng kể từ ngày hợp đồng có hiệu lực hoặc thời gian có hiệu lực của thỏa thuận khung",
-            "B": "Thời gian áp dụng là 24 tháng kể từ ngày kết quả lựa chọn nhà thầu được đăng tải trên Hệ thống mạng đấu thầu quốc gia trong trường hợp hợp đồng, thỏa thuận khung chưa được công khai",
-            "C": "Thời gian áp dụng là 24 tháng kể từ ngày kết quả lựa chọn nhà thầu được đăng tải trên Hệ thống mạng đấu thầu quốc gia",
-            "D": "Phương án A và B đều đúng"
+            "A": "Thời gian áp dụng là thời gian thực hiện hợp đồng trong trường hợp không ký thỏa thuận khung nhưng không quá 24 tháng kể từ ngày hợp đồng có hiệu lực hoặc thời gian có hiệu lực của thỏa thuận khung (1)",
+            "B": "Thời gian áp dụng là 24 tháng kể từ ngày kết quả lựa chọn nhà thầu được đăng tải trên Hệ thống mạng đấu thầu quốc gia trong trường hợp hợp đồng, thỏa thuận khung chưa được công khai (2)",
+            "C": "Thời gian áp dụng là 24 tháng kể từ ngày kết quả lựa chọn nhà thầu được đăng tải trên Hệ thống mạng đấu thầu quốc gia (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -1765,10 +1765,10 @@ const originalQuestions = [
         "id": 161,
         "question": "Đối với gói thầu đấu thầu qua mạng, trường hợp sửa đổi E-HSMT sau khi phát hành, chủ đầu tư phải đăng tải tài liệu nào sau đây trên Hệ thống?",
         "answers": {
-            "A": "Quyết định sửa đổi kèm theo những nội dung sửa đổi E-HSMT",
-            "B": "E-HSMT đã được sửa đổi",
-            "C": "Báo cáo thẩm định E-HSMT sửa đổi",
-            "D": "Phương án A và B đều đúng"
+            "A": "Quyết định sửa đổi kèm theo những nội dung sửa đổi E-HSMT (1)",
+            "B": "E-HSMT đã được sửa đổi (2)",
+            "C": "Báo cáo thẩm định E-HSMT sửa đổi (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -1864,10 +1864,10 @@ const originalQuestions = [
         "id": 170,
         "question": "Đối với gói thầu tổ chức đấu thầu rộng rãi qua mạng, trường hợp tại thời điểm đóng thầu mà không có nhà thầu nộp E-HSDT thì chủ đầu tư quyết định theophương án nào sau đây?",
         "answers": {
-            "A": "Huỷ E-TBMT",
-            "B": "Chuyển sang hình thức đấu thầu rộng rãi không qua mạng",
-            "C": "Cho phép gia hạn thời điểm đóng thầu tối thiểu 05 ngày đối với gói thầu xây lắp, hỗn hợp có giá gói thầu không quá 20 tỷ đồng, gói thầu mua sắm hàng hoá, dịch vụ phi tư vấn có giá không quá 10 tỷ đồng",
-            "D": "Phương án A và C đều đúng"
+            "A": "Huỷ E-TBMT (1)",
+            "B": "Chuyển sang hình thức đấu thầu rộng rãi không qua mạng (2)",
+            "C": "Cho phép gia hạn thời điểm đóng thầu tối thiểu 05 ngày đối với gói thầu xây lắp, hỗn hợp có giá gói thầu không quá 20 tỷ đồng, gói thầu mua sắm hàng hoá, dịch vụ phi tư vấn có giá không quá 10 tỷ đồng (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -1952,10 +1952,10 @@ const originalQuestions = [
         "id": 178,
         "question": "Chủ đầu tư yêu cầu gia hạn hiệu lực hồ sơ dự thầu, bảo đảm dự thầu trong trường hợp nào sau đây?",
         "answers": {
-            "A": "Trước khi hết hạn hiệu lực hồ sơ dự thầu trong trường hợp cần gia hạn để tiếp tục đánh giá hồ sơ dự thầu",
-            "B": "Trường hợp nhà thầu xếp hạng tiếp theo được mời vào thương thảo hợp đồng nhưng hồ sơ dự thầu của nhà thầu đó hết hiệu lực thì Chủ đầu tư phải yêu cầu nhà thầu gia hạn hiệu lực của hồ sơ dự thầu, bảo đảm dự thầu trước khi thương thảo hợp đồng",
-            "C": "Trước khi phê duyệt kết quả lựa chọn nhà thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Trước khi hết hạn hiệu lực hồ sơ dự thầu trong trường hợp cần gia hạn để tiếp tục đánh giá hồ sơ dự thầu (1)",
+            "B": "Trường hợp nhà thầu xếp hạng tiếp theo được mời vào thương thảo hợp đồng nhưng hồ sơ dự thầu của nhà thầu đó hết hiệu lực thì Chủ đầu tư phải yêu cầu nhà thầu gia hạn hiệu lực của hồ sơ dự thầu, bảo đảm dự thầu trước khi thương thảo hợp đồng (2)",
+            "C": "Trước khi phê duyệt kết quả lựa chọn nhà thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -1963,10 +1963,10 @@ const originalQuestions = [
         "id": 179,
         "question": "Trong quá trình đánh giá, Tổ chuyên gia phát hiện nhà thầu tham dự thầu trên\nHệ thống mạng đấu thầu quốc gia đính kèm tệp tin có thiết lập mật khẩu thì xử\nlý thế nào?",
         "answers": {
-            "A": "Yêu cầu nhà thầu nộp lại tệp tin không có thiết lập mật khẩu trên Hệ thống mạng đấu thầu quốc gia để xem xét, đánh giá",
-            "B": "Yêu cầu nhà thầu cung cấp mật khẩu để xem xét, đánh giá",
-            "C": "Tệp tin này không được xem xét, đánh giá",
-            "D": "Phương án A và B đều đúng"
+            "A": "Yêu cầu nhà thầu nộp lại tệp tin không có thiết lập mật khẩu trên Hệ thống mạng đấu thầu quốc gia để xem xét, đánh giá (1)",
+            "B": "Yêu cầu nhà thầu cung cấp mật khẩu để xem xét, đánh giá (2)",
+            "C": "Tệp tin này không được xem xét, đánh giá (3",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2051,10 +2051,10 @@ const originalQuestions = [
         "id": 187,
         "question": "Đối với gói thầu áp dụng chào giá trực tuyến theo quy trình thông thường, trường hợp nhà thầu được mời tham gia chào giá trực tuyến nhưng nhà thầu từ chối tham gia thì xử lý thế nào?",
         "answers": {
-            "A": "Đề xuất về tài chính của nhà thầu sẽ bị đánh giá là không đạt",
-            "B": "Nhà thầu sẽ bị loại và bị khóa tài khoản trên Hệ thống mạng đấu thầu quốc gia trong vòng 06 tháng",
-            "C": "Hồ sơ dự thầu của nhà thầu sẽ tiếp tục được đánh giá về tài chính căn cứ theo hồ sơ dự thầu đã nộp trước thời điểm đóng thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Đề xuất về tài chính của nhà thầu sẽ bị đánh giá là không đạt (1)",
+            "B": "Nhà thầu sẽ bị loại và bị khóa tài khoản trên Hệ thống mạng đấu thầu quốc gia trong vòng 06 tháng (2)",
+            "C": "Hồ sơ dự thầu của nhà thầu sẽ tiếp tục được đánh giá về tài chính căn cứ theo hồ sơ dự thầu đã nộp trước thời điểm đóng thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2075,8 +2075,8 @@ const originalQuestions = [
         "answers": {
             "A": "Đơn vị mua sắm tập trung và các nhà thầu trúng thầu (trong trường hợp không ký thỏa thuận khung)",
             "B": "Đơn vị có nhu cầu mua sắm với các nhà thầu trúng thầu (trong trường hợp đơn vị mua sắm tập trung ký thỏa thuận khung với nhà thầu trúng thầu)",
-            "C": "Phương án A và B đều đúng",
-            "D": "Phương án A và B đều sai"
+            "C": "Cả 2 phương án đều đúng",
+            "D": "Cả 2 phương án đều sai"
         },
         "correctAnswer": "C"
     },
@@ -2205,10 +2205,10 @@ const originalQuestions = [
         "id": 201,
         "question": "Mua sắm trực tuyến được áp dụng đối với\ngói thầu nào sau đây?",
         "answers": {
-            "A": "Gói thầu mua sắm hàng hóa, dịch vụ thuộc dự toán mua sắm có giá gói thầu không quá 500 triệu đồng; gói thầu mua sắm hàng hóa, dịch vụ thuộc dự án có giá gói thầu không quá 01 tỷ đồng",
-            "B": "Gói thầu xây lắp thuộc dự toán mua sắm có giá gói thầu không quá 01 tỷ đồng; gói thầu xây lắp thuộc dự án có giá gói thầu không quá 02 tỷ đồng",
-            "C": "Gói thầu mua sắm hàng hóa, cung cấp dịch vụ phi tư vấn thuộc dự án có giá gói thầu không quá 05 tỷ đồng;",
-            "D": "Phương án B và C đều đúng"
+            "A": "Gói thầu mua sắm hàng hóa, dịch vụ thuộc dự toán mua sắm có giá gói thầu không quá 500 triệu đồng; gói thầu mua sắm hàng hóa, dịch vụ thuộc dự án có giá gói thầu không quá 01 tỷ đồng (1)",
+            "B": "Gói thầu xây lắp thuộc dự toán mua sắm có giá gói thầu không quá 01 tỷ đồng; gói thầu xây lắp thuộc dự án có giá gói thầu không quá 02 tỷ đồng (2)",
+            "C": "Gói thầu mua sắm hàng hóa, cung cấp dịch vụ phi tư vấn thuộc dự án có giá gói thầu không quá 05 tỷ đồng (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -2216,10 +2216,10 @@ const originalQuestions = [
         "id": 202,
         "question": "Đối với gói thầu áp dụng hình thức chào\ngiá trực tuyến rút gọn, việc thẩm định kết\nquả lựa chọn nhà thầu được thực hiện như\nthế nào?",
         "answers": {
-            "A": "Chỉ thẩm định nội dung về giá chào",
-            "B": "Bắt buộc thẩm định khi người có thẩm quyền yêu cầu",
-            "C": "Không phải thẩm định kết quả lựa chọn nhà thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Chỉ thẩm định nội dung về giá chào (1)",
+            "B": "Bắt buộc thẩm định khi người có thẩm quyền yêu cầu (2)",
+            "C": "Không phải thẩm định kết quả lựa chọn nhà thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2227,10 +2227,10 @@ const originalQuestions = [
         "id": 203,
         "question": "Khi đánh giá E-HSDT gói thầu xây lắp đấu\nthầu rộng rãi qua mạng, trường hợp có sự không thống nhất giữa thông tin về hợp đồng tương tự kê khai trên webform và file tài liệu chứng minh các thông tin về hợp đồng đó thì phương án nào sau đây là đúng?",
         "answers": {
-            "A": "Đánh giá nhà thầu không đạt yêu cầu về hợp đồng tương tự",
-            "B": "Yêu cầu nhà thầu làm rõ E-HSDT trên Hệ thống mạng đấu thầu quốc gia",
-            "C": "Yêu cầu nhà thầu gửi bổ sung hợp đồng tương tự bằng bản giấy để đánh giá",
-            "D": "Phương án B và C đều đúng"
+            "A": "Đánh giá nhà thầu không đạt yêu cầu về hợp đồng tương tự (1)",
+            "B": "Yêu cầu nhà thầu làm rõ E-HSDT trên Hệ thống mạng đấu thầu quốc gia (2)",
+            "C": "Yêu cầu nhà thầu gửi bổ sung hợp đồng tương tự bằng bản giấy để đánh giá (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -2304,10 +2304,10 @@ const originalQuestions = [
         "id": 210,
         "question": "Việc hủy E-TBMT được thực hiện tại thời\nđiểm nào?",
         "answers": {
-            "A": "Được thực hiện tại thời điểm đóng thầu trong trường hợp không có nhà thầu tham dự thầu",
-            "B": "Được thực hiện sau thời điểm mở thầu",
-            "C": "Được thực hiện trước thời điểm đóng thầu",
-            "D": "Phương án A và C đều đúng"
+            "A": "Được thực hiện tại thời điểm đóng thầu trong trường hợp không có nhà thầu tham dự thầu (1)",
+            "B": "Được thực hiện sau thời điểm mở thầu (2)",
+            "C": "Được thực hiện trước thời điểm đóng thầu (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2579,10 +2579,10 @@ const originalQuestions = [
         "id": 235,
         "question": "Phương án nào sau đây được xác định là một bước trong quá trình lựa chọn nhà thầu theo quy trình chỉ định thầu thông thường được pháp luật về đấu thầu quy định?",
         "answers": {
-            "A": "Xác định tối thiểu 03 nhà thầu có đủ năng lực, kinh nghiệm để mời nhận hồ sơ yêu cầu",
-            "B": "Chuẩn bị và gửi dự thảo hợp đồng cho tối thiểu 03 nhà thầu có đủ năng lực, kinh nghiệm để đàm phán hợp đồng",
-            "C": "Đánh giá hồ sơ đề xuất và thương thảo về các đề xuất của nhà thầu",
-            "D": "Phương án A và C đều đúng"
+            "A": "Xác định tối thiểu 03 nhà thầu có đủ năng lực, kinh nghiệm để mời nhận hồ sơ yêu cầu (1)",
+            "B": "Chuẩn bị và gửi dự thảo hợp đồng cho tối thiểu 03 nhà thầu có đủ năng lực, kinh nghiệm để đàm phán hợp đồng (2)",
+            "C": "Đánh giá hồ sơ đề xuất và thương thảo về các đề xuất của nhà thầu (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2590,10 +2590,10 @@ const originalQuestions = [
         "id": 236,
         "question": "Trường hợp đơn vị được giao nhiệm vụ\nmua sắm tập trung không đủ năng lực,\nkinh nghiệm tổ chức lựa chọn nhà thầu thì\nthực hiện như thế nào?",
         "answers": {
-            "A": "Báo cáo người có thẩm quyền để giao đơn vị khác thực hiện việc lựa",
-            "B": "Phải thực hiện theo nhiệm vụ được giao, không được đi thuê đơn vị tư vấn để thực hiện việc lựa chọn nhà thầu",
-            "C": "Được phép thuê đơn vị tư vấn đấu thầu có kinh nghiệm để thực hiện việc lựa chọn nhà thầu",
-            "D": "Phương án A và C đều đúng"
+            "A": "Báo cáo người có thẩm quyền để giao đơn vị khác thực hiện việc lựa chọn nhà thầu (1)",
+            "B": "Phải thực hiện theo nhiệm vụ được giao, không được đi thuê đơn vị tư vấn để thực hiện việc lựa chọn nhà thầu (2)",
+            "C": "Được phép thuê đơn vị tư vấn đấu thầu có kinh nghiệm để thực hiện việc lựa chọn nhà thầu (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2634,10 +2634,10 @@ const originalQuestions = [
         "id": 240,
         "question": "Việc giữ lại hồ sơ tài chính của nhà thầu\nkhông đạt kỹ thuật sau thời hạn quy định\nsẽ…?",
         "answers": {
-            "A": "Là cơ sở để tiếp tục đánh giá trong trường hợp phải đánh giá lại",
-            "B": "Bảo đảm trách nhiệm của chủ đầu tư theo quy định của pháp luật về đấu thầu",
-            "C": "Có thể dẫn tới khiếu nại từ nhà thầu",
-            "D": "Phương án A và B đều đúng"
+            "A": "Là cơ sở để tiếp tục đánh giá trong trường hợp phải đánh giá lại (1)",
+            "B": "Bảo đảm trách nhiệm của chủ đầu tư theo quy định của pháp luật về đấu thầu (2)",
+            "C": "Có thể dẫn tới khiếu nại từ nhà thầu (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2656,10 +2656,10 @@ const originalQuestions = [
         "id": 242,
         "question": "Trung tâm X là đơn vị sự nghiệp công lập tự chủ chi thường xuyên thuộc tỉnh A tổ  chức lựa chọn nhà thầu đối với gói thầu mua sắm hàng hóa sử dụng nguồn thu hợp pháp (không sử dụng ngân sách nhà nước), trường hợp nhà thầu có kiến nghị về hồ sơ mời thầu gửi cả người có thẩm quyền và chủ đầu tư của gói thầu thì việc giải quyết kiến nghị được thực hiện theo quy trình nào?",
         "answers": {
-            "A": "Trong thời hạn 07 ngày làm việc kể từ ngày nhận được đơn kiến nghị của",
-            "B": "Người có thẩm quyền phải có văn bản giải quyết kiến nghị gửi đến nhà thầu, cơ quan, tổ chức trong thời hạn 07 ngày làm việc kể từ ngày nhận được đơn kiến nghị của nhà thầu và gửi đến chủ đầu tư để đăng tải trên Hệ thống mạng đấu thầu quốc gia.",
-            "C": "Thực hiện theo quy trình về giải quyết kiến nghị do người đứng đầu Trung tâm X ban hành trong đơn vị mình.",
-            "D": "Phương án A và B đều đúng"
+            "A": "Trong thời hạn 07 ngày làm việc kể từ ngày nhận được đơn kiến nghị của nhà thầu, chủ đầu tư phải có văn bản giải quyết kiến nghị gửi đến nhà thầu, cơ quan, tổ chức và đăng tải trên Hệ thống mạng đấu thầu quốc gia.(1)",
+            "B": "Người có thẩm quyền phải có văn bản giải quyết kiến nghị gửi đến nhà thầu, cơ quan, tổ chức trong thời hạn 07 ngày làm việc kể từ ngày nhận được đơn kiến nghị của nhà thầu và gửi đến chủ đầu tư để đăng tải trên Hệ thống mạng đấu thầu quốc gia. (2)",
+            "C": "Thực hiện theo quy trình về giải quyết kiến nghị do người đứng đầu Trung tâm X ban hành trong đơn vị mình. (3)",
+             "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2689,10 +2689,10 @@ const originalQuestions = [
         "id": 245,
         "question": "Đối với gói thầu xây lắp áp dụng đấu thầu quốc tế, trường hợp nhà thầu xếp thứ nhất có hồ sơ dự thầu không cân bằng (có đơn giá chào cao hơn đáng kể so với đơn giá tương ứng trong dự toán gói thầu ở các hạng mục công việc có các yêu cầu kỹ thuật đơn giản, dễ thực hiện, hạng mục công việc có khả năng phát sinh khối lượng ngoài khối lượng trong bảng giá dự thầu và có đơn giá chào thấp hơn đáng kể so với đơn giá tương ứng trong dự toán gói thầu ở các hạng mục công việc phức tạp, khó thực hiện) thì chủ đầu tư có thể xử lý thế nào?",
         "answers": {
-            "A": "Yêu cầu nhà thầu làm rõ bằng văn bản về các chi phí cấu thành giá dự",
-            "B": "Có thể quy định giá trị bảo đảm thực hiện hợp đồng lớn hơn 10% nhưng",
-            "C": "Mời nhà thầu chào lại giá",
-            "D": "Phương án A và B đều đúng"
+            "A": "Yêu cầu nhà thầu làm rõ bằng văn bản về các chi phí cấu thành giá dự thầu(1)",
+            "B": "Có thể quy định giá trị bảo đảm thực hiện hợp đồng lớn hơn 10% nhưng không quá 30% giá hợp đồng để đề phòng rủi ro(2)",
+            "C": "Mời nhà thầu chào lại giá dự thầu(3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2755,10 +2755,10 @@ const originalQuestions = [
         "id": 251,
         "question": "Đối với đấu thầu qua mạng, thành phần nào sau đây không được coi là một phần của E-HSMST, E-HSMT và nhà thầu không phải đáp ứng các yêu cầu này?",
         "answers": {
-            "A": "Bảng dữ liệu được số hóa dưới dạng webform trên Hệ thống mạng đấu thầu quốc gia",
-            "B": "Tiêu chuẩn đánh giá về tính hợp lệ được đính kèm trên Hệ thống mạng đấu thầu quốc gia",
-            "C": "Yêu cầu về năng lực, kinh nghiệm được đính kèm trên Hệ thống mạng đấu thầu quốc gia",
-            "D": "Phương án B và C đều đúng"
+            "A": "Bảng dữ liệu được số hóa dưới dạng webform trên Hệ thống mạng đấu thầu quốc gia (1)",
+            "B": "Tiêu chuẩn đánh giá về tính hợp lệ được đính kèm trên Hệ thống mạng đấu thầu quốc gia (2)",
+            "C": "Yêu cầu về năng lực, kinh nghiệm được đính kèm trên Hệ thống mạng đấu thầu quốc gia (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2788,10 +2788,10 @@ const originalQuestions = [
         "id": 254,
         "question": "Đối với đấu thầu qua mạng, trường hợp Hệ thống mạng đấu thầu quốc gia gặp sự cố không thể vận hành và phải tự động gia hạn thời điểm đóng thầu của các gói thầu bị ảnh hưởng (có thời điểm đóng thầu trong thời gian từ khi Hệ thống bị sự cố cho đến thời điểm sau hoàn thành khắc phục sự cố 02giờ) thì việc đánh giá E-HSDT được thực hiện trên cơ sở thời điểm đóng thầu nào sau đây?",
         "answers": {
-            "A": "Thời điểm đóng thầu nêu trong E-TBMT được đăng tải (trước thời điểm Hệ thống mạng đấu thầu quốc gia gặp sự cố)",
-            "B": "Thời điểm đóng thầu mà Hệ thống mạng đấu thầu quốc gia tự động gia hạn",
-            "C": "Do Chủ đầu tư quyết định",
-            "D": "Phương án A và B đều đúng"
+            "A": "Thời điểm đóng thầu nêu trong E-TBMT được đăng tải (trước thời điểm Hệ thống mạng đấu thầu quốc gia gặp sự cố) (1)",
+            "B": "Thời điểm đóng thầu mà Hệ thống mạng đấu thầu quốc gia tự động gia hạn (2)",
+            "C": "Do Chủ đầu tư quyết định (3)",
+            "D": "Phương án (1) và (2) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2799,10 +2799,10 @@ const originalQuestions = [
         "id": 255,
         "question": "Loại Chứng thư số nào sau đây được sử dụng trên Hệ thống mạng\nđấu thầu quốc gia?",
         "answers": {
-            "A": "Chứng thư số chuyên dùng do tất cả tổ chức có chức năng cung cấp dịch vụ chứng thực chữ ký số chuyên dùng cấp",
-            "B": "Tất cả các loại chứng thư số",
-            "C": "Chứng thư số công cộng do tổ chức cung cấp dịch vụ chứng thực chữ ký số công cộng cấp hoặc chứng thư số do tổ chức cung cấp dịch vụ chứng thực chữ ký số chuyên dùng Chính phủ cấp",
-            "D": "Phương án A và C đều đúng"
+            "A": "Chứng thư số chuyên dùng do tất cả tổ chức có chức năng cung cấp dịch vụ chứng thực chữ ký số chuyên dùng cấp (1)",
+            "B": "Tất cả các loại chứng thư số (2)",
+            "C": "Chứng thư số công cộng do tổ chức cung cấp dịch vụ chứng thực chữ ký số công cộng cấp hoặc chứng thư số do tổ chức cung cấp dịch vụ chứng thực chữ ký số chuyên dùng Chính phủ cấp (3)",
+            "D": "Phương án (1) và (3) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -2843,10 +2843,10 @@ const originalQuestions = [
         "id": 259,
         "question": "Đối với đấu thầu qua mạng, sau khi đánh giá E-HSDT, tổ trưởng tổ chuyên gia đính kèm bản scan báo cáo đánh giá E-HSDT lên Hệ thống mạng đấu thầu quốc gia với yêu cầu nào sau đây?",
         "answers": {
-            "A": "Báo cáo đánh giá E-HSDT có chữ ký của tất cả thành viên trong tổ chuyên gia",
-            "B": "Báo cáo đánh giá E-HSDT chỉ cần có chữ ký của tổ trưởng tổ chuyên gia",
-            "C": "Báo cáo đánh giá E-HSDT (đăng tải báo cáo đánh giá tổng hợp, không cần kèm theo các phiếu chấm của thành viên trong tổ chuyên gia)",
-            "D": "Phương án B và C đều đúng"
+            "A": "Báo cáo đánh giá E-HSDT có chữ ký của tất cả thành viên trong tổ chuyên gia (1)",
+            "B": "Báo cáo đánh giá E-HSDT chỉ cần có chữ ký của tổ trưởng tổ chuyên gia (2)",
+            "C": "Báo cáo đánh giá E-HSDT (đăng tải báo cáo đánh giá tổng hợp, không cần kèm theo các phiếu chấm của thành viên trong tổ chuyên gia) (3)",
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -2887,10 +2887,10 @@ const originalQuestions = [
         "id": 263,
         "question": "Trường hợp nhà thầu bị đánh giá về uy tín khi thực hiện hành vi: được lựa chọn trúng thầu nhưng không tiến hành hoặc từ chối tiến hành hoàn thiện hợp đồng hoặc không ký kết hợp đồng thì khi tham gia gói thầu khác, nhà thầu sẽ bị bất lợi như thế nào?",
         "answers": {
-            "A": "Đối với gói thầu hàng hóa, xây lắp, phi tư vấn, hỗn hợp, nhà thầu bị đánh giá về uy tín phải nộp gấp 3 lần bảo đảm dự thầu trong vòng 03 năm kể từ lần cuối cùng thực hiện hành vi",
-            "B": "Đối với gói thầu tư vấn, thông tin uy tín này sẽ được sử dụng để đánh giá về kỹ thuật",
-            "C": "Bị đưa vào xem xét, đánh giá về kỹ thuật trong quá trình lựa chọn nhà thầu đối với gói thầu xây lắp, phi tư vấn, hàng hóa, hỗn hợp",
-            "D": "Đáp án B và C đều đúng"
+            "A": "Đối với gói thầu hàng hóa, xây lắp, phi tư vấn, hỗn hợp, nhà thầu bị đánh giá về uy tín phải nộp gấp 3 lần bảo đảm dự thầu trong vòng 03 năm kể từ lần cuối cùng thực hiện hành vi (1)",
+            "B": "Đối với gói thầu tư vấn, thông tin uy tín này sẽ được sử dụng để đánh giá về kỹ thuật (2)",
+            "C": "Bị đưa vào xem xét, đánh giá về kỹ thuật trong quá trình lựa chọn nhà thầu đối với gói thầu xây lắp, phi tư vấn, hàng hóa, hỗn hợp (3)",
+            "D": "Đáp án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -2955,8 +2955,8 @@ const originalQuestions = [
         "answers": {
             "A": "Hợp đồng thuốc đã cung cấp thuốc cho cơ sở khám chữa bệnh tư nhân",
             "B": "Hợp đồng thuốc đã cung cấp thuốc cho các cơ sở kinh doanh thuốc",
-            "C": "Phương án A và B đều đúng",
-            "D": "Phương án A và B đều sai"
+            "C": "Cả 2 phương án đều đúng",
+            "D": "Cả 2 phương án đều sai"
         },
         "correctAnswer": "C"
     },
