@@ -775,10 +775,10 @@ const originalQuestions = [
         "id": 71,
         "question": "Đối với gói thầu mua sắm hàng hóa tổ chức đấu thầu rộng rãi qua mạng, kinh nghiệm thực hiện hợp đồng cung cấp hàng hóa tương tự được xét trên cơ sở nào sau đây?",
         "answers": {
-            "A": "Hàng hóa có cùng chủng loại với gói thầu đang xét",
-            "B": "Hàng hóa thuộc cùng lĩnh vực tổng quát với hàng hóa của gói thầu",
-            "C": "Hàng hóa có 4 số đầu tiên mã HS cùng với mã HS của hàng hóa thuộc gói thầu",
-            "D": "Cả 2 phương án B và C đều đúng"
+            "A": "Hàng hóa có cùng chủng loại với gói thầu đang xét (1)",
+            "B": "Hàng hóa thuộc cùng lĩnh vực tổng quát với hàng hóa của gói thầu (2)",
+            "C": "Hàng hóa có 4 số đầu tiên mã HS cùng với mã HS của hàng hóa thuộc gói thầu (3)",
+            "D": "Cả 2 phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
