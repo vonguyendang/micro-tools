@@ -47,12 +47,15 @@ async function initializeGeneralEventsTab() {
     generalEventsTable = new DataTable('table-events-general', 'search-events-general', 'pagination-events-general', generalEventColumns, 'recordDate');
 
     const today = new Date();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(today.getMonth() - 3);
+
     const threeMonthsLater = new Date();
     threeMonthsLater.setMonth(today.getMonth() + 3);
 
     const formatDateToISO = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     
-    const startDate = formatDateToISO(today);
+    const startDate = formatDateToISO(threeMonthsAgo);
     const endDate = formatDateToISO(threeMonthsLater);
     
     const url = `https://restv2.fireant.vn/events/search?symbol=&orderBy=1&type=0&startDate=${startDate}&endDate=${endDate}&offset=0&limit=500`;
