@@ -387,6 +387,26 @@ select:focus {
 #profit-loss-table input, #avg-price-table input { padding: 6px 8px; font-size: 0.9rem; max-width: 120px; }
 .breakeven-highlight { color: var(--accent-color); font-weight: bold; }
 
+/* ----- Price Lock Styles (NEW) ----- */
+.lock-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #888;
+    padding: 5px;
+    vertical-align: middle;
+}
+.lock-btn .fa-lock {
+    color: var(--accent-color);
+}
+#profit-loss-table .sell-price:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+
 /* Toggle Switch for Fees */
 .fee-toggle-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
 .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
@@ -578,5 +598,3 @@ input:checked + .slider:before { transform: translateX(26px); }
 .delete-portfolio-btn { background-color: var(--error-color) !important; }
 .delete-portfolio-btn:hover { background-color: #c0392b !important; }
 .edit-btn { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.1rem; }
-
-
