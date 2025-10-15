@@ -19,8 +19,6 @@ function showListingSubTab(subTabId) {
  * Khởi tạo và tải dữ liệu cho cả hai bảng trong tab Niêm yết Mới.
  */
 async function initializeListingTabs() {
-    const proxy = 'https://webproxy.vodang2702.workers.dev/?url=';
-
     // Cấu hình các cột cho bảng "Đăng ký niêm yết"
     const registeredColumns = [
         { header: '#', key: 'stt', searchable: false, render: (item, i) => i },
@@ -49,14 +47,18 @@ async function initializeListingTabs() {
     approvedTable = new DataTable('table-approved', 'search-approved', 'pagination-approved', approvedColumns, 'acceptDate');
 
     try {
-        // Gọi đồng thời cả hai API
+        // Gọi đồng thời cả hai API thông qua proxy
         const [registeredRes, approvedRes] = await Promise.all([
-            fetch(`${proxy}https://api.hsx.vn/l/api/v1/1/securities?pageIndex=1%26pageSize=100%26newListingStatusId=0`),
-            fetch(`${proxy}https://api.hsx.vn/l/api/v1/1/securities?pageIndex=1%26pageSize=100%26newListingStatusId=8`)
+            fetch(`api/proxy.php?endpoint=listings&statusId=0`),
+            fetch(`api/proxy.php?endpoint=listings&statusId=8`)
         ]);
         
         const registeredData = await registeredRes.json();
         const approvedData = await approvedRes.json();
+        
+        if (registeredData.error || approvedData.error) {
+            throw new Error("Lỗi tải dữ liệu niêm yết từ server.");
+        }
 
         // Tải dữ liệu vào bảng (truy cập vào data.data.list)
         registeredTable.loadData(registeredData.data.list || []);
