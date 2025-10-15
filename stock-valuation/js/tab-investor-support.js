@@ -84,7 +84,7 @@ async function updateLivePricesAndCalculate() {
         const sellPriceInput = row.querySelector('.sell-price');
         const stockCode = row.querySelector('.stock-code').value.trim().toUpperCase();
         if (stockCode) {
-            return fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stockCode}`)
+            return fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`)
                 .then(response => response.ok ? response.json() : null)
                 .then(data => {
                     if (data?.data?.matchedPrice) {
@@ -375,7 +375,12 @@ async function updatePortfolioPrices() {
     updateButton.disabled = true;
 
     const stocksToUpdate = portfolios[activePortfolio].stocks;
-    const priceRequests = stocksToUpdate.map(stock => fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stock.code}`).then(res => res.ok ? res.json() : null).then(data => ({ code: stock.code, marketPrice: data?.data?.matchedPrice || stock.marketPrice || null })).catch(err => { console.error(`Lỗi lấy giá ${stock.code}:`, err); return { code: stock.code, marketPrice: stock.marketPrice || null }; }));
+    const priceRequests = stocksToUpdate.map(stock => 
+        fetch(`api/proxy.php?endpoint=stock_price&code=${stock.code}`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => ({ code: stock.code, marketPrice: data?.data?.matchedPrice || stock.marketPrice || null }))
+        .catch(err => { console.error(`Lỗi lấy giá ${stock.code}:`, err); return { code: stock.code, marketPrice: stock.marketPrice || null }; })
+    );
     const updatedPrices = await Promise.all(priceRequests);
     
     let hasChanged = false;
@@ -501,10 +506,10 @@ async function calculateTargetProfitSessions() {
 
     let currentPriceForProfit = 0, startPriceForRoadmap = 0, exchange = '';
     try {
-        const response = await fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stockCode}`);
+        const response = await fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`);
         if (!response.ok) throw new Error('Không tìm thấy mã cổ phiếu.');
         const data = await response.json();
-        if (!data?.data?.matchedPrice || !data?.data?.exchange) throw new Error('Không lấy được dữ liệu giá hoặc sàn.');
+        if (data.error || !data?.data?.matchedPrice || !data?.data?.exchange) throw new Error('Không lấy được dữ liệu giá hoặc sàn.');
         
         exchange = data.data.exchange.toLowerCase();
         currentPriceForProfit = data.data.matchedPrice; 
