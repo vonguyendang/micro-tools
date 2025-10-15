@@ -171,27 +171,53 @@
 
             <div id="investor-portfolio" class="investor-sub-container">
                  <h2><i class="fas fa-briefcase"></i> Theo Dõi Danh Mục</h2>
-                 <div class="button-container">
-                     <button class="action-button" onclick="exportPortfolio()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
-                 </div>
-                 <div class="table-wrapper">
-                    <table id="portfolio-table">
-                        <thead>
-                            <tr>
-                                <th>Mã CK</th>
-                                <th>Tổng KL</th>
-                                <th>Giá vốn TB</th>
-                                <th>Giá hiện tại</th>
-                                <th>Lãi/Lỗ</th>
-                                <th>ROI (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            </tbody>
-                    </table>
-                </div>
-                 <div id="portfolio-summary" class="summary-container">
+                 <div id="portfolio-login-view">
+                    <p>Nhập mật khẩu của danh mục để xem hoặc nhập mật khẩu admin để quản lý tất cả.</p>
+                    <div class="input-group">
+                        <label for="portfolio-password">Mật khẩu:</label>
+                        <input type="password" id="portfolio-password" placeholder="Nhập mật khẩu...">
                     </div>
+                    <div class="button-container">
+                        <button class="action-button" onclick="loginPortfolio()"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+                        <button class="action-button calculate-button" onclick="showCreatePortfolioModal()"><i class="fas fa-plus"></i> Tạo Danh mục mới</button>
+                    </div>
+                 </div>
+
+                 <div id="portfolio-main-view" style="display: none;">
+                    <div class="portfolio-header">
+                        <h3 id="portfolio-name-display"></h3>
+                        <div>
+                            <select id="portfolio-selector" onchange="switchPortfolio()"></select>
+                            <button class="action-button" onclick="logoutPortfolio()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                         <button class="action-button" onclick="showAddStockModal()"><i class="fas fa-plus"></i> Thêm Cổ phiếu</button>
+                         <button class="action-button calculate-button" id="update-prices-btn" onclick="updatePortfolioPrices()"><i class="fas fa-sync-alt"></i> Cập nhật giá</button>
+                         <button class="action-button delete-portfolio-btn" onclick="deleteCurrentPortfolio()"><i class="fas fa-trash-alt"></i> Xóa Danh mục này</button>
+                    </div>
+                     <div class="table-wrapper">
+                        <table id="portfolio-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã CK</th>
+                                    <th>Khối lượng</th>
+                                    <th>Giá vốn TB</th>
+                                    <th>Tổng vốn</th>
+                                    <th>Giá hiện tại</th>
+                                    <th>Giá trị TT</th>
+                                    <th>Lãi/Lỗ tạm tính</th>
+                                    <th>% L/L</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                     <div id="portfolio-summary" class="summary-container">
+                    </div>
+                 </div>
             </div>
 
             <div id="investor-target" class="investor-sub-container">
@@ -352,6 +378,46 @@
             </div>
          </main>
     </div>
+
+    <div id="portfolio-modal-backdrop" class="modal-backdrop" style="display: none;"></div>
+
+    <div id="create-portfolio-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('create-portfolio-modal')">&times;</span>
+            <h2>Tạo Danh mục mới</h2>
+            <div class="input-group">
+                <label for="new-portfolio-name">Tên Danh mục:</label>
+                <input type="text" id="new-portfolio-name" placeholder="VD: Đầu tư dài hạn">
+            </div>
+            <div class="input-group">
+                <label for="new-portfolio-password">Mật khẩu:</label>
+                <input type="password" id="new-portfolio-password" placeholder="Mật khẩu để truy cập">
+            </div>
+            <button class="action-button" onclick="createPortfolio()">Tạo mới</button>
+        </div>
+    </div>
+
+    <div id="add-stock-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('add-stock-modal')">&times;</span>
+            <h2 id="stock-modal-title">Thêm Cổ phiếu</h2>
+            <input type="hidden" id="edit-stock-index">
+            <div class="input-group">
+                <label for="stock-modal-code">Mã CK:</label>
+                <input type="text" id="stock-modal-code" placeholder="VD: HPG">
+            </div>
+            <div class="input-group">
+                <label for="stock-modal-volume">Khối lượng:</label>
+                <input type="number" id="stock-modal-volume" placeholder="VD: 100">
+            </div>
+            <div class="input-group">
+                <label for="stock-modal-price">Giá vốn:</label>
+                <input type="number" id="stock-modal-price" placeholder="VD: 28000">
+            </div>
+            <button class="action-button" onclick="saveStock()">Lưu</button>
+        </div>
+    </div>
+
 
     <footer>
         <p>© 2023 Stock Review by Dangvo. All rights reserved.</p>
