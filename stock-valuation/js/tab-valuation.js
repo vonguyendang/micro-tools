@@ -41,66 +41,28 @@ async function fetchStockData() {
     }
 
     const stockCode = code.toUpperCase();
-    const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg';
     resultDiv.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Đang tải và phân tích dữ liệu...</p>';
     dividendCurrentPage = 1; // Reset lại trang khi tìm mã mới
 
-    const fetchBondDataWithFallback = async () => {
-        try {
-            const response = await fetch('https://sbcharts.investing.com/bond_charts/bonds_chart_72.json');
-            if (!response.ok) throw new Error('API Trái phiếu chính (investing.com) thất bại');
-            return response.json();
-        } catch (error) {
-            console.warn(error.message, "Đang thử API Trái phiếu dự phòng (worldgovernmentbonds.com).");
-            try {
-                const fallbackUrl = 'https://www.worldgovernmentbonds.com/wp-json/common/v1/historical';
-                const fallbackHeaders = { 'Content-Type': 'application/json; charset=UTF-8' };
-                const fallbackBody = JSON.stringify({
-                    "GLOBALVAR": { "JS_VARIABLE": "jsGlobalVars", "FUNCTION": "Bond", "DOMESTIC": true, "ENDPOINT": "https://www.worldgovernmentbonds.com/wp-json/common/v1/historical", "DATE_RIF": "2099-12-31", "OBJ": { "UNIT": "%", "DECIMAL": 3, "UNIT_DELTA": "bp", "DECIMAL_DELTA": 1 }, "COUNTRY1": { "SYMBOL": "58", "PAESE": "Vietnam", "PAESE_UPPERCASE": "VIETNAM", "BANDIERA": "vn", "URL_PAGE": "vietnam" }, "COUNTRY2": null, "OBJ1": { "DURATA_STRING": "10 Years", "DURATA": 120 }, "OBJ2": null }
-                });
-                const fallbackResponse = await fetch(fallbackUrl, { method: 'POST', headers: fallbackHeaders, body: fallbackBody });
-                if (!fallbackResponse.ok) throw new Error('API Trái phiếu dự phòng cũng thất bại');
-                const data = await fallbackResponse.json();
-                const yearToFetch = new Date().getFullYear() + 1;
-                const bondYield = data?.result?.yearly?.[yearToFetch]?.lastVal;
-                if (typeof bondYield !== 'number') throw new Error('Không thể trích xuất dữ liệu lợi suất từ API dự phòng.');
-                return { isFallback: true, value: bondYield };
-            } catch (fallbackError) {
-                console.error("Lỗi API Trái phiếu dự phòng:", fallbackError);
-                return {};
-            }
-        }
-    };
-
-    const [dateFrom, dateTo] = getFilterDate();
-    const proxy = 'https://webproxy.vodang2702.workers.dev/?url=';
-    const urls = [
-        `https://restv2.fireant.vn/symbols/${stockCode}/fundamental`,
-        `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`,
-        `https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`,
-        `${proxy}https://iboard-query.ssi.com.vn/stock/${stockCode}`,
-        `https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${dateFrom}&endDate=${dateTo}&offset=0&limit=100`, // Tăng limit để lấy đủ dữ liệu
-        `https://restv2.fireant.vn/symbols/${stockCode}/profile`
-    ];
-
-    const headers = { 'accept': 'application/json', 'authorization': apiKey };
-
     try {
-        const apiRequests = urls.map(url => fetch(url, { headers: !url.startsWith(proxy) ? headers : {} }));
-        const allRequests = [apiRequests[0], apiRequests[1], apiRequests[2], fetchBondDataWithFallback(), apiRequests[3], apiRequests[4], apiRequests[5]];
-        const responses = await Promise.all(allRequests);
-        const dataPromises = responses.map(async (response, index) => {
-            if (index === 3) return response;
-            if (!response.ok) {
-                 let errorMsg = `Lỗi ${response.status}: ${response.statusText}`;
-                 try { const errorData = await response.json(); errorMsg += ` - ${errorData.message || JSON.stringify(errorData)}`; } catch (e) { /* Ignore */ }
-                 throw new Error(`Không thể tải dữ liệu. ${errorMsg}`);
-            }
-            return response.json();
-        });
+        const response = await fetch(`api/proxy.php?endpoint=stock_data&code=${stockCode}`);
+        if (!response.ok) {
+            throw new Error(`Lỗi máy chủ: ${response.statusText}`);
+        }
+        const allData = await response.json();
 
-        const allData = await Promise.all(dataPromises);
-        [globalStockData, globalFinancialDataQuarter, globalFinancialDataYear, globalBonds, globalStockTransaction, globalDividendEvents, globalStockProfile] = allData;
+        if (allData.error) {
+             throw new Error(`Lỗi từ backend: ${allData.message}`);
+        }
+
+        // Gán dữ liệu vào các biến toàn cục
+        globalStockData = allData.fundamental || {};
+        globalFinancialDataQuarter = allData.financial_q || [];
+        globalFinancialDataYear = allData.financial_y || [];
+        globalBonds = allData.bonds || {};
+        globalStockTransaction = allData.transaction || {};
+        globalDividendEvents = allData.events || [];
+        globalStockProfile = allData.profile || {};
 
         const q_count = globalFinancialDataQuarter.length;
         const y_count = globalFinancialDataYear.length;
@@ -113,6 +75,7 @@ async function fetchStockData() {
         resultDiv.innerHTML = `<p class="placeholder-text error-text"><i class="fas fa-exclamation-circle"></i> Có lỗi xảy ra: ${error.message}. Vui lòng thử lại hoặc kiểm tra mã cổ phiếu.</p>`;
     }
 }
+
 
 /**
  * Cập nhật giao diện định giá dựa trên giai đoạn được chọn.
@@ -373,9 +336,15 @@ function renderAssessmentUI(dataToProcess, period, periodLabel, availablePeriods
     }
     
     let y10;
-    if (bonds && bonds.isFallback && typeof bonds.value === 'number') y10 = bonds.value;
-    else if (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') y10 = bonds.current[5][1];
-    else y10 = 3.79; // Mặc định nếu không có dữ liệu
+    // Xử lý dữ liệu trái phiếu từ nguồn chính hoặc dự phòng
+    const yearToFetch = new Date().getFullYear() + 1;
+    if (bonds && bonds.result && bonds.result.yearly && bonds.result.yearly[yearToFetch]) {
+        y10 = bonds.result.yearly[yearToFetch].lastVal; // Nguồn dự phòng
+    } else if (bonds && bonds.current && bonds.current[5] && typeof bonds.current[5][1] === 'number') {
+        y10 = bonds.current[5][1]; // Nguồn chính
+    } else {
+        y10 = 3.79; // Mặc định nếu cả hai nguồn đều lỗi
+    }
 
     const riskFreeRateAdj = (y10 > 0 ? y10 : 4.4) + 0.5;
 
