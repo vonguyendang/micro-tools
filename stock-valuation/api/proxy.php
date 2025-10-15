@@ -9,6 +9,10 @@ function fetch_data($url, $headers = []) {
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    // ===== FIX: THÊM USER-AGENT ĐỂ GIẢ LẬP TRÌNH DUYỆT =====
+    // Dòng này rất quan trọng để vượt qua lớp bảo vệ của Cloudflare
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
+    // =========================================================
     // Bỏ qua xác minh SSL (chỉ nên dùng trong môi trường phát triển)
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
