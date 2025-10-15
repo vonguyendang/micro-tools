@@ -1,7 +1,6 @@
 /**
  * tab-investor-support.js
  * Chứa mã nguồn cho chức năng Tab 7: Hỗ trợ Nhà Đầu Tư.
- * Cập nhật: Tích hợp tính năng Theo dõi Danh mục Đầu tư và khóa giá.
  */
 
 // --- KHỞI TẠO KHI TẢI TRANG ---
@@ -43,7 +42,7 @@ function showInvestorSubTab(subTabId) {
 // =================================================================
 
 /**
- * HÀM MỚI: Chuyển đổi trạng thái khóa/mở khóa của một ô giá.
+ * Chuyển đổi trạng thái khóa/mở khóa của một ô giá.
  * @param {HTMLElement} btn - Nút khóa được nhấn.
  */
 function togglePriceLock(btn) {
@@ -221,7 +220,7 @@ function calculateAveragePrice() {
 // =================================================================
 // CHỨC NĂNG 3: THEO DÕI DANH MỤC (Cập nhật với PHP)
 // =================================================================
-const ADMIN_PASS_HASH = "5f4dcc3b5aa765d61d8327deb882cf99"; 
+const ADMIN_PASS_HASH = "db49afcfc0a6eac0199be1e781f13d63"; 
 let portfolios = {};
 let activePortfolio = null;
 let loggedInAs = null;
@@ -286,9 +285,14 @@ function checkLoginState() {
 
 function loginPortfolio() {
     if (typeof md5 !== 'function') { alert("Lỗi: Hàm md5 không tồn tại."); return; }
-    const password = document.getElementById('portfolio-password').value;
+    // Thêm .trim() để loại bỏ khoảng trắng thừa =====
+    const password = document.getElementById('portfolio-password').value.trim();
     if (!password) { alert("Vui lòng nhập mật khẩu."); return; }
+
     const passHash = md5(password);
+    console.log("Mật khẩu bạn nhập là: ",password)
+    console.log("Hash MD5 của mật khẩu là: ", passHash);
+    console.log("Hash MD5 của admin là: ", ADMIN_PASS_HASH);
 
     if (passHash === ADMIN_PASS_HASH) {
         loggedInAs = 'admin';
