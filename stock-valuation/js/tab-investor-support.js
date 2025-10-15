@@ -1,7 +1,7 @@
 /**
  * tab-investor-support.js
  * Chứa mã nguồn cho chức năng Tab 7: Hỗ trợ Nhà Đầu Tư.
- * Cập nhật: Tích hợp tính năng Theo dõi Danh mục Đầu tư.
+ * Cập nhật: Tích hợp tính năng Theo dõi Danh mục Đầu tư và khóa giá.
  */
 
 // --- KHỞI TẠO KHI TẢI TRANG ---
@@ -39,8 +39,33 @@ function showInvestorSubTab(subTabId) {
 }
 
 // =================================================================
-// CHỨC NĂNG 1: TÍNH LÃI/LỖ (Không thay đổi nhiều)
+// CHỨC NĂNG 1: TÍNH LÃI/LỖ
 // =================================================================
+
+/**
+ * HÀM MỚI: Chuyển đổi trạng thái khóa/mở khóa của một ô giá.
+ * @param {HTMLElement} btn - Nút khóa được nhấn.
+ */
+function togglePriceLock(btn) {
+    const icon = btn.querySelector('i');
+    const row = btn.closest('tr');
+    const sellPriceInput = row.querySelector('.sell-price');
+
+    if (icon.classList.contains('fa-lock-open')) {
+        // Khóa lại
+        icon.classList.remove('fa-lock-open');
+        icon.classList.add('fa-lock');
+        sellPriceInput.disabled = true;
+        btn.setAttribute('title', 'Mở khóa để cập nhật giá');
+    } else {
+        // Mở khóa
+        icon.classList.remove('fa-lock');
+        icon.classList.add('fa-lock-open');
+        sellPriceInput.disabled = false;
+        btn.setAttribute('title', 'Khóa để không cập nhật giá');
+    }
+}
+
 
 function toggleFeeColumn(isChecked) {
     const table = document.getElementById('profit-loss-table');
@@ -66,6 +91,11 @@ function addProfitLossRow() {
         <td><input type="number" class="volume" placeholder="100"></td>
         <td><input type="number" class="buy-price" placeholder="25000"></td>
         <td><input type="number" class="sell-price" placeholder="Để trống = giá hiện tại"></td>
+        <td style="text-align: center; vertical-align: middle;">
+            <button class="lock-btn" onclick="togglePriceLock(this)" title="Khóa để không cập nhật giá">
+                <i class="fas fa-lock-open"></i>
+            </button>
+        </td>
         <td class="fee-cell"><input type="number" class="fee" value="0.15" step="0.01"></td>
         <td class="profit-loss-result">0</td>
         <td class="profit-loss-percent-result">-</td>
@@ -82,6 +112,12 @@ async function updateLivePricesAndCalculate() {
 
     const priceRequests = rows.map(row => {
         const sellPriceInput = row.querySelector('.sell-price');
+        
+        // Bỏ qua nếu ô giá đã bị khóa
+        if (sellPriceInput.disabled) {
+            return Promise.resolve();
+        }
+
         const stockCode = row.querySelector('.stock-code').value.trim().toUpperCase();
         if (stockCode) {
             return fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`)
