@@ -1,24 +1,46 @@
 <?php
-// Cho phép truy cập từ bất kỳ nguồn nào (cần thiết cho môi trường phát triển)
+// Cho phép truy cập từ bất kỳ nguồn nào
 header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
 // Hàm để thực hiện một yêu cầu cURL và trả về kết quả
-function fetch_data($url, $headers = []) {
+function fetch_data($url, $custom_headers = []) {
     $ch = curl_init();
+
+    $browser_headers = [
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language: en-US,en;q=0.9,vi;q=0.8',
+    ];
+    
+    $headers = array_merge($browser_headers, $custom_headers);
+
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    // ===== FIX: THÊM USER-AGENT ĐỂ GIẢ LẬP TRÌNH DUYỆT =====
-    // Dòng này rất quan trọng để vượt qua lớp bảo vệ của Cloudflare
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
-    // =========================================================
-    // Bỏ qua xác minh SSL (chỉ nên dùng trong môi trường phát triển)
+    
+    // Xử lý cookie
+    $cookie_file = sys_get_temp_dir() . '/cloudflare_cookie.txt';
+    curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
+    curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
+    
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
     $output = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
     curl_close($ch);
+
+    if ($curl_error) {
+        return json_encode(['error' => true, 'message' => 'cURL Error: ' . $curl_error]);
+    }
 
     if ($http_code >= 400) {
         return json_encode(['error' => true, 'message' => 'API request failed with status code ' . $http_code, 'details' => $output]);
@@ -33,6 +55,10 @@ $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 $fireant_api_key = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg';
 $fireant_headers = ['Authorization: ' . $fireant_api_key, 'Accept: application/json'];
 
+// ===== FIX: SỬ DỤNG PROXY TRUNG GIAN CHO CÁC API BỊ CHẶN =====
+$third_party_proxy = 'https://webproxy.vodang2702.workers.dev/?url=';
+// ==============================================================
+
 switch ($endpoint) {
     case 'stock_data':
         $code = isset($_GET['code']) ? strtoupper($_GET['code']) : '';
@@ -41,11 +67,10 @@ switch ($endpoint) {
             exit;
         }
 
-        // Lấy tất cả dữ liệu cần thiết cho việc định giá
         $fundamental = fetch_data("https://restv2.fireant.vn/symbols/{$code}/fundamental", $fireant_headers);
         $financial_q = fetch_data("https://restv2.fireant.vn/symbols/{$code}/financial-data?type=Q&count=4", $fireant_headers);
         $financial_y = fetch_data("https://restv2.fireant.vn/symbols/{$code}/financial-data?type=Y&count=5", $fireant_headers);
-        $transaction = fetch_data("https://iboard-query.ssi.com.vn/stock/{$code}");
+        $transaction = fetch_data($third_party_proxy . "https://iboard-query.ssi.com.vn/stock/{$code}");
         $profile = fetch_data("https://restv2.fireant.vn/symbols/{$code}/profile", $fireant_headers);
         
         $date_from = date('Y-m-d', strtotime('-10 year'));
@@ -96,7 +121,7 @@ switch ($endpoint) {
             echo json_encode(['error' => true, 'message' => 'Stock code is required.']);
             exit;
         }
-        echo fetch_data("https://iboard-query.ssi.com.vn/stock/{$code}");
+        echo fetch_data($third_party_proxy . "https://iboard-query.ssi.com.vn/stock/{$code}");
         break;
 
     case 'listings':
