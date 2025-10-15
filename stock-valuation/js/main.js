@@ -138,9 +138,9 @@ function generateDerivativeNotification() {
     
     let countdownText = "";
     if (daysRemaining > 1) {
-        countdownText = `, đếm ngược còn ${daysRemaining} ngày nữa !`;
+        countdownText = `, đếm ngược còn ${daysRemaining} ngày nữa!`;
     } else if (daysRemaining === 1) {
-        countdownText = `, đếm ngược còn 1 ngày nữa !`;
+        countdownText = `, đếm ngược còn 1 ngày nữa!`;
     } else if (daysRemaining === 0) {
         countdownText = `, đáo hạn HÔM NAY!`;
     }
