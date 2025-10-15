@@ -46,11 +46,10 @@ async function calculateAdjustedPrice() {
         loadingDiv.style.display = 'block';
         try {
             const stockCode = preGDKHQValue.toUpperCase();
-            const proxy = 'https://webproxy.vodang2702.workers.dev/?url=';
-            const response = await fetch(`${proxy}https://iboard-query.ssi.com.vn/stock/${stockCode}`);
+            const response = await fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`);
             if (!response.ok) throw new Error(`Không tìm thấy mã CK "${stockCode}"`);
             const stockTransaction = await response.json();
-            if (!stockTransaction.data || stockTransaction.data.matchedPrice == null) {
+            if (stockTransaction.error || !stockTransaction.data || stockTransaction.data.matchedPrice == null) {
                  throw new Error(`Không lấy được giá cho mã ${stockCode}.`);
             }
             P = parseFloat(stockTransaction.data.matchedPrice);
