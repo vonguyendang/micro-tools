@@ -24,8 +24,11 @@
             <button class="tab" onclick="showTab('tab4')"><i class="fas fa-bullhorn"></i> LỊCH SỰ KIỆN</button>
             <button class="tab" onclick="showTab('tab5')"><i class="fas fa-paper-plane"></i> PHÁT HÀNH</button>
             <button class="tab" onclick="showTab('tab6')"><i class="fas fa-th-large"></i> PTKT</button>
+            <button class="tab" onclick="showTab('tab-admin')"><i class="fas fa-user-shield"></i> QUẢN LÝ</button>
         </div>
     </div>
+
+    <div id="notification-bar" class="notification-container"></div>
 
 
     <div id="tab1" class="container active-container">
@@ -380,6 +383,96 @@
          </main>
     </div>
 
+    <div id="tab-admin" class="container">
+        <header><h1><i class="fas fa-user-shield"></i> Trang Quản lý</h1></header>
+        <main>
+            <div id="admin-login-view">
+                <p>Vui lòng nhập mật khẩu Admin để tiếp tục.</p>
+                <div class="input-group" style="max-width: 400px; margin: auto;">
+                    <label for="admin-password">Mật khẩu Admin:</label>
+                    <input type="password" id="admin-password" placeholder="Nhập mật khẩu...">
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+                </div>
+            </div>
+
+            <div id="admin-main-view" style="display: none;">
+                <div class="portfolio-header" style="justify-content: flex-end;">
+                    <button class="action-button" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                </div>
+                
+                <div class="period-tabs">
+                    <button class="period-tab active" onclick="showAdminSubTab('admin-notifications')">Quản lý Thông báo</button>
+                    <button class="period-tab" onclick="showAdminSubTab('admin-reset-password')">Mật khẩu Danh mục</button>
+                    <button class="period-tab" onclick="showAdminSubTab('admin-generate-md5')">Tạo mã MD5</button>
+                </div>
+
+                <div id="admin-notifications" class="admin-sub-container active">
+                    <h2><i class="fas fa-bell"></i> Quản lý Thông báo Tùy chỉnh</h2>
+                    <div class="button-container" style="justify-content: flex-start;">
+                        <button class="action-button calculate-button" onclick="showAddNotificationModal()"><i class="fas fa-plus"></i> Thêm Thông báo Mới</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="admin-notifications-table">
+                            <thead>
+                                <tr>
+                                    <th class="message-col">Nội dung Thông báo</th>
+                                    <th class="type-col">Loại</th>
+                                    <th class="status-col">Trạng thái</th>
+                                    <th class="actions-col">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-reset-password" class="admin-sub-container">
+                    <h2><i class="fas fa-key"></i> Đặt lại Mật khẩu Danh mục</h2>
+                     <div class="admin-tool-section">
+                        <p>Công cụ này cho phép đặt lại mật khẩu của bất kỳ danh mục nào nếu người dùng quên.</p>
+                        <div class="input-group">
+                            <label for="reset-portfolio-select">Chọn Danh mục:</label>
+                            <select id="reset-portfolio-select"></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-portfolio-pass">Mật khẩu mới:</label>
+                            <input type="password" id="new-portfolio-pass" placeholder="Nhập mật khẩu mới...">
+                        </div>
+                        <button class="action-button" onclick="resetPortfolioPassword()">
+                            <i class="fas fa-save"></i> Lưu Mật khẩu Mới
+                        </button>
+                    </div>
+                </div>
+
+                <div id="admin-generate-md5" class="admin-sub-container">
+                    <h2><i class="fas fa-hashtag"></i> Tạo mã Hash MD5</h2>
+                    <div class="admin-tool-section">
+                        <p>Công cụ này dùng để tạo mã hash MD5 từ một chuỗi bất kỳ, hữu ích cho việc kiểm tra hoặc cấu hình.</p>
+                        <div class="input-group">
+                            <label for="md5-input-text">Chuỗi cần mã hóa:</label>
+                            <input type="text" id="md5-input-text" placeholder="Nhập chuỗi bất kỳ...">
+                        </div>
+                        <button class="action-button calculate-button" onclick="generateMd5Hash()">
+                            <i class="fas fa-cogs"></i> Tạo Hash
+                        </button>
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="md5-output-text">Kết quả MD5:</label>
+                            <div class="input-with-button">
+                                <input type="text" id="md5-output-text" readonly placeholder="Kết quả sẽ hiển thị ở đây..." onclick="copyMd5Hash(this)">
+                                <button class="copy-btn" onclick="copyMd5Hash(document.getElementById('md5-output-text'))" title="Sao chép">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
     <div id="portfolio-modal-backdrop" class="modal-backdrop" style="display: none;"></div>
 
     <div id="create-portfolio-modal" class="modal" style="display: none;">
@@ -418,18 +511,49 @@
             <button class="action-button" onclick="saveStock()">Lưu</button>
         </div>
     </div>
+    
+    <div id="notification-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('notification-modal')">&times;</span>
+            <h2 id="notification-modal-title">Thêm Thông báo Mới</h2>
+            <input type="hidden" id="edit-notification-index">
+            <div class="input-group">
+                <label for="notification-message">Nội dung thông báo:</label>
+                <textarea id="notification-message" placeholder="Nhập nội dung... Hỗ trợ emoji."></textarea>
+            </div>
+            <div class="input-group">
+                <label for="notification-type">Loại thông báo:</label>
+                <select id="notification-type">
+                    <option value="info">Thông tin (Xanh dương)</option>
+                    <option value="success">Thành công (Xanh lá)</option>
+                    <option value="warning">Cảnh báo (Vàng)</option>
+                    <option value="alert">Báo động (Đỏ)</option>
+                </select>
+            </div>
+            <div class="input-group" style="display: flex; align-items: center;">
+                <label for="notification-active" style="margin-bottom: 0; margin-right: 15px;">Kích hoạt:</label>
+                <label class="switch">
+                    <input type="checkbox" id="notification-active">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <button class="action-button" onclick="saveNotification()">Lưu Thông báo</button>
+        </div>
+    </div>
 
 
     <footer>
         <p>© 2023 Stock Review by Dangvo. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/tab-valuation.js"></script>
     <script src="js/tab-gdkhq.js"></script>
     <script src="js/tab-investor-support.js"></script>
     <script src="js/tab-listings.js"></script>
     <script src="js/tab-events.js"></script>
+    <script src="js/tab-admin.js"></script>
     <script src="js/main.js"></script>
 </body>
 
