@@ -1,6 +1,7 @@
 /**
  * tab-investor-support.js
  * Chứa mã nguồn cho chức năng Tab 7: Hỗ trợ Nhà Đầu Tư.
+ * Cập nhật: Sửa lỗi cập nhật giá live, thêm cột % Lãi/Lỗ.
  */
 
 // --- KHỞI TẠO KHI TẢI TRANG ---
@@ -20,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Chạy lần đầu để đảm bảo trạng thái đúng (mặc định OFF)
-    // Gọi hàm này sau khi thêm dòng đầu tiên để đảm bảo header và cell tồn tại
-    // Việc này sẽ được gọi lại sau khi addProfitLossRow() chạy.
+    toggleFeeColumn(feeToggle.checked);
 });
 
 /**
@@ -51,17 +51,14 @@ function toggleFeeColumn(isChecked) {
     const feeHeader = table.querySelector('.fee-header');
     const displayStyle = isChecked ? 'table-cell' : 'none';
 
-    // 1. Cập nhật header
     if (feeHeader) {
         feeHeader.style.display = displayStyle;
     }
 
-    // 2. Cập nhật các ô dữ liệu
     feeCells.forEach(cell => {
         cell.style.display = displayStyle;
     });
-
-    // 3. Vô hiệu hóa/kích hoạt input 
+ 
     feeInputs.forEach(input => {
         input.disabled = !isChecked;
         input.style.backgroundColor = isChecked ? '#f8f9fa' : '#f0f0f0';
@@ -72,80 +69,121 @@ function addProfitLossRow() {
     const tableBody = document.getElementById('profit-loss-table').querySelector('tbody');
     const newRow = tableBody.insertRow();
     const isChecked = document.getElementById('fee-toggle')?.checked || false;
-    // Bổ sung class 'fee-cell' cho cột phí
-    newRow.innerHTML = `<td><input type="text" class="stock-code" placeholder="HPG"></td><td><input type="number" class="volume" placeholder="100"></td><td><input type="number" class="buy-price" placeholder="25000"></td><td><input type="number" class="sell-price" placeholder="Để trống = giá hiện tại"></td><td class="fee-cell"><input type="number" class="fee" value="0.15" step="0.01"></td><td class="profit-loss-result">0</td><td><button class="delete-btn" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button></td>`;
     
-    // Áp dụng trạng thái ẩn/hiện ngay lập tức cho dòng mới
+    // *** THAY ĐỔI 1: Thêm cột <td class="profit-loss-percent-result">-</td> cho % Lãi/Lỗ ***
+    newRow.innerHTML = `
+        <td><input type="text" class="stock-code" placeholder="HPG"></td>
+        <td><input type="number" class="volume" placeholder="100"></td>
+        <td><input type="number" class="buy-price" placeholder="25000"></td>
+        <td><input type="number" class="sell-price" placeholder="Để trống = giá hiện tại"></td>
+        <td class="fee-cell"><input type="number" class="fee" value="0.15" step="0.01"></td>
+        <td class="profit-loss-result">0</td>
+        <td class="profit-loss-percent-result">-</td>
+        <td><button class="delete-btn" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button></td>`;
+    
     toggleFeeColumn(isChecked);
 }
 
 async function updateLivePricesAndCalculate() {
     const rows = Array.from(document.getElementById('profit-loss-table').querySelectorAll('tbody tr'));
+    
+    // Hiển thị chỉ báo loading
+    const updateButton = document.querySelector('button[onclick="updateLivePricesAndCalculate()"]');
+    const originalButtonText = updateButton.innerHTML;
+    updateButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...`;
+    updateButton.disabled = true;
+
     const priceRequests = rows.map(row => {
         const sellPriceInput = row.querySelector('.sell-price');
         const stockCode = row.querySelector('.stock-code').value.trim().toUpperCase();
-        if (!sellPriceInput.value && stockCode) {
+        
+        // *** THAY ĐỔI 2: Luôn cập nhật giá nếu có mã cổ phiếu, không kiểm tra ô giá bán có trống hay không ***
+        if (stockCode) {
             return fetch(`https://webproxy.vodang2702.workers.dev/?url=https://iboard-query.ssi.com.vn/stock/${stockCode}`)
                 .then(response => response.ok ? response.json() : null)
                 .then(data => {
-                    // Dùng giá khớp lệnh hiện tại để tính lãi/lỗ
                     if (data?.data?.matchedPrice) {
                         sellPriceInput.value = data.data.matchedPrice;
-                        sellPriceInput.style.backgroundColor = '#e8f5e9';
+                        sellPriceInput.style.backgroundColor = '#e8f5e9'; // Đánh dấu giá được cập nhật
+                    } else {
+                         sellPriceInput.style.backgroundColor = '#fff3f3'; // Đánh dấu nếu không lấy được giá
                     }
-                }).catch(err => console.error(`Lỗi lấy giá ${stockCode}:`, err));
+                }).catch(err => {
+                    console.error(`Lỗi lấy giá ${stockCode}:`, err);
+                    sellPriceInput.style.backgroundColor = '#fff3f3';
+                });
         }
         return Promise.resolve();
     });
+    
     await Promise.all(priceRequests);
+    
+    // Hoàn tất loading
+    updateButton.innerHTML = originalButtonText;
+    updateButton.disabled = false;
+    
     calculateTotalProfitLoss();
 }
 
 function calculateTotalProfitLoss() {
     const rows = document.getElementById('profit-loss-table').querySelectorAll('tbody tr');
-    // Đọc trạng thái toggle để quyết định có tính phí hay không
     const feeEnabled = document.getElementById('fee-toggle').checked; 
     let totalProfitLoss = 0;
+
     rows.forEach(row => {
         const volume = parseFloat(row.querySelector('.volume').value) || 0;
         const buyPrice = parseFloat(row.querySelector('.buy-price').value) || 0;
         const sellPrice = parseFloat(row.querySelector('.sell-price').value) || 0;
-        // Chỉ tính phí nếu toggle được bật, nếu không thì feePercent là 0
         const feePercent = feeEnabled ? (parseFloat(row.querySelector('.fee').value) || 0) : 0;
         
+        const resultCell = row.querySelector('.profit-loss-result');
+        const percentCell = row.querySelector('.profit-loss-percent-result'); // Lấy ô %
+
         if (volume > 0 && buyPrice > 0 && sellPrice > 0) {
-            const buyValue = volume * buyPrice, sellValue = volume * sellPrice;
+            const buyValue = volume * buyPrice;
+            const sellValue = volume * sellPrice;
             const buyFee = buyValue * (feePercent / 100);
             const sellFee = sellValue * (feePercent / 100);
             const profitLoss = sellValue - buyValue - buyFee - sellFee;
             
             totalProfitLoss += profitLoss;
-            const resultCell = row.querySelector('.profit-loss-result');
+            
+            // Cập nhật cột Lãi/Lỗ (VNĐ)
             resultCell.textContent = formatNumber(profitLoss, 0);
             resultCell.className = `profit-loss-result ${profitLoss >= 0 ? 'price-up' : 'price-down'}`;
+            
+            // *** THAY ĐỔI 3: Tính toán và cập nhật cột % Lãi/Lỗ ***
+            const profitLossPercent = buyValue > 0 ? (profitLoss / buyValue) * 100 : 0;
+            percentCell.textContent = `${profitLossPercent.toFixed(2)}%`;
+            percentCell.className = `profit-loss-percent-result ${profitLoss >= 0 ? 'price-up' : 'price-down'}`;
+
         } else {
-            row.querySelector('.profit-loss-result').textContent = '0';
-            row.querySelector('.profit-loss-result').className = 'profit-loss-result';
+            // Reset cả 2 cột nếu dữ liệu không hợp lệ
+            resultCell.textContent = '0';
+            resultCell.className = 'profit-loss-result';
+            percentCell.textContent = '-';
+            percentCell.className = 'profit-loss-percent-result';
         }
     });
+
     const summaryDiv = document.getElementById('profit-loss-summary');
     const profitClass = totalProfitLoss >= 0 ? 'total-profit' : 'total-loss';
-    const toggleContainer = summaryDiv.querySelector('.fee-toggle-container');
-    const toggleHTML = toggleContainer ? toggleContainer.outerHTML : '';
+    
+    // Giữ lại toggle khi cập nhật summary để tránh lỗi
+    const toggleHTML = summaryDiv.querySelector('.fee-toggle-container')?.outerHTML || '';
     summaryDiv.innerHTML = `${toggleHTML}<p><strong>Tổng Lãi/Lỗ:</strong> <span class="${profitClass}">${formatNumber(totalProfitLoss, 0)} VNĐ</span></p>`;
-    // Đảm bảo toggle vẫn ở đó nếu nó bị mất do gán lại innerHTML
-    if (!toggleContainer && document.getElementById('fee-toggle')) {
-         document.getElementById('fee-toggle').closest('.fee-toggle-container').remove(); // Remove old one if exists
-         const newToggleContainer = document.createElement('div');
-         newToggleContainer.className = 'fee-toggle-container';
-         newToggleContainer.innerHTML = '<span>Bao gồm phí giao dịch?</span><label class="switch"><input type="checkbox" id="fee-toggle" ' + (feeEnabled ? 'checked' : '') + '><span class="slider round"></span></label>';
-         summaryDiv.prepend(newToggleContainer);
-         document.getElementById('fee-toggle').addEventListener('change', () => {
-            toggleFeeColumn(document.getElementById('fee-toggle').checked);
+    
+    // Gắn lại sự kiện cho toggle nếu nó được vẽ lại
+    const newToggle = document.getElementById('fee-toggle');
+    if (newToggle && !newToggle.dataset.listenerAttached) {
+         newToggle.addEventListener('change', () => {
+            toggleFeeColumn(newToggle.checked);
             calculateTotalProfitLoss();
          });
+         newToggle.dataset.listenerAttached = 'true';
     }
 }
+
 
 // =================================================================
 // CÁC CHỨC NĂNG KHÁC (Không thay đổi)
@@ -197,13 +235,12 @@ async function calculateTargetProfitSessions() {
         if (!data?.data?.matchedPrice || !data?.data?.exchange) throw new Error('Không lấy được dữ liệu giá hoặc sàn.');
         
         exchange = data.data.exchange.toLowerCase();
-        currentPriceForProfit = data.data.matchedPrice; // Dùng matchedPrice để tính lãi lỗ hiện tại
+        currentPriceForProfit = data.data.matchedPrice; 
 
-        // LOGIC CẬP NHẬT CHO UPCOM: Sử dụng Giá Trung bình (avgPrice) làm giá tham chiếu cho Phiên 1
         if (exchange === 'upcom' && data.data.avgPrice) {
             startPriceForRoadmap = data.data.avgPrice; 
         } else {
-            startPriceForRoadmap = data.data.matchedPrice; // Các sàn khác dùng matchedPrice
+            startPriceForRoadmap = data.data.matchedPrice;
         }
 
     } catch (error) {
