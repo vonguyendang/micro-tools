@@ -158,6 +158,7 @@ label i {
 }
 
 input[type="text"],
+input[type="password"],
 input[type="number"],
 select {
     width: 100%;
@@ -172,6 +173,7 @@ select {
 }
 
 input[type="text"]:focus,
+input[type="password"]:focus,
 input[type="number"]:focus,
 select:focus {
     outline: none;
@@ -351,7 +353,6 @@ select:focus {
 .iframe-container { position: relative; overflow: hidden; width: 100%; padding-top: 75%; margin-top: 25px; border: 1px solid var(--border-color); border-radius: var(--border-radius); }
 .iframe-container iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
 
-/* Thêm gợi ý thoát Full Screen (chỉ hiển thị khi ở chế độ Fullscreen) */
 .iframe-container::after {
     content: "Nhấn ESC để thoát chế độ Toàn màn hình";
     position: fixed;
@@ -363,12 +364,10 @@ select:focus {
     border-radius: 4px;
     font-size: 0.9rem;
     z-index: 10000;
-    opacity: 0; /* Mặc định ẩn */
+    opacity: 0;
     transition: opacity 0.3s;
 }
 
-/* Hiển thị khi iframe ở chế độ fullscreen */
-/* Thêm các tiền tố để đảm bảo tương thích */
 .iframe-container:fullscreen::after,
 .iframe-container:-webkit-full-screen::after,
 .iframe-container:-moz-full-screen::after,
@@ -414,6 +413,64 @@ input:checked + .slider:before { transform: translateX(26px); }
 .dividend-pagination { margin-top: 10px; padding-bottom: 10px; }
 
 
+/* ----- Portfolio Styles (NEW) ----- */
+#portfolio-login-view { text-align: center; }
+.portfolio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+.portfolio-header h3 { margin: 0; font-size: 1.3rem; color: var(--text-color); }
+.portfolio-header div { display: flex; align-items: center; gap: 10px; }
+.delete-portfolio-btn { background-color: var(--error-color) !important; }
+.delete-portfolio-btn:hover { background-color: #c0392b !important; }
+.edit-btn { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.1rem; }
+
+/* ----- Modal Styles (NEW) ----- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    z-index: 101;
+    width: 90%;
+    max-width: 500px;
+    animation: slideIn 0.3s ease-out;
+}
+.modal-content {
+    position: relative;
+}
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--primary-darker);
+}
+.close-button {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+.close-button:hover {
+    color: #333;
+}
+@keyframes slideIn {
+    from { top: 45%; opacity: 0; }
+    to { top: 50%; opacity: 1; }
+}
+
+
 /* ----- Responsive Design ----- */
 @media (max-width: 768px) {
     body { padding: 15px 5px; }
@@ -438,12 +495,9 @@ input:checked + .slider:before { transform: translateX(26px); }
     .hidden-border .external-link-button { flex-grow: 1; padding: 6px 8px; font-size: 0.8rem; }
     .iframe-container { padding-top: 100%; }
 
-    /* === PHẦN SỬA LỖI CHO BẢNG TRÊN ĐIỆN THOẠI === */
     .table-wrapper {
-        overflow-x: auto; /* Bật tính năng cuộn ngang */
+        overflow-x: auto;
     }
-
-    /* Áp dụng cho các bảng cần cuộn ngang */
     #profit-loss-table,
     #avg-price-table,
     #portfolio-table,
@@ -451,26 +505,20 @@ input:checked + .slider:before { transform: translateX(26px); }
     #table-approved,
     #table-events-general,
     #table-events-hose {
-        font-size: 0.8rem; /* Giảm cỡ chữ cho giao diện mobile */
-        width: 100%; /* Bảng sẽ chiếm đủ không gian cần thiết */
-        table-layout: auto; /* Cho phép trình duyệt tự điều chỉnh độ rộng cột */
+        font-size: 0.8rem;
+        width: 100%;
+        table-layout: auto;
     }
-
-    /* Đảm bảo ô nhập liệu không bị quá nhỏ */
     #profit-loss-table input,
     #avg-price-table input {
         min-width: 100px;
     }
-    /* Bổ sung để làm cho iframe PTKT chiếm tối đa chiều cao còn lại trên mobile */
     #tab6 .iframe-container {
-        padding-top: 0 !important; /* Loại bỏ giới hạn tỷ lệ khung hình */
-        margin-top: 15px; /* Điều chỉnh margin */
-        /* 100vh trừ đi khoảng ước tính của tabs, header, buttons và padding/margin */
+        padding-top: 0 !important;
+        margin-top: 15px;
         height: calc(100vh - 250px); 
-        min-height: 400px; /* Đảm bảo đủ lớn */
+        min-height: 400px;
     }
-
-    /* Đảm bảo iframe con lấp đầy chiều cao của container */
     #tab6 .iframe-container iframe {
         height: 100%; 
     }
@@ -513,3 +561,22 @@ input:checked + .slider:before { transform: translateX(26px); }
     color: #777;
     margin-top: 5px;
 }
+
+.external-link-button {
+    background-color: var(--accent-color);
+    color: var(--light-text-color);
+}
+.external-link-button:hover {
+    background-color: #d35400; /* Màu cam đậm hơn khi hover */
+}
+
+/* ----- Portfolio Styles (NEW) ----- */
+#portfolio-login-view { text-align: center; }
+.portfolio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
+.portfolio-header h3 { margin: 0; font-size: 1.3rem; color: var(--text-color); }
+.portfolio-header div { display: flex; align-items: center; gap: 10px; }
+.delete-portfolio-btn { background-color: var(--error-color) !important; }
+.delete-portfolio-btn:hover { background-color: #c0392b !important; }
+.edit-btn { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.1rem; }
+
+
