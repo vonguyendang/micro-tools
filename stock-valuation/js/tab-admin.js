@@ -64,7 +64,7 @@ function loginAdmin() {
         return;
     }
     const passHash = md5(password);
-    const ADMIN_PASS_HASH = "5f4dcc3b5aa765d61d8327deb882cf99"; 
+    const ADMIN_PASS_HASH = "db49afcfc0a6eac0199be1e781f13d63"; 
 
     if (passHash === ADMIN_PASS_HASH) {
         sessionStorage.setItem('admin_loggedIn', 'true');
