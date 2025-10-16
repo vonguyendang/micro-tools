@@ -108,18 +108,19 @@ async function updateLivePricesAndCalculate() {
     const originalButtonText = updateButton.innerHTML;
     updateButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...`;
     updateButton.disabled = true;
+    const corsProxyUrl = 'https://webproxy.vodang2702.workers.dev/?url=';
 
     const priceRequests = rows.map(row => {
         const sellPriceInput = row.querySelector('.sell-price');
         
-        // Bỏ qua nếu ô giá đã bị khóa
         if (sellPriceInput.disabled) {
             return Promise.resolve();
         }
 
         const stockCode = row.querySelector('.stock-code').value.trim().toUpperCase();
         if (stockCode) {
-            return fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`)
+            const url = `https://iboard-query.ssi.com.vn/stock/${stockCode}`;
+            return fetch(corsProxyUrl + encodeURIComponent(url), { cache: 'no-store' })
                 .then(response => response.ok ? response.json() : null)
                 .then(data => {
                     if (data?.data?.matchedPrice) {
@@ -413,14 +414,16 @@ async function updatePortfolioPrices() {
     const originalButtonHTML = updateButton.innerHTML;
     updateButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...`;
     updateButton.disabled = true;
+    const corsProxyUrl = 'https://webproxy.vodang2702.workers.dev/?url=';
 
     const stocksToUpdate = portfolios[activePortfolio].stocks;
-    const priceRequests = stocksToUpdate.map(stock => 
-        fetch(`api/proxy.php?endpoint=stock_price&code=${stock.code}`)
-        .then(res => res.ok ? res.json() : null)
-        .then(data => ({ code: stock.code, marketPrice: data?.data?.matchedPrice || stock.marketPrice || null }))
-        .catch(err => { console.error(`Lỗi lấy giá ${stock.code}:`, err); return { code: stock.code, marketPrice: stock.marketPrice || null }; })
-    );
+    const priceRequests = stocksToUpdate.map(stock => {
+        const url = `https://iboard-query.ssi.com.vn/stock/${stock.code}`;
+        return fetch(corsProxyUrl + encodeURIComponent(url), { cache: 'no-store' })
+            .then(res => res.ok ? res.json() : null)
+            .then(data => ({ code: stock.code, marketPrice: data?.data?.matchedPrice || stock.marketPrice || null }))
+            .catch(err => { console.error(`Lỗi lấy giá ${stock.code}:`, err); return { code: stock.code, marketPrice: stock.marketPrice || null }; })
+    });
     const updatedPrices = await Promise.all(priceRequests);
     
     let hasChanged = false;
@@ -546,7 +549,9 @@ async function calculateTargetProfitSessions() {
 
     let currentPriceForProfit = 0, startPriceForRoadmap = 0, exchange = '';
     try {
-        const response = await fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`);
+        const corsProxyUrl = 'https://webproxy.vodang2702.workers.dev/?url=';
+        const url = `https://iboard-query.ssi.com.vn/stock/${stockCode}`;
+        const response = await fetch(corsProxyUrl + encodeURIComponent(url), { cache: 'no-store' });
         if (!response.ok) throw new Error('Không tìm thấy mã cổ phiếu.');
         const data = await response.json();
         if (data.error || !data?.data?.matchedPrice || !data?.data?.exchange) throw new Error('Không lấy được dữ liệu giá hoặc sàn.');
