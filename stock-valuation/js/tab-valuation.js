@@ -41,37 +41,94 @@ async function fetchStockData() {
     }
 
     const stockCode = code.toUpperCase();
+    const apiKey = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDA5MTc4MDczLCJuYmYiOjE3MDkxNzgwNzMsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiIzMWYzYzU5Ny1jYjZlLTQzYWEtYmRlZS01NjkyYjM3YWNiM2EiLCJhdXRoX3RpbWUiOjE3MDkxNzgwNzMsImlkcCI6Imlkc3J2IiwibmFtZSI6InZvZGFuZzI3MDJAZ21haWwuY29tIiwic2VjdXJpdHlfc3RhbXAiOiJlNjA5NTEzYy05ZDFmLTQ4NGUtOTAyNi01MTA0ZDVlNmYzNTMiLCJqdGkiOiIwNzc0MDRiNmE1ZmM3MjQ4ZmMyMmNlYmEzYjUzYjlhZCIsImFtciI6WyJwYXNzd29yZCJdfQ.yhyKMefOxXhxIFTD9YCAUnQYqGAnA7-m89g-EWX3B3N51m614d2uj3IhEMH6kl8W-zhgdWu1yfIY7PgiwIUqAKL4M-LG93roNzTN0F0tk_WCFbrpxyc3Z4Cv1uTi4A10EGCkqwnZ3sZV8ValCmzfxmDvXDoQRFuy91nznmiUFEg_YVnukVsZyASetLh6-_jYC-FsuW9ZCLAXo4QNkr6_DsJKbIywZkkofn7IsfWFMDBoa5dEiPyxfG8zMq3F3pydh_fKPjaz-oUWmewjIRwm0ohfNwvTJqs4jU0Pz4t4QmFYvRj_yrILxTc_59ewZvKb_fvuE8q3l1E7dXvIb7SYIg';
+    const headers = { 'accept': 'application/json', 'authorization': apiKey };
+    const corsProxyUrl = 'https://webproxy.vodang2702.workers.dev/?url=';
+
     resultDiv.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Đang tải và phân tích dữ liệu...</p>';
-    dividendCurrentPage = 1; // Reset lại trang khi tìm mã mới
+    dividendCurrentPage = 1;
+
+    // Helper function to fetch and handle errors gracefully
+    const safeFetch = (url, options = {}) => fetch(url, { ...options, cache: 'no-store' })
+        .then(res => {
+            if (!res.ok) throw new Error(`API ${url} failed with status: ${res.status}`);
+            return res.json();
+        })
+        .catch(err => {
+            console.warn(err);
+            return null; // Return null on error so Promise.all doesn't fail
+        });
+
+    // Helper function for bond data with fallback
+    const fetchBondData = async () => {
+        const primaryUrl = 'https://sbcharts.investing.com/bond_charts/bonds_chart_72.json';
+        let data = await safeFetch(corsProxyUrl + encodeURIComponent(primaryUrl));
+        if (data) return data;
+
+        // Fallback logic
+        console.warn("Primary bond API failed. Trying fallback...");
+        const fallbackUrl = 'https://www.worldgovernmentbonds.com/wp-json/common/v1/historical';
+        const fallbackOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({
+                "GLOBALVAR": {
+                    "JS_VARIABLE": "jsGlobalVars", "FUNCTION": "Bond", "DOMESTIC": true,
+                    "ENDPOINT": "https://www.worldgovernmentbonds.com/wp-json/common/v1/historical",
+                    "DATE_RIF": "2099-12-31", "OBJ": { "UNIT": "%", "DECIMAL": 3, "UNIT_DELTA": "bp", "DECIMAL_DELTA": 1 },
+                    "COUNTRY1": { "SYMBOL": "58", "PAESE": "Vietnam", "PAESE_UPPERCASE": "VIETNAM", "BANDIERA": "vn", "URL_PAGE": "vietnam" },
+                    "COUNTRY2": null, "OBJ1": { "DURATA_STRING": "10 Years", "DURATA": 120 }, "OBJ2": null
+                }
+            })
+        };
+        // Note: The worker proxy must support POST requests for this to work.
+        return await safeFetch(fallbackUrl, fallbackOptions);
+    };
 
     try {
-        const response = await fetch(`api/proxy.php?endpoint=stock_data&code=${stockCode}`);
-        if (!response.ok) {
-            throw new Error(`Lỗi máy chủ: ${response.statusText}`);
-        }
-        const allData = await response.json();
+        const [dateFrom, dateTo] = getFilterDate();
+        const urls = [
+            safeFetch(`https://restv2.fireant.vn/symbols/${stockCode}/fundamental`, { headers }),
+            safeFetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Q&count=4`, { headers }),
+            safeFetch(`https://restv2.fireant.vn/symbols/${stockCode}/financial-data?type=Y&count=5`, { headers }),
+            fetchBondData(),
+            safeFetch(`${corsProxyUrl}https://iboard-query.ssi.com.vn/stock/${stockCode}`),
+            safeFetch(`https://restv2.fireant.vn/events/search?symbol=${stockCode}&orderBy=1&type=0&startDate=${dateFrom}&endDate=${dateTo}&offset=0&limit=100`, { headers }),
+            safeFetch(`https://restv2.fireant.vn/symbols/${stockCode}/profile`, { headers })
+        ];
 
-        if (allData.error) {
-             throw new Error(`Lỗi từ backend: ${allData.message}`);
-        }
+        const [
+            fundamentalData,
+            financialQData,
+            financialYData,
+            bondsData,
+            transactionData,
+            eventsData,
+            profileData
+        ] = await Promise.all(urls);
 
-        // Gán dữ liệu vào các biến toàn cục
-        globalStockData = allData.fundamental || {};
-        globalFinancialDataQuarter = allData.financial_q || [];
-        globalFinancialDataYear = allData.financial_y || [];
-        globalBonds = allData.bonds || {};
-        globalStockTransaction = allData.transaction || {};
-        globalDividendEvents = allData.events || [];
-        globalStockProfile = allData.profile || {};
+        // Assign data to global variables, providing empty defaults
+        globalStockData = fundamentalData || {};
+        globalFinancialDataQuarter = financialQData || [];
+        globalFinancialDataYear = financialYData || [];
+        globalBonds = bondsData || {};
+        globalStockTransaction = transactionData || {};
+        globalDividendEvents = eventsData || [];
+        globalStockProfile = profileData || {};
+
+        if (Object.keys(globalStockProfile).length === 0 && Object.keys(globalStockTransaction).length === 0) {
+            throw new Error(`Không tìm thấy dữ liệu cho mã ${stockCode}`);
+        }
 
         const q_count = globalFinancialDataQuarter.length;
         const y_count = globalFinancialDataYear.length;
         const availablePeriods = PERIODS.filter(p => (p.source === 'q' ? q_count : y_count) >= p.required);
         const defaultPeriod = availablePeriods.find(p => p.id === '1Y') ? '1Y' : (availablePeriods.length > 0 ? availablePeriods[availablePeriods.length - 1].id : '1Q');
-
+        
         updateValuationUI(defaultPeriod);
+
     } catch (error) {
-        console.error("Lỗi khi fetch dữ liệu:", error);
+        console.error("Lỗi nghiêm trọng khi fetch dữ liệu:", error);
         resultDiv.innerHTML = `<p class="placeholder-text error-text"><i class="fas fa-exclamation-circle"></i> Có lỗi xảy ra: ${error.message}. Vui lòng thử lại hoặc kiểm tra mã cổ phiếu.</p>`;
     }
 }
