@@ -8,20 +8,18 @@ let registeredTable, approvedTable, generalEventsTable, hoseEventsTable;
 
 /**
  * Hiển thị tab được chọn và ẩn các tab khác.
- * Kích hoạt việc tải dữ liệu cho các tab mới khi chúng được mở lần đầu.
+ * Kích hoạt việc tải dữ liệu và hiển thị sub-tab mặc định.
  * @param {string} tabId - ID của container tab cần hiển thị.
  */
 function showTab(tabId) {
     // Ẩn tất cả các container
-    const containers = document.querySelectorAll('.container');
-    containers.forEach(container => {
+    document.querySelectorAll('.container').forEach(container => {
         container.style.display = 'none';
         container.classList.remove('active-container');
     });
 
     // Bỏ trạng thái 'active' khỏi tất cả các nút tab
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
 
     // Hiển thị container được chọn
     const selectedContainer = document.getElementById(tabId);
@@ -32,7 +30,7 @@ function showTab(tabId) {
 
     // Đánh dấu nút tab được chọn là 'active'
     const selectedTab = document.querySelector(`.tab[onclick="showTab('${tabId}')"]`);
-     if (selectedTab) {
+    if (selectedTab) {
         selectedTab.classList.add('active');
     }
     
@@ -41,13 +39,44 @@ function showTab(tabId) {
         initializeListingTabs();
     } else if (tabId === 'tab4' && !generalEventsTable && !hoseEventsTable) {
         initializeEventsTabs();
+    } else if (tabId === 'tab7' && !document.getElementById('investor-profit-loss').querySelector('tbody').hasChildNodes()) {
+        // Khởi tạo tab Hỗ trợ NĐT nếu bảng còn trống
+        initializeInvestorSupportTabDefaults();
     } else if (tabId === 'tab-admin') {
         initializeAdminTab();
+    }
+
+    // --- CẢI TIẾN: Luôn kích hoạt sub-tab mặc định khi chuyển tab ---
+    // Điều này đảm bảo nội dung luôn hiển thị ngay khi mở tab chính.
+    switch (tabId) {
+        case 'tab3':
+            showListingSubTab('listing-registered');
+            break;
+        case 'tab4':
+            showEventSubTab('events-general');
+            break;
+        case 'tab7':
+            showInvestorSubTab('investor-profit-loss');
+            break;
+        case 'tab-admin':
+            // Hàm checkAdminLoginState đã xử lý việc hiển thị sub-tab
+            checkAdminLoginState(); 
+            break;
     }
 }
 
 /**
- * Hàm mới để mở URL của web trong một tab mới.
+ * --- HÀM MỚI: Khởi tạo các giá trị mặc định cho tab Hỗ trợ NĐT ---
+ * Thêm các dòng trống ban đầu để người dùng có thể nhập liệu ngay.
+ */
+function initializeInvestorSupportTabDefaults() {
+    addProfitLossRow();
+    addAvgPriceRow();
+}
+
+
+/**
+ * Mở URL của web trong một tab mới.
  * @param {string} url - Đường dẫn đến trang web.
  */
 function openWebUrl(url) {
@@ -55,65 +84,50 @@ function openWebUrl(url) {
 }
 
 /**
- * Hàm mới để mở iframe PTKT ở chế độ toàn màn hình.
+ * Mở iframe PTKT ở chế độ toàn màn hình.
  */
 function openFullscreenPTKT() {
     const iframe = document.getElementById('ptkt-iframe');
     if (iframe) {
-        if (iframe.requestFullscreen) {
-            iframe.requestFullscreen();
-        } else if (iframe.webkitRequestFullscreen) { /* Safari */
-            iframe.webkitRequestFullscreen();
-        } else if (iframe.msRequestFullscreen) { /* IE11 */
-            iframe.msRequestFullscreen();
-        } else {
-             alert('Trình duyệt của bạn không hỗ trợ chế độ toàn màn hình.');
-        }
+        if (iframe.requestFullscreen) iframe.requestFullscreen();
+        else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen(); // Safari
+        else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen(); // IE11
+        else alert('Trình duyệt của bạn không hỗ trợ chế độ toàn màn hình.');
     }
 }
 
 // =================================================================
-// LOGIC KHU VỰC THÔNG BÁO (CẬP NHẬT)
+// LOGIC KHU VỰC THÔNG BÁO
 // =================================================================
 
 /**
  * Tìm ngày đáo hạn phái sinh tiếp theo (Thứ 5 tuần thứ 3 của tháng).
- * @returns {Date} Đối tượng Date cho ngày đáo hạn tiếp theo.
+ * @returns {Date|null}
  */
 function getNextDerivativeExpirationDate() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     let year = today.getFullYear();
     let month = today.getMonth();
 
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 24; i++) { // Check for next 2 years
         const firstDayOfMonth = new Date(year, month, 1);
-        const dayOfWeek = firstDayOfMonth.getDay();
-
+        const dayOfWeek = firstDayOfMonth.getDay(); // Sunday = 0, Thursday = 4
         const daysUntilFirstThursday = (4 - dayOfWeek + 7) % 7;
-        const firstThursday = 1 + daysUntilFirstThursday;
-
-        const thirdThursday = firstThursday + 14;
-
+        const thirdThursday = 1 + daysUntilFirstThursday + 14;
         const expirationDate = new Date(year, month, thirdThursday);
 
-        if (expirationDate >= today) {
-            return expirationDate;
-        }
+        if (expirationDate >= today) return expirationDate;
 
         month++;
-        if (month > 11) {
-            month = 0;
-            year++;
-        }
+        if (month > 11) { month = 0; year++; }
     }
     return null;
 }
 
 /**
  * Tạo nội dung HTML cho thông báo đáo hạn phái sinh tự động.
- * @returns {string|null} Chuỗi HTML của thông báo, hoặc null nếu không có.
+ * @returns {string|null}
  */
 function generateDerivativeNotification() {
     const expirationDate = getNextDerivativeExpirationDate();
@@ -121,45 +135,28 @@ function generateDerivativeNotification() {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     const timeDiff = expirationDate.getTime() - today.getTime();
     const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
     // Bỏ qua nếu đã qua ngày đáo hạn
     if (daysRemaining < 0) return null;
 
-    const day = String(expirationDate.getDate()).padStart(2, '0');
-    const month = String(expirationDate.getMonth() + 1).padStart(2, '0');
-    const year = expirationDate.getFullYear();
+    const [day, month, year] = [
+        String(expirationDate.getDate()).padStart(2, '0'),
+        String(expirationDate.getMonth() + 1).padStart(2, '0'),
+        expirationDate.getFullYear()
+    ];
 
-    const expirationMonth = expirationDate.getMonth() + 1;
-    const isQuarterlyMonth = [3, 6, 9, 12].includes(expirationMonth);
+    const isQuarterlyMonth = [3, 6, 9, 12].includes(expirationDate.getMonth() + 1);
     const icon = isQuarterlyMonth ? '🔥🔥🔥' : '🔥';
     
-    let countdownText = "";
-    if (daysRemaining > 1) {
-        countdownText = `, đếm ngược còn ${daysRemaining} ngày nữa!`;
-    } else if (daysRemaining === 1) {
-        countdownText = `, đếm ngược còn 1 ngày nữa!`;
-    } else if (daysRemaining === 0) {
-        countdownText = `, đáo hạn HÔM NAY!`;
-    }
+    let countdownText = `, còn ${daysRemaining} ngày nữa!`;
+    if (daysRemaining === 1) countdownText = `, chỉ còn 1 ngày nữa!`;
+    else if (daysRemaining === 0) countdownText = `, đáo hạn HÔM NAY!`;
 
-    // *** LOGIC MỚI ĐỂ CHỌN LOẠI THÔNG BÁO ***
-    let notificationType = 'info'; // Mặc định
-    if (daysRemaining <= 3) {
-        notificationType = 'alert'; // Dưới 3 ngày: Báo động (Đỏ)
-    } else if (daysRemaining <= 7) {
-        notificationType = 'warning'; // Dưới 7 ngày: Cảnh báo (Vàng)
-    } else if (daysRemaining < 14) {
-        notificationType = 'info'; // Dưới 14 ngày: Thông tin (Xanh dương)
-    } else { // >= 14 ngày
-        notificationType = 'success'; // Trên 14 ngày: Thành công (Xanh lá)
-    }
-    // *** KẾT THÚC LOGIC MỚI ***
-
+    let notificationType = 'info';
+    if (daysRemaining <= 3) notificationType = 'alert';
+    else if (daysRemaining <= 7) notificationType = 'warning';
     const message = `Chú ý: Đáo hạn phái sinh vào Thứ Năm, ngày ${day}/${month}/${year}${countdownText}`;
-    
     return `<div class="notification-item type-${notificationType}"><span class="notification-icon">${icon}</span><span class="notification-text">${message}</span></div>`;
 }
 
@@ -176,13 +173,7 @@ async function fetchCustomNotifications() {
         const notifications = await response.json();
         
         if (Array.isArray(notifications)) {
-            const icons = {
-                info: '📢',
-                success: '✅',
-                warning: '⚠️',
-                alert: '🚨'
-            };
-
+            const icons = { info: '📢', success: '✅', warning: '⚠️', alert: '🚨' };
             return notifications
                 .filter(n => n.active && n.message)
                 .map(n => {
@@ -208,9 +199,9 @@ async function displayNotifications() {
 
     const customMsgs = await fetchCustomNotifications();
     const derivativeMsg = generateDerivativeNotification();
-
     // Hiển thị thông báo tùy chỉnh trước, sau đó đến thông báo phái sinh
-    let allMessagesHTML = customMsgs + (derivativeMsg || '');
+
+    const allMessagesHTML = customMsgs + (derivativeMsg || '');
 
     if (allMessagesHTML) {
         notificationBar.innerHTML = allMessagesHTML;
