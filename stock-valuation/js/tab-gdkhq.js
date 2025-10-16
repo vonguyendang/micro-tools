@@ -46,7 +46,10 @@ async function calculateAdjustedPrice() {
         loadingDiv.style.display = 'block';
         try {
             const stockCode = preGDKHQValue.toUpperCase();
-            const response = await fetch(`api/proxy.php?endpoint=stock_price&code=${stockCode}`);
+            const corsProxyUrl = 'https://webproxy.vodang2702.workers.dev/?url=';
+            const url = `https://iboard-query.ssi.com.vn/stock/${stockCode}`;
+            const response = await fetch(corsProxyUrl + encodeURIComponent(url), { cache: 'no-store' });
+            
             if (!response.ok) throw new Error(`Không tìm thấy mã CK "${stockCode}"`);
             const stockTransaction = await response.json();
             if (stockTransaction.error || !stockTransaction.data || stockTransaction.data.matchedPrice == null) {
@@ -150,8 +153,8 @@ function parseRatioInput(inputString, type, parValue = 10000) {
         return type === 'cash' ? ratio * parValue : ratio;
     }
 
-    // Định dạng tỷ lệ (VD: '10:100' hoặc '10/100')
-    let delimiter = str.includes(':') ? ':' : (str.includes('/') ? '/' : null);
+    // Định dạng tỷ lệ (VD: '10:100' hoặc '1:10')
+    let delimiter = str.includes(':') ? ':' : null;
     if (delimiter) {
         const parts = str.split(delimiter);
         if (parts.length !== 2) return NaN;
