@@ -1,0 +1,15 @@
+# Thư mục chứa các gói thư viện của Node.js
+/node_modules
+
+# Thư mục build được tạo tự động
+../stock-valuation-obfuscate
+
+# Các file log và file tạm của hệ điều hành
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Các file cấu hình của Editor/IDE
+.vscode/
+.idea/
