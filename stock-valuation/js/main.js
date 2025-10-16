@@ -158,7 +158,7 @@ function generateDerivativeNotification() {
     }
     // *** KẾT THÚC LOGIC MỚI ***
 
-    const message = `Chú ý: Đáo hạn phái sinh ngày ${day}/${month}/${year}${countdownText}`;
+    const message = `Chú ý: Đáo hạn phái sinh vào Thứ Năm, ngày ${day}/${month}/${year}${countdownText}`;
     
     return `<div class="notification-item type-${notificationType}"><span class="notification-icon">${icon}</span><span class="notification-text">${message}</span></div>`;
 }
