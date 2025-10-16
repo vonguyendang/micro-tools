@@ -1,0 +1,48 @@
+{
+    "PVTHAO": {
+        "passwordHash": "a054fce99351f5894fea786050e29d31",
+        "stocks": [
+            {
+                "code": "NLG",
+                "volume": 600,
+                "price": 40800,
+                "marketPrice": 42050
+            },
+            {
+                "code": "BID",
+                "volume": 521,
+                "price": 40562,
+                "marketPrice": 39750
+            },
+            {
+                "code": "MBS",
+                "volume": 345,
+                "price": 31527,
+                "marketPrice": 33700
+            }
+        ]
+    },
+    "VNDANG": {
+        "passwordHash": "c951b13c848f49fe9b00dbb0e23254fd",
+        "stocks": [
+            {
+                "code": "MBS",
+                "volume": 60,
+                "price": 31527,
+                "marketPrice": 33700
+            },
+            {
+                "code": "NLG",
+                "volume": 900,
+                "price": 40646,
+                "marketPrice": 42050
+            },
+            {
+                "code": "LCG",
+                "volume": 245,
+                "price": 12242,
+                "marketPrice": 12300
+            }
+        ]
+    }
+}

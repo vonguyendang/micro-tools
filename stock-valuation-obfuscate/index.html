@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Review</title>
+    <link rel="shortcut icon" href="favicon_io/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('tab1')"><i class="fas fa-chart-pie"></i> ĐỊNH GIÁ CỔ PHIẾU</button>
+            <button class="tab" onclick="showTab('tab2')"><i class="fas fa-calendar-alt"></i> GIÁ NGÀY GDKHQ</button>
+            <button class="tab" onclick="showTab('tab7')"><i class="fas fa-hands-helping"></i> HỖ TRỢ NĐT</button>
+            <button class="tab" onclick="showTab('tab3')"><i class="fas fa-list-alt"></i> NIÊM YẾT MỚI</button>
+            <button class="tab" onclick="showTab('tab4')"><i class="fas fa-bullhorn"></i> LỊCH SỰ KIỆN</button>
+            <button class="tab" onclick="showTab('tab5')"><i class="fas fa-paper-plane"></i> PHÁT HÀNH</button>
+            <button class="tab" onclick="showTab('tab6')"><i class="fas fa-th-large"></i> PTKT</button>
+            <button class="tab" onclick="showTab('tab-admin')"><i class="fas fa-user-shield"></i> QUẢN LÝ</button>
+        </div>
+    </div>
+
+    <div id="notification-bar" class="notification-container"></div>
+
+
+    <div id="tab1" class="container active-container">
+        <header>
+            <h1><i class="fas fa-search-dollar"></i> Định Giá Cổ Phiếu</h1>
+        </header>
+        <main>
+            <div class="input-group">
+                <label for="stockCode"><i class="fas fa-tag"></i> Mã cổ phiếu:</label>
+                <input type="text" id="stockCode" placeholder="Nhập mã cổ phiếu (VD: HPG, FPT)...">
+            </div>
+            <div class="button-container main-actions">
+                 <button class="action-button calculate-button" onclick="fetchStockData()">
+                    <i class="fas fa-calculator"></i> Tính toán Định giá
+                 </button>
+            </div>
+            <div class="result" id="resultValuation">
+                 <p class="placeholder-text">Nhập mã cổ phiếu và nhấn "Tính toán" để xem kết quả định giá chi tiết.</p>
+            </div>
+         </main>
+    </div>
+
+    <div id="tab2" class="container">
+        <header>
+            <h1><i class="fas fa-adjust"></i> Tính Giá Điều Chỉnh Ngày GDKHQ</h1>
+        </header>
+        <main>
+            <div class="input-group">
+                <label for="preGDKHQInput"><i class="fas fa-file-invoice-dollar"></i> Giá trước GDKHQ hoặc Mã CK:</label>
+                <input type="text" id="preGDKHQInput" placeholder="Nhập giá (VD: 50000) hoặc Mã CK (VD: HPG)">
+                <small>Nếu nhập Mã CK, giá đóng cửa gần nhất sẽ được tự động lấy.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="Pa"><i class="fas fa-cash-register"></i> Giá thực hiện quyền mua PHT (VNĐ):</label>
+                <input type="number" id="Pa" step="100" placeholder="Giá mua ưu đãi (VD: 10000)">
+            </div>
+
+            <div class="input-group">
+                <label for="phtRatioInput"><i class="fas fa-percentage"></i> Tỷ lệ PHT (Cổ phiếu sở hữu : Cổ phiếu được mua):</label>
+                <input type="text" id="phtRatioInput" placeholder="VD: 100:10 hoặc 10%">
+                 <small>Định dạng: Sở hữu:Được mua (100:10), Phần trăm (10%)</small>
+            </div>
+
+            <div class="input-group">
+                <label for="cashDividendInput"><i class="fas fa-hand-holding-usd"></i> Cổ tức bằng tiền mặt (VNĐ/cổ phiếu):</label>
+                <input type="text" id="cashDividendInput" placeholder="VD: 2000 hoặc 20%">
+                <small>Nhập số tiền (2000) hoặc Tỷ lệ % trên mệnh giá (20% = 2000đ)</small>
+            </div>
+
+             <div class="input-group">
+                <label for="stockDividendRatioInput"><i class="fas fa-file-invoice-dollar"></i> Tỷ lệ Cổ tức bằng Cổ phiếu (Cổ phiếu sở hữu : Cổ phiếu nhận thêm):</label>
+                <input type="text" id="stockDividendRatioInput" placeholder="VD: 100:10 hoặc 10%">
+                 <small>Định dạng: Sở hữu:Nhận thêm (1000:125), Phần trăm (12,5%)</small>
+            </div>
+
+             <div class="button-container main-actions">
+                <button class="action-button calculate-button" onclick="calculateAdjustedPrice()"> <i class="fas fa-calculator"></i> Tính Giá Điều Chỉnh
+                </button>
+             </div>
+
+            <div class="result" id="resultGDKHQ">
+                <p class="placeholder-text">Nhập các thông số và nhấn nút để tính giá tham chiếu điều chỉnh.</p>
+            </div>
+             <div id="loadingGDKHQ" style="display: none; text-align: center; margin-top: 15px;">
+                 <i class="fas fa-spinner fa-spin"></i> Đang lấy giá cổ phiếu...
+             </div>
+        </main>
+    </div>
+
+    <div id="tab7" class="container">
+        <header>
+            <h1><i class="fas fa-hands-helping"></i> Hỗ trợ Nhà Đầu Tư</h1>
+        </header>
+        <main>
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showInvestorSubTab('investor-profit-loss')">Tính Lãi/Lỗ</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-avg-price')">Giá Vốn Trung Bình</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-portfolio')">Danh Mục Đầu Tư</button>
+                <button class="period-tab" onclick="showInvestorSubTab('investor-target')">Lợi Nhuận Mục Tiêu</button>
+            </div>
+
+            <div id="investor-profit-loss" class="investor-sub-container active">
+                <h2><i class="fas fa-balance-scale-right"></i> Tính Lãi/Lỗ & ROI</h2>
+                <div class="table-wrapper">
+                    <table id="profit-loss-table">
+                        <thead>
+                            <tr>
+                                <th>Mã CK</th>
+                                <th>Khối lượng</th>
+                                <th>Giá mua</th>
+                                <th>Giá bán / Hiện tại</th>
+                                <th>Khóa</th>
+                                <th class="fee-header">Phí GD (%)</th>
+                                <th>Lãi/Lỗ</th>
+                                <th>% ROI</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="addProfitLossRow()"><i class="fas fa-plus"></i> Thêm lệnh</button>
+                    <button class="action-button calculate-button" onclick="updateLivePricesAndCalculate()"><i class="fas fa-sync-alt"></i> Cập nhật giá hiện tại</button>
+                </div>
+                 <div id="profit-loss-summary" class="summary-container">
+                    <div class="fee-toggle-container">
+                        <span>Bao gồm phí giao dịch?</span>
+                        <label class="switch">
+                            <input type="checkbox" id="fee-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    </div>
+            </div>
+
+            <div id="investor-avg-price" class="investor-sub-container">
+                <h2><i class="fas fa-chart-line"></i> Tính Giá Vốn Trung Bình</h2>
+                <div class="input-group">
+                    <label for="avg-price-stock-code"><i class="fas fa-tag"></i> Mã cổ phiếu:</label>
+                    <input type="text" id="avg-price-stock-code" placeholder="Nhập mã (VD: HPG)">
+                </div>
+                <div class="table-wrapper">
+                    <table id="avg-price-table">
+                        <thead>
+                            <tr>
+                                <th>Khối lượng</th>
+                                <th>Giá mua</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="addAvgPriceRow()"><i class="fas fa-plus"></i> Thêm lệnh mua</button>
+                </div>
+                 <div id="avg-price-summary" class="summary-container">
+                    </div>
+            </div>
+
+            <div id="investor-portfolio" class="investor-sub-container">
+                 <h2><i class="fas fa-briefcase"></i> Theo Dõi Danh Mục</h2>
+                 <div id="portfolio-login-view">
+                    <p>Nhập mật khẩu của danh mục để xem hoặc nhập mật khẩu admin để quản lý tất cả.</p>
+                    <div class="input-group">
+                        <label for="portfolio-password">Mật khẩu:</label>
+                        <input type="password" id="portfolio-password" placeholder="Nhập mật khẩu...">
+                    </div>
+                    <div class="button-container">
+                        <button class="action-button" onclick="loginPortfolio()"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+                        <button class="action-button calculate-button" onclick="showCreatePortfolioModal()"><i class="fas fa-plus"></i> Tạo Danh mục mới</button>
+                    </div>
+                 </div>
+
+                 <div id="portfolio-main-view" style="display: none;">
+                    <div class="portfolio-header">
+                        <h3 id="portfolio-name-display"></h3>
+                        <div>
+                            <select id="portfolio-selector" onchange="switchPortfolio()"></select>
+                            <button class="action-button" onclick="logoutPortfolio()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                         <button class="action-button" onclick="showAddStockModal()"><i class="fas fa-plus"></i> Thêm Cổ phiếu</button>
+                         <button class="action-button calculate-button" id="update-prices-btn" onclick="updatePortfolioPrices()"><i class="fas fa-sync-alt"></i> Cập nhật giá</button>
+                         <button class="action-button delete-portfolio-btn" onclick="deleteCurrentPortfolio()"><i class="fas fa-trash-alt"></i> Xóa Danh mục này</button>
+                    </div>
+                     <div class="table-wrapper">
+                        <table id="portfolio-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã CK</th>
+                                    <th>Khối lượng</th>
+                                    <th>Giá vốn TB</th>
+                                    <th>Tổng vốn</th>
+                                    <th>Giá hiện tại</th>
+                                    <th>Giá trị TT</th>
+                                    <th>Lãi/Lỗ tạm tính</th>
+                                    <th>% L/L</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                     <div id="portfolio-summary" class="summary-container">
+                    </div>
+                 </div>
+            </div>
+
+            <div id="investor-target" class="investor-sub-container">
+                <h2><i class="fas fa-bullseye"></i> Ước Tính Lợi Nhuận Mục Tiêu</h2>
+                 <div class="input-group">
+                    <label for="target-stock-code">Mã cổ phiếu:</label>
+                    <input type="text" id="target-stock-code" placeholder="Nhập mã (VD: HPG)">
+                </div>
+                <div class="input-group">
+                    <label for="target-buy-price">Giá mua của bạn:</label>
+                    <input type="number" id="target-buy-price" placeholder="Giá bạn đã mua">
+                </div>
+                 <div class="input-group">
+                    <label for="target-price">Giá mục tiêu:</label>
+                    <input type="number" id="target-price" placeholder="Nhập giá bán mong muốn">
+                </div>
+                <div class="button-container">
+                    <button class="action-button calculate-button" onclick="calculateTargetProfitSessions()">
+                        <i class="fas fa-calculator"></i> Ước tính số phiên đạt mục tiêu
+                    </button>
+                </div>
+                <div id="target-summary" class="summary-container">
+                    </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="tab3" class="container">
+        <header>
+            <h1><i class="fas fa-list-alt"></i> Niêm Yết Mới Trên HOSE</h1>
+        </header>
+        <main>
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showListingSubTab('listing-registered')">Đăng ký niêm yết</button>
+                <button class="period-tab" onclick="showListingSubTab('listing-approved')">Được chấp thuận chính thức</button>
+            </div>
+            
+            <div id="listing-registered" class="listing-sub-container active">
+                <div class="table-controls">
+                    <input type="text" id="search-registered" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-registered">
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-registered"></div>
+            </div>
+
+            <div id="listing-approved" class="listing-sub-container">
+                <div class="table-controls">
+                    <input type="text" id="search-approved" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-approved">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-approved"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="tab4" class="container">
+        <header>
+            <h1><i class="fas fa-bullhorn"></i> Lịch Sự Kiện Sắp Tới</h1>
+        </header>
+        <main>
+            <div class="period-tabs">
+                <button class="period-tab active" onclick="showEventSubTab('events-general')">Tổng hợp</button>
+                <button class="period-tab" onclick="showEventSubTab('events-hose')">HOSE</button>
+            </div>
+
+            <div id="events-general" class="listing-sub-container active">
+                <div class="table-controls">
+                    <input type="text" id="search-events-general" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-events-general">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-events-general"></div>
+            </div>
+
+            <div id="events-hose" class="listing-sub-container">
+                <div class="table-controls">
+                    <input type="text" id="search-events-hose" placeholder="Tìm kiếm...">
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-events-hose">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="loading-cell">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls" id="pagination-events-hose"></div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="tab5" class="container">
+        <header>
+            <h1><i class="fas fa-paper-plane"></i> Tin tức phát hành (UBCKNN)</h1>
+        </header>
+        <main>
+            <div class="button-container">
+                <button class="action-button external-link-button" 
+                        onclick="openWebUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=b%C3%A1o+c%C3%A1o+ph%C3%A1t+h%C3%A0nh')">
+                    <i class="fas fa-external-link-alt"></i> Tin phát hành (Chia cổ tức)
+                </button>
+                <button class="action-button external-link-button" 
+                        onclick="openWebUrl('https://ssc.gov.vn/webcenter/portal/ubck/pages_otherpages/tmkim?SearchInput=%C4%91%C4%83ng+k%C3%BD+ch%C3%A0o+b%C3%A1n')">
+                    <i class="fas fa-external-link-alt"></i> Tin phát hành (Chào bán)
+                </button>
+            </div>
+             <p class="placeholder-text" style="margin-top: 30px;">Nhấn vào các nút trên để mở trang tin tức tương ứng từ website của Ủy ban Chứng khoán Nhà nước trong một tab mới.</p>
+        </main>
+    </div>
+
+    <div id="tab6" class="container">
+        <header>
+            <h1><i class="fas fa-th-large"></i> Phân tích PTKT</h1>
+        </header>
+        <main>
+            <div class="button-container main-actions">
+                 <button class="action-button external-link-button" onclick="openWebUrl('https://ptkt.dangvo.io.vn/')">
+                    <i class="fas fa-external-link-alt"></i> Mở công cụ PTKT
+                 </button>
+                 <button class="action-button calculate-button" onclick="openFullscreenPTKT()">
+                    <i class="fas fa-expand"></i> Mở Full Màn hình
+                 </button>
+            </div>
+            <div class="iframe-container">
+                <iframe id="ptkt-iframe" src="https://smoney.vodang2702.workers.dev/phan-tich-ky-thuat" frameborder="0"></iframe>
+            </div>
+         </main>
+    </div>
+
+    <div id="tab-admin" class="container">
+        <header><h1><i class="fas fa-user-shield"></i> Trang Quản lý</h1></header>
+        <main>
+            <div id="admin-login-view">
+                <p>Vui lòng nhập mật khẩu Admin để tiếp tục.</p>
+                <div class="input-group" style="max-width: 400px; margin: auto;">
+                    <label for="admin-password">Mật khẩu Admin:</label>
+                    <input type="password" id="admin-password" placeholder="Nhập mật khẩu...">
+                </div>
+                <div class="button-container">
+                    <button class="action-button" onclick="loginAdmin()"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+                </div>
+            </div>
+
+            <div id="admin-main-view" style="display: none;">
+                <div class="portfolio-header" style="justify-content: flex-end;">
+                    <button class="action-button" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                </div>
+                
+                <div class="period-tabs">
+                    <button class="period-tab active" onclick="showAdminSubTab('admin-notifications')">Quản lý Thông báo</button>
+                    <button class="period-tab" onclick="showAdminSubTab('admin-reset-password')">Mật khẩu Danh mục</button>
+                    <button class="period-tab" onclick="showAdminSubTab('admin-generate-md5')">Tạo mã MD5</button>
+                </div>
+
+                <div id="admin-notifications" class="admin-sub-container active">
+                    <h2><i class="fas fa-bell"></i> Quản lý Thông báo Tùy chỉnh</h2>
+                    <div class="button-container" style="justify-content: flex-start;">
+                        <button class="action-button calculate-button" onclick="showAddNotificationModal()"><i class="fas fa-plus"></i> Thêm Thông báo Mới</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="admin-notifications-table">
+                            <thead>
+                                <tr>
+                                    <th class="message-col">Nội dung Thông báo</th>
+                                    <th class="type-col">Loại</th>
+                                    <th class="status-col">Trạng thái</th>
+                                    <th class="actions-col">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-reset-password" class="admin-sub-container">
+                    <h2><i class="fas fa-key"></i> Đặt lại Mật khẩu Danh mục</h2>
+                     <div class="admin-tool-section">
+                        <p>Công cụ này cho phép đặt lại mật khẩu của bất kỳ danh mục nào nếu người dùng quên.</p>
+                        <div class="input-group">
+                            <label for="reset-portfolio-select">Chọn Danh mục:</label>
+                            <select id="reset-portfolio-select"></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-portfolio-pass">Mật khẩu mới:</label>
+                            <input type="password" id="new-portfolio-pass" placeholder="Nhập mật khẩu mới...">
+                        </div>
+                        <button class="action-button" onclick="resetPortfolioPassword()">
+                            <i class="fas fa-save"></i> Lưu Mật khẩu Mới
+                        </button>
+                    </div>
+                </div>
+
+                <div id="admin-generate-md5" class="admin-sub-container">
+                    <h2><i class="fas fa-hashtag"></i> Tạo mã Hash MD5</h2>
+                    <div class="admin-tool-section">
+                        <p>Công cụ này dùng để tạo mã hash MD5 từ một chuỗi bất kỳ, hữu ích cho việc kiểm tra hoặc cấu hình.</p>
+                        <div class="input-group">
+                            <label for="md5-input-text">Chuỗi cần mã hóa:</label>
+                            <input type="text" id="md5-input-text" placeholder="Nhập chuỗi bất kỳ...">
+                        </div>
+                        <button class="action-button calculate-button" onclick="generateMd5Hash()">
+                            <i class="fas fa-cogs"></i> Tạo Hash
+                        </button>
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="md5-output-text">Kết quả MD5:</label>
+                            <div class="input-with-button">
+                                <input type="text" id="md5-output-text" readonly placeholder="Kết quả sẽ hiển thị ở đây..." onclick="copyMd5Hash(this)">
+                                <button class="copy-btn" onclick="copyMd5Hash(document.getElementById('md5-output-text'))" title="Sao chép">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <div id="portfolio-modal-backdrop" class="modal-backdrop" style="display: none;"></div>
+
+    <div id="create-portfolio-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('create-portfolio-modal')">&times;</span>
+            <h2>Tạo Danh mục mới</h2>
+            <div class="input-group">
+                <label for="new-portfolio-name">Tên Danh mục:</label>
+                <input type="text" id="new-portfolio-name" placeholder="VD: Đầu tư dài hạn">
+            </div>
+            <div class="input-group">
+                <label for="new-portfolio-password">Mật khẩu:</label>
+                <input type="password" id="new-portfolio-password" placeholder="Mật khẩu để truy cập">
+            </div>
+            <button class="action-button" onclick="createPortfolio()">Tạo mới</button>
+        </div>
+    </div>
+
+    <div id="add-stock-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('add-stock-modal')">&times;</span>
+            <h2 id="stock-modal-title">Thêm Cổ phiếu</h2>
+            <input type="hidden" id="edit-stock-index">
+            <div class="input-group">
+                <label for="stock-modal-code">Mã CK:</label>
+                <input type="text" id="stock-modal-code" placeholder="VD: HPG">
+            </div>
+            <div class="input-group">
+                <label for="stock-modal-volume">Khối lượng:</label>
+                <input type="number" id="stock-modal-volume" placeholder="VD: 100">
+            </div>
+            <div class="input-group">
+                <label for="stock-modal-price">Giá vốn:</label>
+                <input type="number" id="stock-modal-price" placeholder="VD: 28000">
+            </div>
+            <button class="action-button" onclick="saveStock()">Lưu</button>
+        </div>
+    </div>
+    
+    <div id="notification-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('notification-modal')">&times;</span>
+            <h2 id="notification-modal-title">Thêm Thông báo Mới</h2>
+            <input type="hidden" id="edit-notification-index">
+            <div class="input-group">
+                <label for="notification-message">Nội dung thông báo:</label>
+                <textarea id="notification-message" placeholder="Nhập nội dung... Hỗ trợ emoji."></textarea>
+            </div>
+            <div class="input-group">
+                <label for="notification-type">Loại thông báo:</label>
+                <select id="notification-type">
+                    <option value="info">Thông tin (Xanh dương)</option>
+                    <option value="success">Thành công (Xanh lá)</option>
+                    <option value="warning">Cảnh báo (Vàng)</option>
+                    <option value="alert">Báo động (Đỏ)</option>
+                </select>
+            </div>
+            <div class="input-group" style="display: flex; align-items: center;">
+                <label for="notification-active" style="margin-bottom: 0; margin-right: 15px;">Kích hoạt:</label>
+                <label class="switch">
+                    <input type="checkbox" id="notification-active">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <button class="action-button" onclick="saveNotification()">Lưu Thông báo</button>
+        </div>
+    </div>
+
+
+    <footer>
+        <p>© 2023 Stock Review by Dangvo. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="app.min.js"></script>
+</body>
+
+</html>

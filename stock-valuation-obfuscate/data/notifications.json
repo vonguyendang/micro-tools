@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Chúc mừng năm mới 2026! Chúc quý nhà đầu tư một năm an khang, thịnh vượng và đầu tư thắng lợi!",
+        "type": "success",
+        "active": false
+    },
+    {
+        "message": "Lịch nghỉ lễ 30\/4 - 1\/5: Thị trường sẽ nghỉ giao dịch từ ngày 30\/04\/2026 đến hết ngày 01\/05\/2026.",
+        "type": "info",
+        "active": false
+    },
+    {
+        "message": "Hệ thống sẽ bảo trì vào lúc 23:00 tối nay để nâng cấp hiệu năng.",
+        "type": "warning",
+        "active": false
+    },
+    {
+        "message": "Cảnh báo rủi ro trên toàn thị trường, nhà đầu tư nên cẩn trọng trong các quyết định giao dịch.",
+        "type": "alert",
+        "active": false
+    }
+]
