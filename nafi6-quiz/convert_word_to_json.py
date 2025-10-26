@@ -22,7 +22,7 @@ def find_correct_answer_by_bold(cell):
                     return match.group(1) # Trả về ký tự tìm được (A, B, C, hoặc D)
     return ""
 
-def convert_docx_to_js(docx_path, js_path):
+def convert_docx_to_json(docx_path, json_path):
     """
     Đọc file DOCX có cấu trúc 3 cột và xuất ra file data.js.
     Đáp án đúng được xác định bằng chữ in đậm.
@@ -92,21 +92,14 @@ def convert_docx_to_js(docx_path, js_path):
         print("Không có dữ liệu câu hỏi nào được trích xuất.")
         return
 
-    with open(js_path, 'w', encoding='utf-8') as f:
-        f.write("// data.js\n\n")
-        f.write("const originalQuestions = ")
-        json_string = json.dumps(questions_data, ensure_ascii=False, indent=4)
-        f.write(json_string)
-        f.write(";\n\n")
-        f.write("const NUM_QUESTIONS = 70; // 70 câu hỏi ngẫu nhiên\n")
-        f.write("const QUIZ_DURATION = 40 * 60; // 40 phút = 2400 giây\n")
+    # Ghi ra file JSON
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(questions_data, f, ensure_ascii=False, indent=4)
     
-    print(f"---")
-    print(f"✅ Hoàn thành! Đã chuyển đổi {len(questions_data)} câu hỏi từ '{docx_path}' sang '{js_path}'.")
+    print(f"✅ Hoàn thành! Đã chuyển đổi {len(questions_data)} câu hỏi từ '{docx_path}' sang '{json_path}'.")
 
-# --- THỰC THI SCRIPT ---
 if __name__ == "__main__":
     input_file = "NganHangCauHoi.docx" 
-    output_file = "data.js"
+    output_file = "data.json" # Đổi tên file output
     
-    convert_docx_to_js(input_file, output_file)
+    convert_docx_to_json(input_file, output_file)
