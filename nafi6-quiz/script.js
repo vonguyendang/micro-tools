@@ -1,16 +1,12 @@
-// script.js
+// script.js (đã cập nhật hoàn toàn)
 
-// === KHAI BÁO CÁC BIẾN TOÀN CỤC VÀ HẰNG SỐ ===
+const NUM_QUESTIONS = 70;
+const QUIZ_DURATION = 40 * 60; 
 
-// Giả định các hằng số này (originalQuestions, NUM_QUESTIONS, DEFAULT_QUIZ_DURATION)
-// đã được khai báo và load từ file data.js hoặc trong thẻ <script> trước đó.
-
-let selectedQuestions = [];
-let ALL_QUESTIONS = []; // Mảng chứa tất cả câu hỏi đã gộp
-let timeLeft = -1; // -1: không giới hạn thời gian (mặc định)
+let selectedQuestions = []; // Chỉ chứa câu hỏi, không có đáp án
+let timeLeft = -1;
 let timerInterval;
 let quizSubmitted = false;
-const ADDED_QUESTIONS_FILE = 'add-quiz.json'; // Tên file trên server
 
 const quizForm = document.getElementById('quiz-form');
 const timerDisplay = document.getElementById('timer');
@@ -18,17 +14,8 @@ const startTimerBtn = document.getElementById('start-timer-btn');
 const setTimerBtn = document.getElementById('set-timer-btn');
 const setTimeModal = document.getElementById('setTimeModal');
 
-// Mảng cố định để đánh số thứ tự hiển thị cho các lựa chọn (A, B, C, D)
 const DISPLAY_KEYS = ['A', 'B', 'C', 'D'];
 
-
-// === HÀM HỖ TRỢ ===
-
-/**
- * Hàm xáo trộn mảng (Fisher-Yates)
- * @param {Array} array - Mảng cần xáo trộn
- * @returns {Array} Mảng đã xáo trộn
- */
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -37,243 +24,62 @@ function shuffleArray(array) {
     return array;
 }
 
-/**
- * Tải và gộp tất cả câu hỏi từ data.js và add-quiz.json trên server
- */
-async function loadAllQuestions() {
-    // 1. Lấy dữ liệu từ data.js (đã load sẵn trong biến global originalQuestions)
-    let mergedList = [...originalQuestions]; 
-
-    // 2. Lấy dữ liệu từ file add-quiz.json trên server
-    try {
-        const response = await fetch(ADDED_QUESTIONS_FILE);
-        if (response.ok) {
-            const added = await response.json();
-            if (Array.isArray(added)) {
-                mergedList = mergedList.concat(added);
-            }
-        } else {
-            console.warn(`Không thể tải file ${ADDED_QUESTIONS_FILE}. Server trả về status: ${response.status}`);
-        }
-    } catch (e) {
-        console.error(`Lỗi khi fetch file ${ADDED_QUESTIONS_FILE}. Vui lòng kiểm tra file có tồn tại không.`, e);
-    }
-    
-    // Gán danh sách đã gộp vào biến toàn cục
-    ALL_QUESTIONS = mergedList;
-    
-    // Cập nhật tổng số câu hỏi có sẵn trên giao diện quiz
-    const totalAvailableQuestionsElement = document.getElementById('total-available-questions');
-    if(totalAvailableQuestionsElement) {
-        if(document.getElementById('results').classList.contains('hidden')) {
-            totalAvailableQuestionsElement.textContent = ALL_QUESTIONS.length;
-        }
-    }
-}
-
-
-// === HÀM KHỞI TẠO VÀ HIỂN THỊ QUIZ ===
-
-/**
- * Khởi tạo bài kiểm tra: chọn câu ngẫu nhiên, xáo trộn nội dung đáp án và hiển thị.
- */
 async function initializeQuiz() {
-    // BƯỚC 1: Tải và gộp tất cả câu hỏi (sử dụng await)
-    await loadAllQuestions(); 
+    try {
+        const response = await fetch('quiz-api.php?action=start');
+        if (!response.ok) {
+            throw new Error('Không thể bắt đầu bài kiểm tra từ server.');
+        }
+        selectedQuestions = await response.json();
 
-    // 2. Chọn ngẫu nhiên 70 câu từ ALL_QUESTIONS
-    const shuffledQuestions = shuffleArray([...ALL_QUESTIONS]); 
-    const numToSelect = Math.min(NUM_QUESTIONS, ALL_QUESTIONS.length);
-    selectedQuestions = shuffledQuestions.slice(0, numToSelect);
+        selectedQuestions.forEach(q => {
+            const answersContent = Object.keys(q.answers).map(key => ({
+                originalKey: key, text: q.answers[key]
+            }));
+            const shuffledContent = shuffleArray(answersContent);
+            q.shuffledAnswers = shuffledContent.map((item, index) => ({
+                displayKey: DISPLAY_KEYS[index],
+                originalKey: item.originalKey,
+                text: item.text
+            }));
+        });
 
-    // 3. Xáo trộn thứ tự nội dung đáp án
-    selectedQuestions.forEach(q => {
-        const answerKeys = Object.keys(q.answers); 
-        const answersContent = answerKeys.map(key => ({
-            originalKey: key,         
-            text: q.answers[key]      
-        }));
+        renderQuiz();
+        updateTimerDisplay(true);
+        updateStartTimerButton(QUIZ_DURATION);
+        document.getElementById('total-available-questions').textContent = selectedQuestions.length;
 
-        const shuffledContent = shuffleArray(answersContent);
-        
-        q.shuffledAnswers = shuffledContent.map((item, index) => ({
-            displayKey: DISPLAY_KEYS[index], 
-            originalKey: item.originalKey,   
-            text: item.text                  
-        }));
-    });
-
-    // 4. Hiển thị câu hỏi
-    renderQuiz();
-    
-    // 5. Thiết lập trạng thái ban đầu cho timer
-    const defaultDuration = typeof QUIZ_DURATION !== 'undefined' ? QUIZ_DURATION : 40 * 60;
-    updateTimerDisplay(true);
-    updateStartTimerButton(defaultDuration);
-    
-    // Cập nhật tổng số câu hỏi có sẵn
-    document.getElementById('total-available-questions').textContent = selectedQuestions.length;
+    } catch (error) {
+        console.error("Lỗi khi khởi tạo bài thi:", error);
+        quizForm.innerHTML = `<p style='color:red;'>${error.message}</p>`;
+    }
 }
 
-/**
- * Hiển thị các câu hỏi đã chọn lên HTML
- */
 function renderQuiz() {
     let htmlContent = selectedQuestions.map((q, index) => {
-        const questionNumber = index + 1;
         const answerOptions = q.shuffledAnswers.map(ans => `
             <label class="answer-option" for="q${q.id}_${ans.originalKey}">
-                <input type="radio" 
-                       name="question_${q.id}" 
-                       id="q${q.id}_${ans.originalKey}" 
-                       value="${ans.originalKey}" 
-                />
+                <input type="radio" name="question_${q.id}" id="q${q.id}_${ans.originalKey}" value="${ans.originalKey}" />
                 <span class="answer-key">${ans.displayKey}.</span> ${ans.text}
             </label>
         `).join('');
 
         return `
             <div class="question-item" data-question-id="${q.id}">
-                <p class="question-text">Câu ${questionNumber}: ${q.question}</p>
+                <p class="question-text">Câu ${index + 1}: ${q.question}</p>
                 ${answerOptions}
             </div>
         `;
     }).join('');
-
     quizForm.innerHTML = htmlContent;
 }
 
-
-// === HÀM QUẢN LÝ VIEW (ĐƠN GIẢN HÓA) ===
-
-/**
- * Hiển thị phần nội dung được chọn (chỉ dành cho trang index.html)
- */
-function showSection(sectionId) {
-    const sections = ['quiz-main-section'];
-    sections.forEach(id => {
-        const section = document.getElementById(id);
-        if (section) {
-            section.classList.add('hidden');
-        }
-    });
-
-    const activeSection = document.getElementById(sectionId);
-    if (activeSection) {
-        activeSection.classList.remove('hidden');
-    }
-}
-
-
-// === HÀM XỬ LÝ THỜI GIAN (ĐÃ SỬA LỖI MODAL) ===
-
-/**
- * Cập nhật hiển thị thời gian
- */
-function updateTimerDisplay(isInitial = false) {
-    if (isInitial || timeLeft === -1) {
-        timerDisplay.textContent = 'Không giới hạn';
-    } else {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = 
-            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
-}
-
-/**
- * Cập nhật nút bắt đầu tính giờ với thời gian mới
- */
-function updateStartTimerButton(durationSeconds) {
-    const minutes = Math.floor(durationSeconds / 60);
-    startTimerBtn.textContent = `Bắt đầu Tính giờ (${minutes} phút)`;
-    startTimerBtn.onclick = () => startTimer(durationSeconds);
-}
-
-
-/**
- * Bắt đầu đếm ngược thời gian
- */
-function startTimer(durationSeconds) {
+async function submitQuiz(isAutoSubmit = false) {
     if (quizSubmitted) return;
-    
-    clearInterval(timerInterval); 
-    
-    timeLeft = durationSeconds;
-    
-    // Vô hiệu hóa các nút điều khiển thời gian khi đang chạy
-    startTimerBtn.disabled = true;
-    setTimerBtn.disabled = true;
-
-    timerInterval = setInterval(() => {
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            timerDisplay.textContent = 'Hết giờ';
-            alert("Hết giờ! Bài kiểm tra sẽ tự động được nộp.");
-            submitQuiz(true); // Tự động nộp bài khi hết giờ
-            return;
-        }
-
-        updateTimerDisplay();
-        timeLeft--;
-    }, 1000);
-}
-
-
-// === HÀM XỬ LÝ MODAL ĐẶT GIỜ (ĐÃ SỬA LỖI) ===
-
-function openSetTimeModal() {
-    if (timerInterval) {
-        alert("Đang trong quá trình tính giờ. Vui lòng nộp bài để đặt lại thời gian.");
-        return;
-    }
-    // HIỂN THỊ MODAL
-    setTimeModal.classList.remove('hidden');
-    const defaultDuration = typeof QUIZ_DURATION !== 'undefined' ? QUIZ_DURATION : 40 * 60;
-    document.getElementById('timeInput').value = Math.floor(defaultDuration / 60); 
-}
-
-// HÀM TẮT MODAL (QUAN TRỌNG)
-function closeSetTimeModal() {
-    // ẨN MODAL
-    setTimeModal.classList.add('hidden');
-}
-
-function setCustomTime() {
-    const minutes = parseInt(document.getElementById('timeInput').value);
-    
-    if (isNaN(minutes) || minutes <= 0 || minutes > 180) {
-        alert("Vui lòng nhập số phút hợp lệ (tối đa 180 phút).");
-        return;
-    }
-    
-    closeSetTimeModal(); // Đóng modal sau khi xác nhận
-    const durationSeconds = minutes * 60;
-    
-    updateStartTimerButton(durationSeconds);
-    
-    const minutesStr = String(minutes).padStart(2, '0');
-    timerDisplay.textContent = `${minutesStr}:00`;
-
-    alert(`Đã đặt thời gian làm bài là ${minutes} phút. Nhấn nút "Bắt đầu Tính giờ" để bắt đầu.`);
-}
-
-
-// === HÀM NỘP BÀI VÀ CHẤM ĐIỂM ===
-
-/**
- * Xử lý nộp bài, chấm điểm và hiển thị kết quả chi tiết
- */
-function submitQuiz(isAutoSubmit = false) {
-    if (quizSubmitted) return; 
     quizSubmitted = true;
-    clearInterval(timerInterval); 
-    
-    let score = 0;
-    const userAnswers = {};
-    const reviewArea = document.getElementById('review-area');
-    let reviewHtml = '';
+    clearInterval(timerInterval);
 
+    const userAnswers = {};
     const formData = new FormData(quizForm);
     for (const [key, value] of formData.entries()) {
         if (key.startsWith('question_')) {
@@ -281,38 +87,49 @@ function submitQuiz(isAutoSubmit = false) {
             userAnswers[qId] = value;
         }
     }
-    
-    const totalQuestionsInQuiz = selectedQuestions.length;
-    document.getElementById('total-available-questions').textContent = totalQuestionsInQuiz;
-    
-    selectedQuestions.forEach((q, index) => {
-        const questionNumber = index + 1;
-        const userAnswerKey = userAnswers[q.id]; 
-        const correctAnswerKey = q.correctAnswer; 
-        const isCorrect = userAnswerKey === correctAnswerKey;
 
-        if (isCorrect) {
-            score++;
+    try {
+        const response = await fetch('quiz-api.php?action=submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userAnswers)
+        });
+
+        if (!response.ok) {
+            throw new Error('Lỗi khi nộp bài. Vui lòng thử lại.');
         }
+
+        const result = await response.json();
+        displayResults(result.score, result.reviewData, userAnswers);
+
+    } catch (error) {
+        console.error("Lỗi khi nộp bài:", error);
+        alert(error.message);
+    }
+}
+
+function displayResults(score, reviewData, userAnswers) {
+    let reviewHtml = '';
+
+    // Tạo một map để tra cứu shuffledAnswers của mỗi câu hỏi
+    const questionMap = new Map(selectedQuestions.map(q => [q.id, q]));
+
+    reviewData.forEach((q, index) => {
+        const userAnswerKey = userAnswers[q.id];
+        const isCorrect = userAnswerKey === q.correctAnswer;
         
-        const correctDisplayKey = q.shuffledAnswers.find(a => a.originalKey === correctAnswerKey)?.displayKey || 'N/A';
-        const userDisplayKey = q.shuffledAnswers.find(a => a.originalKey === userAnswerKey)?.displayKey || 'N/A';
-        
-        const correctChoiceText = q.answers[correctAnswerKey];
+        const questionClientData = questionMap.get(q.id);
+        if (!questionClientData) return;
 
         reviewHtml += `<div class="question-item ${isCorrect ? 'correct-review' : 'incorrect-review'}">`;
-        reviewHtml += `<p class="question-text">Câu ${questionNumber}: ${q.question}</p>`;
+        reviewHtml += `<p class="question-text">Câu ${index + 1}: ${q.question}</p>`;
         
-        q.shuffledAnswers.forEach(ans => {
+        questionClientData.shuffledAnswers.forEach(ans => {
             const isUserChoice = ans.originalKey === userAnswerKey;
-            const isCorrectAnswer = ans.originalKey === correctAnswerKey;
-            
+            const isCorrectAnswer = ans.originalKey === q.correctAnswer;
             let answerClass = '';
-            if (isCorrectAnswer) {
-                answerClass = 'correct-answer-highlight'; 
-            } else if (isUserChoice && !isCorrectAnswer) {
-                answerClass = 'incorrect-choice-highlight'; 
-            }
+            if (isCorrectAnswer) answerClass = 'correct-answer-highlight';
+            else if (isUserChoice) answerClass = 'incorrect-choice-highlight';
             
             reviewHtml += `
                 <div class="answer-option ${answerClass}">
@@ -323,31 +140,80 @@ function submitQuiz(isAutoSubmit = false) {
                 </div>
             `;
         });
-        
-        reviewHtml += `<p style="font-weight:bold; margin-top: 10px;">`;
-        if (isCorrect) {
-            reviewHtml += `Kết quả: <span style="color:#28a745;">Đúng!</span>`;
-        } else {
-            const userChoiceText = userAnswerKey ? q.answers[userAnswerKey] : 'Chưa trả lời';
-        reviewHtml += `
-            <div>Kết quả: <span style="color:#dc3545;">Sai.</span> Bạn đã chọn: ${userDisplayKey} (${userChoiceText}).</div>
-            <div>Đáp án đúng: ${correctDisplayKey} (${correctChoiceText})</div>
-        `;        }
-        reviewHtml += `</p></div>`;
+        reviewHtml += `</div>`;
     });
 
-    document.querySelectorAll('.answer-option input').forEach(input => input.disabled = true);
+    document.querySelectorAll('#quiz-form input').forEach(input => input.disabled = true);
     startTimerBtn.disabled = true;
     setTimerBtn.disabled = true;
     
     document.getElementById('score').textContent = score;
-    reviewArea.innerHTML = reviewHtml;
+    document.getElementById('total-available-questions').textContent = reviewData.length;
+    document.getElementById('review-area').innerHTML = reviewHtml;
     
     quizForm.classList.add('hidden');
     document.getElementById('submit-btn').classList.add('hidden');
     document.getElementById('results').classList.remove('hidden');
 }
 
+
+// --- Các hàm xử lý timer và modal không thay đổi ---
+function updateTimerDisplay(isInitial = false) {
+    if (isInitial || timeLeft === -1) timerDisplay.textContent = 'Không giới hạn';
+    else {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+}
+
+function updateStartTimerButton(durationSeconds) {
+    const minutes = Math.floor(durationSeconds / 60);
+    startTimerBtn.textContent = `Bắt đầu Tính giờ (${minutes} phút)`;
+    startTimerBtn.onclick = () => startTimer(durationSeconds);
+}
+
+function startTimer(durationSeconds) {
+    if (quizSubmitted) return;
+    clearInterval(timerInterval);
+    timeLeft = durationSeconds;
+    startTimerBtn.disabled = true;
+    setTimerBtn.disabled = true;
+    timerInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = 'Hết giờ';
+            alert("Hết giờ! Bài kiểm tra sẽ tự động được nộp.");
+            submitQuiz(true);
+            return;
+        }
+        timeLeft--;
+        updateTimerDisplay();
+    }, 1000);
+}
+
+function openSetTimeModal() {
+    if (timerInterval) return;
+    setTimeModal.classList.remove('hidden');
+    document.getElementById('timeInput').value = Math.floor(QUIZ_DURATION / 60);
+}
+
+function closeSetTimeModal() {
+    setTimeModal.classList.add('hidden');
+}
+
+function setCustomTime() {
+    const minutes = parseInt(document.getElementById('timeInput').value);
+    if (isNaN(minutes) || minutes <= 0 || minutes > 180) {
+        alert("Vui lòng nhập số phút hợp lệ (tối đa 180 phút).");
+        return;
+    }
+    closeSetTimeModal();
+    const durationSeconds = minutes * 60;
+    updateStartTimerButton(durationSeconds);
+    timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:00`;
+    alert(`Đã đặt thời gian làm bài là ${minutes} phút. Nhấn nút "Bắt đầu Tính giờ" để bắt đầu.`);
+}
 
 // Khởi tạo bài kiểm tra khi trang load
 window.onload = initializeQuiz;
