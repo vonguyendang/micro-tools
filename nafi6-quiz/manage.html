@@ -10,7 +10,10 @@
     <div id="quiz-container">
         <header>
             <h1>⚙️ Quản Lý Ngân Hàng Câu Hỏi</h1>
-            <p style="text-align: center; color: #dc3545;">*Dữ liệu câu hỏi thêm mới sẽ được lưu vào file add-quiz.json trên server*</p>
+            <p style="text-align: center; color: #dc3545; font-weight: 500;">
+                *<b>Sửa/Xóa</b> câu hỏi gốc sẽ cập nhật file <b>data.json</b>.<br>
+                *<b>Thêm/Sửa/Xóa</b> câu hỏi mới sẽ cập nhật và <b>tự động đánh số lại</b> file <b>add-quiz.json</b>.*
+            </p>
         </header>
 
         <div id="admin-password-modal" class="modal">
@@ -72,18 +75,14 @@
             </div>
             
             <div id="question-bank-list">
-            </div>
+                </div>
         </section>
         
     </div>
 
-    <script src="data.js"></script> 
     <script>
-        // === KHAI BÁO BIẾN CỤC BỘ ===
         const ADMIN_PASSWORD = 'Bimat@123';
-        const BASE_QUESTION_COUNT = 270; // Giả định data.js có 270 câu hỏi
-        const ADDED_QUESTIONS_FILE = 'add-quiz.json';
-        const SAVE_ENDPOINT = './save-quiz-data.php'; // Endpoint API PHP
+        const SAVE_ENDPOINT = './save-quiz-data.php';
 
         const adminPasswordModal = document.getElementById('admin-password-modal');
         const manageSection = document.getElementById('manage-questions-section');
@@ -94,214 +93,143 @@
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
         const searchInput = document.getElementById('search-input');
 
-        let allQuestions = [];  // Mảng tổng hợp
-        let addedQuestions = []; // Dữ liệu từ add-quiz.json (được tải về)
-        let isEditing = false; // Trạng thái: Đang chỉnh sửa hay Thêm mới
+        let originalQuestions = [];
+        let addedQuestions = [];
+        let isEditing = false;
 
-        // === LOGIC TẢI VÀ GỘP DỮ LIỆU ===
-        
-        /**
-         * Tải và gộp tất cả câu hỏi từ data.js và add-quiz.json trên server
-         */
-        async function loadAndMergeQuestions() {
-            // 1. Lấy dữ liệu từ data.js
-            allQuestions = [...originalQuestions];
-
-            // 2. Lấy dữ liệu từ file add-quiz.json trên server
+        async function loadAndSeparateQuestions() {
             try {
-                const response = await fetch(ADDED_QUESTIONS_FILE);
-                if (response.ok) {
-                    addedQuestions = await response.json();
-                    if (Array.isArray(addedQuestions)) {
-                        // Loại bỏ các câu hỏi trùng ID nếu có lỗi trong quá trình merge (đề phòng)
-                        const addedIds = new Set(originalQuestions.map(q => q.id));
-                        addedQuestions = addedQuestions.filter(q => !addedIds.has(q.id));
+                const [originalRes, addedRes] = await Promise.all([
+                    fetch('data.json').catch(e => ({ ok: false, json: () => Promise.resolve([]) })),
+                    fetch('add-quiz.json').catch(e => ({ ok: false, text: () => Promise.resolve("[]") }))
+                ]);
 
-                        allQuestions = allQuestions.concat(addedQuestions);
+                originalQuestions = originalRes.ok ? await originalRes.json() : [];
+                
+                let addedData = [];
+                if (addedRes.ok) {
+                    const addedText = await addedRes.text();
+                    if (addedText && addedText.trim() !== "" && addedText.trim() !== "[]") {
+                        addedData = JSON.parse(addedText);
                     }
-                } else {
-                    // Nếu file không tồn tại hoặc lỗi, coi như mảng rỗng
-                    addedQuestions = [];
                 }
-            } catch (e) {
-                console.warn(`Lỗi khi fetch file ${ADDED_QUESTIONS_FILE}. Sử dụng mảng rỗng cho câu hỏi thêm mới.`, e);
-                addedQuestions = [];
+                addedQuestions = Array.isArray(addedData) ? addedData : [];
+
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu câu hỏi:", error);
+                questionBankList.innerHTML = `<p style="color: red; text-align: center;">Không thể tải dữ liệu. Vui lòng kiểm tra file JSON và console.</p>`;
             }
         }
-
-        // === LOGIC LƯU DỮ LIỆU LÊN SERVER (Sử dụng PHP API) ===
         
-        /**
-         * Ghi câu hỏi đã thêm/sửa/xóa vào file add-quiz.json trên server
-         * @param {Object} updatedData - Mảng addedQuestions mới cần lưu
-         */
-        async function saveUpdatedAddedQuestions(updatedData) {
+        // *** HÀM LƯU ĐÃ CẬP NHẬT LOGIC TỰ ĐỘNG ĐÁNH SỐ ***
+        async function saveAllChangesToServer() {
+            // 1. Tìm ID lớn nhất từ file gốc
+            const maxIdOriginal = originalQuestions.length > 0
+                ? Math.max(...originalQuestions.map(q => q.id))
+                : 0;
+
+            // 2. Sắp xếp và đánh số lại TOÀN BỘ câu hỏi thêm mới để đảm bảo tính liên tiếp
+            const renumberedAdded = addedQuestions
+                .sort((a, b) => (a.tempId || a.id) - (b.tempId || b.id)) // Sắp xếp theo thứ tự thêm/sửa
+                .map((question, index) => {
+                    const { tempId, ...rest } = question; // Loại bỏ ID tạm thời
+                    return {
+                        ...rest,
+                        id: maxIdOriginal + 1 + index // Gán ID mới, tuần tự
+                    };
+                });
             
-            // 1. Gửi yêu cầu POST đến server
             try {
                 const response = await fetch(SAVE_ENDPOINT, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        original: originalQuestions,
+                        added: renumberedAdded // Gửi danh sách đã được đánh số lại
+                    })
                 });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        alert(`✅ Thao tác thành công. ${result.message}. Vui lòng tải lại trang quiz (index.html) để thấy cập nhật.`);
-                        
-                        // Cập nhật client-side 
-                        await loadAndMergeQuestions(); // Tải lại toàn bộ dữ liệu để đồng bộ
-                        renderQuestionBank();
-                        
-                        return true;
-                    } else {
-                         alert(`❌ Lỗi Server: Không thể lưu dữ liệu. ${result.message}`);
-                         return false;
-                    }
+                
+                if (!response.ok) throw new Error(`Server trả về lỗi: ${response.status}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`✅ Thao tác thành công. ${result.message}`);
+                    await loadAndSeparateQuestions();
+                    filterQuestions();
+                    return true;
                 } else {
-                    const errorText = await response.text();
-                    alert(`❌ Lỗi Server: Không thể lưu dữ liệu. Server trả về lỗi: ${response.status} - ${errorText}`);
+                    alert(`❌ Lỗi Server: ${result.message}`);
                     return false;
                 }
-
             } catch (e) {
-                alert("❌ Lỗi Kết Nối: Không thể gửi dữ liệu đến server. Vui lòng kiểm tra lại cấu hình endpoint PHP.");
-                console.error("Lỗi khi gửi dữ liệu lên server:", e);
+                console.error("Lỗi khi gửi dữ liệu:", e);
+                alert("❌ Lỗi Kết Nối: Không thể gửi dữ liệu đến server.");
                 return false;
             }
         }
-
-
-        // === LOGIC QUẢN LÝ MẬT KHẨU ===
         
-        window.onload = function() {
-            document.getElementById('adminPasswordInput').focus();
-        };
-
-        /**
-         * Kiểm tra mật khẩu admin
-         */
-        async function checkAdminPassword() {
-            const enteredPassword = document.getElementById('adminPasswordInput').value.trim();
-            const errorMessage = document.getElementById('password-error');
-
-            if (enteredPassword === ADMIN_PASSWORD) {
-                errorMessage.classList.add('hidden');
-                
-                // Tải dữ liệu trước khi hiển thị trang quản lý
-                await loadAndMergeQuestions();                     
-
-                adminPasswordModal.classList.add('hidden'); // Ẩn modal
-                manageSection.classList.remove('hidden');    // Hiển thị phần quản lý
-                renderQuestionBank();                         // Hiển thị danh sách câu hỏi
-            } else {
-                errorMessage.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-                errorMessage.classList.remove('hidden');
-                document.getElementById('adminPasswordInput').value = ''; 
-                document.getElementById('adminPasswordInput').focus();
-            }
+        function getDisplayList() {
+            const questionMap = new Map();
+            originalQuestions.forEach(q => questionMap.set(q.id, { ...q, source: 'original' }));
+            addedQuestions.forEach(q => questionMap.set(q.id, { ...q, source: 'added' }));
+            return Array.from(questionMap.values());
         }
-        
-        window.checkAdminPassword = checkAdminPassword; // Đưa hàm ra phạm vi global
 
-        
-        // === HÀM HIỂN THỊ VÀ TÌM KIẾM NGÂN HÀNG CÂU HỎI ===
-        
-        /**
-         * Lọc danh sách câu hỏi dựa trên từ khóa tìm kiếm
-         */
-        function filterQuestions() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
+        function renderQuestionBank(questionsToRender) {
+            document.getElementById('total-questions').textContent = questionsToRender.length;
             
-            let filteredQuestions = allQuestions;
-
-            if (searchTerm) {
-                filteredQuestions = allQuestions.filter(q => 
-                    q.question.toLowerCase().includes(searchTerm) || 
-                    String(q.id) === searchTerm // Tìm theo ID
-                );
-            }
-
-            renderQuestionBank(filteredQuestions);
-        }
-        
-        window.filterQuestions = filterQuestions; // Đưa hàm ra phạm vi global
-
-        /**
-         * Hiển thị danh sách câu hỏi (đã lọc)
-         */
-        function renderQuestionBank(questionsToRender = allQuestions) {
-            document.getElementById('total-questions').textContent = allQuestions.length;
-
             if (questionsToRender.length === 0 && searchInput.value.trim()) {
-                questionBankList.innerHTML = `<p style="color: #dc3545; text-align: center;">Không tìm thấy câu hỏi nào khớp với từ khóa.</p>`;
+                questionBankList.innerHTML = `<p style="color: #dc3545; text-align: center;">Không tìm thấy câu hỏi nào khớp.</p>`;
                 return;
             }
 
+            questionBankList.innerHTML = questionsToRender.map((q) => {
+                const sourceTag = q.source === 'added'
+                    ? ' <span style="color:#007bff; font-weight: bold;">(Thêm mới)</span>'
+                    : ' <span style="color:#6c757d; font-weight: bold;">(Gốc)</span>';
 
-            let htmlContent = questionsToRender.map((q, index) => {
-                const questionNumber = allQuestions.findIndex(item => item.id === q.id) + 1; // Số thứ tự trong mảng tổng hợp
-                
-                // Xác định nguồn câu hỏi
-                const isAdded = q.id > BASE_QUESTION_COUNT;
-                const sourceTag = isAdded ? ' <span style="color:#17a2b8;">(add-quiz.json)</span>' : ' <span style="color:#495057;">(data.js)</span>';
-                
-                // Tạo danh sách đáp án
                 const answerOptions = Object.keys(q.answers).map(key => {
                     const isCorrect = key === q.correctAnswer;
-                    const answerText = q.answers[key];
-                    return `<div class="q-answer">
-                                ${key}. ${answerText} 
-                                ${isCorrect ? ' <span class="correct-answer-highlight"> (Đáp án đúng ✅)</span>' : ''}
-                            </div>`;
+                    return `<div class="q-answer">${key}. ${q.answers[key]} ${isCorrect ? '<b>(Đúng)</b>' : ''}</div>`;
                 }).join('');
 
-                // Thêm nút Sửa và Xóa chỉ cho câu hỏi trong add-quiz.json
-                const managementButtons = isAdded ? `
+                const managementButtons = `
                     <div style="margin-top: 10px;">
                         <button class="btn btn-info btn-sm" onclick="openEditModal(${q.id})">Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteQuestion(${q.id})">Xóa</button>
-                    </div>
-                ` : '<div style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">(Câu hỏi gốc - không thể sửa/xóa)</div>';
-
+                    </div>`;
 
                 return `
                     <div class="question-bank-item" data-question-id="${q.id}">
-                        <p class="q-number">Câu ${questionNumber} (ID: ${q.id})${sourceTag}:</p>
+                        <p class="q-number"><b>ID: ${q.id}</b>${sourceTag}</p>
                         <p class="q-text">${q.question}</p>
                         ${answerOptions}
-                        <span class="correct-answer-key">ĐÁP ÁN: ${q.correctAnswer}</span>
                         ${managementButtons}
-                    </div>
-                `;
+                    </div>`;
             }).join('');
-
-            questionBankList.innerHTML = htmlContent;
         }
-
-        // === HÀM XỬ LÝ SỬA CÂU HỎI (EDIT) ===
-
-        /**
-         * Đặt form vào chế độ chỉnh sửa và điền dữ liệu
-         * @param {number} questionId - ID của câu hỏi cần sửa
-         */
-        function openEditModal(questionId) {
-            const questionToEdit = addedQuestions.find(q => q.id === questionId);
-            if (!questionToEdit) {
-                alert("Lỗi: Không tìm thấy câu hỏi để sửa.");
-                return;
-            }
+        
+        window.filterQuestions = () => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const displayList = getDisplayList();
             
+            const filtered = searchTerm ? displayList.filter(q => 
+                q.question.toLowerCase().includes(searchTerm) || String(q.id) === searchTerm
+            ) : displayList;
+
+            renderQuestionBank(filtered.sort((a, b) => a.id - b.id));
+        };
+        
+        window.openEditModal = (questionId) => {
+            const displayList = getDisplayList();
+            const questionToEdit = displayList.find(q => q.id === questionId);
+            if (!questionToEdit) return;
+
             isEditing = true;
             addEditFormTitle.textContent = "Chỉnh Sửa Câu Hỏi (ID: " + questionId + ")";
             saveQuestionBtn.textContent = "Cập Nhật Câu Hỏi";
             cancelEditBtn.style.display = 'inline-block';
 
-            // Điền dữ liệu vào form
             document.getElementById('current-question-id').value = questionToEdit.id;
             document.getElementById('new-question-text').value = questionToEdit.question;
             document.getElementById('new-answer-a').value = questionToEdit.answers.A;
@@ -310,59 +238,34 @@
             document.getElementById('new-answer-d').value = questionToEdit.answers.D;
             document.getElementById('correct-answer-key').value = questionToEdit.correctAnswer;
             
-            // Cuộn lên đầu form để người dùng dễ nhìn
             manageSection.scrollIntoView({ behavior: 'smooth' });
-        }
+        };
         
-        window.openEditModal = openEditModal; // Đưa hàm ra phạm vi global
+        window.deleteQuestion = async (questionId) => {
+            if (!confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN câu hỏi (ID: ${questionId})?`)) return;
 
-        /**
-         * Hủy chế độ chỉnh sửa và đưa form về trạng thái thêm mới
-         */
+            originalQuestions = originalQuestions.filter(q => q.id !== questionId);
+            addedQuestions = addedQuestions.filter(q => q.id !== questionId);
+            
+            await saveAllChangesToServer();
+        };
+        
         function cancelEdit() {
             isEditing = false;
             addEditFormTitle.textContent = "Thêm Câu Hỏi Mới";
             saveQuestionBtn.textContent = "Lưu Câu Hỏi";
             cancelEditBtn.style.display = 'none';
             addQuestionForm.reset();
+            document.getElementById('current-question-id').value = '';
         }
 
         cancelEditBtn.addEventListener('click', cancelEdit);
 
-
-        // === HÀM XỬ LÝ XÓA CÂU HỎI (DELETE) ===
-
-        /**
-         * Xóa câu hỏi khỏi danh sách và lưu lên server
-         * @param {number} questionId - ID của câu hỏi cần xóa
-         */
-        async function deleteQuestion(questionId) {
-            if (!confirm(`Bạn có chắc chắn muốn xóa câu hỏi (ID: ${questionId}) này không? Thao tác này sẽ được lưu lên server.`)) {
-                return;
-            }
-
-            // Lọc ra câu hỏi cần xóa khỏi mảng addedQuestions
-            const updatedAddedQuestions = addedQuestions.filter(q => q.id !== questionId);
-
-            const success = await saveUpdatedAddedQuestions(updatedAddedQuestions);
-            
-            if (success) {
-                alert(`✅ Đã xóa câu hỏi (ID: ${questionId}) thành công.`);
-            }
-        }
-
-        window.deleteQuestion = deleteQuestion; // Đưa hàm ra phạm vi global
-
-
-        // === HÀM XỬ LÝ SUBMIT FORM (THÊM MỚI & CẬP NHẬT) ===
-
         addQuestionForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             
-            // Lấy dữ liệu từ form
-            const currentQuestionId = parseInt(document.getElementById('current-question-id').value) || 0;
             const newQuestionData = {
-                question: document.getElementById('new-question-text').value.trim().replace(/\n/g, ' '), 
+                question: document.getElementById('new-question-text').value.trim().replace(/\n/g, ' '),
                 answers: {
                     A: document.getElementById('new-answer-a').value.trim(),
                     B: document.getElementById('new-answer-b').value.trim(),
@@ -372,36 +275,46 @@
                 correctAnswer: document.getElementById('correct-answer-key').value,
             };
 
-            let updatedAddedQuestions = [...addedQuestions];
-            let success = false;
-            let actionMessage = '';
-
-            if (isEditing && currentQuestionId) {
-                // CHẾ ĐỘ CHỈNH SỬA (EDIT)
-                const index = updatedAddedQuestions.findIndex(q => q.id === currentQuestionId);
-                if (index !== -1) {
-                    updatedAddedQuestions[index] = { ...updatedAddedQuestions[index], ...newQuestionData };
-                    actionMessage = `Chỉnh sửa câu hỏi ID: ${currentQuestionId}`;
+            if (isEditing) {
+                const id = parseInt(document.getElementById('current-question-id').value);
+                let wasInAdded = addedQuestions.some(q => q.id === id);
+                if (wasInAdded) {
+                    let index = addedQuestions.findIndex(q => q.id === id);
+                    addedQuestions[index] = { ...addedQuestions[index], ...newQuestionData };
+                } else {
+                    let index = originalQuestions.findIndex(q => q.id === id);
+                    if (index > -1) {
+                         originalQuestions[index] = { ...originalQuestions[index], ...newQuestionData };
+                    }
                 }
             } else {
-                // CHẾ ĐỘ THÊM MỚI (ADD)
-                const maxId = allQuestions.length > 0 ? allQuestions.reduce((max, q) => Math.max(max, q.id), 0) : BASE_QUESTION_COUNT;
-                const newId = maxId + 1; 
-                
-                const newQuestion = { id: newId, ...newQuestionData };
-                updatedAddedQuestions.push(newQuestion);
-                actionMessage = `Thêm câu hỏi mới ID: ${newId}`;
+                // Thêm câu hỏi mới vào danh sách 'added' với một ID tạm thời để sắp xếp
+                addedQuestions.push({ tempId: Date.now(), ...newQuestionData });
             }
 
-            // Lưu lên server
-            success = await saveUpdatedAddedQuestions(updatedAddedQuestions);
-            
-            if (success) {
-                alert(`✅ ${actionMessage} thành công!`);
-                cancelEdit(); // Reset form và trạng thái
-            }
+            await saveAllChangesToServer();
+            cancelEdit();
         });
         
+        window.onload = function() {
+            document.getElementById('adminPasswordInput').focus();
+        };
+
+        async function checkAdminPassword() {
+            const enteredPassword = document.getElementById('adminPasswordInput').value.trim();
+            const errorMessage = document.getElementById('password-error');
+            if (enteredPassword === ADMIN_PASSWORD) {
+                errorMessage.classList.add('hidden');
+                await loadAndSeparateQuestions();
+                adminPasswordModal.classList.add('hidden');
+                manageSection.classList.remove('hidden');
+                filterQuestions();
+            } else {
+                errorMessage.textContent = 'Mật khẩu không đúng.';
+                errorMessage.classList.remove('hidden');
+            }
+        }
+        window.checkAdminPassword = checkAdminPassword;
     </script>
 </body>
 </html>
