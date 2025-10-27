@@ -378,3 +378,28 @@ button:disabled {
 #manage-questions-section.hidden {
     display: none !important;
 }
+/* Khu vực chọn đề */
+#deck-selection-section {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+#deck-selection-section h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.deck-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.deck-buttons .btn {
+    min-width: 120px;
+}

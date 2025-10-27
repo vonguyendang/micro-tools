@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiểm tra Trắc nghiệm Đấu thầu (70 câu)</title>
+    <title>Kiểm tra Trắc nghiệm Đấu thầu</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,31 +13,41 @@
             <button id="nav-manage-btn" class="btn btn-primary manage-button" onclick="window.open('manage.html', '_blank')">Quản Lý Câu Hỏi</button>
         </header>
         
-        <section id="quiz-main-section" class="active-section">
+        <section id="deck-selection-section">
+            <h2>Chọn đề thi để bắt đầu</h2>
+            <p>Tổng số câu hỏi trong ngân hàng: <b id="total-bank-questions">...</b></p>
+            <div id="deck-selection-area" class="deck-buttons">
+                </div>
+        </section>
+
+        <section id="quiz-main-section" class="hidden">
             <section id="timer-controls">
                 <div id="timer-box" class="info-box">
                     ⏱️ Thời gian: <span id="timer">Không giới hạn</span>
                 </div>
                 <div class="control-buttons">
-                    <button id="start-timer-btn" class="btn btn-warning" onclick="startTimer(DEFAULT_QUIZ_DURATION)">Bắt đầu Tính giờ (40 phút)</button>
+                    <button id="start-timer-btn" class="btn btn-warning">Bắt đầu Tính giờ (40 phút)</button>
                     <button id="set-timer-btn" class="btn btn-info" onclick="openSetTimeModal()">Đặt thời gian</button>
                 </div>
             </section>
 
             <main>
                 <form id="quiz-form" onsubmit="event.preventDefault(); submitQuiz();">
-                </form>
+                    </form>
                 <button id="submit-btn" class="btn btn-success submit-btn" onclick="submitQuiz()">Nộp bài</button>
             </main>
 
             <section id="results" class="hidden">
                 <h2>📝 Kết Quả Bài Làm</h2>
                 <div class="score-display">
-                    <p>Tổng điểm: <span id="score"></span> / <span id="total-available-questions"></span></p> 
+                    <p>Tổng điểm: <span id="score"></span> / <span id="total-quiz-questions"></span></p> 
                 </div>
                 <div id="review-area" class="review-area">
                 </div>
-                <button class="btn btn-primary new-quiz-btn" onclick="window.location.reload()">Làm bài mới</button>
+                <div class="results-actions" style="text-align: center; margin-top: 20px;">
+                    <button id="redo-deck-btn" class="btn btn-warning">Làm lại đề này</button>
+                    <button id="choose-another-deck-btn" class="btn btn-primary">Chọn đề khác</button>
+                </div>
             </section>
         </section>
         
