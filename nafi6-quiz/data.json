@@ -280,8 +280,8 @@
         "answers": {
             "A": "Trả lại nguyên trạng cho nhà thầu trong thời hạn 10 ngày kể từ ngày ký hợp đồng với nhà thầu được lựa chọn",
             "B": "Trả lại nguyên trạng cho nhà thầu trong thời hạn 05 ngày kể từ ngày ký hợp đồng với nhà thầu được lựa chọn",
-            "C": "Hồ sơ được lưu trữ theo quy định của Pháp luật về lưu trữ",
-            "D": ""
+            "C": "Trả lại nguyên trạng cho nhà thầu trong thời hạn 15 ngày kể từ ngày ký hợp đồng với nhà thầu được lựa chọn",
+            "D": "Hồ sơ được lưu trữ theo quy định của Pháp luật về lưu trữ"
         },
         "correctAnswer": "A"
     },
