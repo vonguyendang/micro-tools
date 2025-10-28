@@ -490,7 +490,7 @@
             "A": "(1) Tất cả nội dung công việc có liên quan đến giải phóng mặt bằng thuộc phần công việc không áp dụng một trong các hình thức lựa chọn nhà thầu",
             "B": "(2) Đối với các công việc mà Hội đồng đền bù giải phóng mặt bằng tự làm (ví dụ: tổ chức họp với người sử dụng đất, chủ sở hữu tài sản; trình duyệt, công khai phương án bồi thường, bàn giao chi phí bồi thường..,) thì thuộc phần không áp dụng một trong các hình thức lựa chọn nhà thầu",
             "C": "(3) Đối với phần việc phải hình thành gói thầu thuê tư vấn để thực hiện nhằm phục vụ công việc giải phóng mặt bằng thì thuộc phần công việc thuộc kế hoạch lựa chọn nhà thầu",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -644,7 +644,7 @@
             "A": "(1) Báo giá của nhà thầu",
             "B": "(2) Quyết định mua sắm được phê duyệt",
             "C": "(3) Kế hoạch lựa chọn nhà thầu được duyệt",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -1018,7 +1018,7 @@
             "A": "(1) Hàng hóa phải cùng chủng loại với gói thầu đang xét",
             "B": "(2) Hàng hóa thuộc cùng lĩnh vực tổng quát với hàng hóa của gói thầu",
             "C": "(3) Hàng hóa có 4 số đầu tiên mã HS cùng với mã HS của hàng hóa thuộc gói thầu",
-            "D": "Cả 2 phương án B và C đều đúng"
+            "D": "Cả 2 phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -1183,7 +1183,7 @@
             "A": "(1) Không được thay đổi nhân sự đã đề xuất trong E-HSDT trong mọi trường hợp",
             "B": "(2) Được thay đổi nhân sự đã đề xuất trong E-HSDT 01 lần trong trường hợp nhân sự không đáp ứng yêu cầu hoặc không chứng minh được khả năng huy động",
             "C": "(3) Được thay đổi nhân sự đã đề xuất trong E-HSDT trong trường hợp do thời gian đánh giá E-HSDT kéo dài hơn so với dự kiến trong kế hoạch lựa chọn nhà thầu hoặc vì lý do bất khả kháng mà các vị trí nhân sự chủ chốt do nhà thầu đã đề xuất không thể tham gia thực hiện hợp đồng",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "C"
     },
@@ -1281,8 +1281,8 @@
         "answers": {
             "A": "(1) Nhà thầu A có 01 hợp đồng giặt là X cho bệnh viện công lập có thời gian thực hiện gói thầu là 48 tháng (đang trong quá trình thực hiện, chưa hoàn thành, chưa được thanh lý), nhưng tính đến thời điểm tham dự thầu, nhà thầu A đã thực hiện được 24 tháng, trong đó giá trị công việc đã được nghiệm thu 12 tháng đầu là 1,2 tỷ đồng;",
             "B": "(2) Nhà thầu B cung cấp 02 hợp đồng, trong đó có hợp đồng giặt X cho khách sạn tư nhân, thời gian thực hiện hợp đồng trong 06 tháng với giá trị là 300 triệu đồng; Hợp đồng giặt là Y cho bệnh viện công lập, thời gian thực hiện hợp đồng trong 24 tháng với giá trị là 3 tỷ đồng, trong đó giá trị công việc đã được nghiệm thu 12 tháng đầu là 1 tỷ đồng.",
-            "C": "Nhà thầu A và B đều đáp ứng",
-            "D": "Nhà thầu A và B đều không đáp ứng"
+            "C": "Nhà thầu (1) và (2) đều đáp ứng",
+            "D": "Nhà thầu (1) và (2) đều không đáp ứng"
         },
         "correctAnswer": "C"
     },
@@ -1436,7 +1436,7 @@
             "A": "(1) Do chủ đầu tư quyết định trên cơ sở bảo đảm tiến độ của dự án, gói thầu",
             "B": "(2) Tối đa là 05 ngày làm việc kể từ ngày tổ chuyên gia trình dự thảo hồ sơ mời thầu trong trường hợp không thẩm định hồ sơ mời thầu",
             "C": "(3) Tối đa là 05 ngày làm việc kể từ ngày tổ thẩm định gửi báo cáo thẩm định hồ sơ mời thầu",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -1447,7 +1447,7 @@
             "A": "(1) Do chủ đầu tư quyết định trên cơ sở bảo đảm tiến độ của dự án, gói thầu",
             "B": "(2) Tối đa là 05 ngày làm việc kể từ ngày tổ chuyên gia trình báo cáo đánh giá hồ sơ dự thầu trong trường hợp không thẩm định kết quả lựa chọn nhà thầu",
             "C": "(3) Tối đa là 05 ngày làm việc kể từ ngày tổ thẩm định trình báo cáo thẩm định kết quả lựa chọn nhà thầu",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -1524,7 +1524,7 @@
             "A": "(1) Thời hạn áp dụng thỏa thuận khung được quy định là 40 tháng",
             "B": "(2) Thời hạn áp dụng thỏa thuận khung được quy định trong kế hoạch lựa chọn nhà thầu nhưng không quá 36 tháng",
             "C": "(3) Thời hạn áp dụng thỏa thuận khung do người có thẩm quyền quyết định trong kế hoạch lựa chọn nhà thầu",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -1931,7 +1931,7 @@
             "A": "(1) Kiến nghị của nhà thầu được kết luận là đúng",
             "B": "(2) Một hoặc các nội dung kiến nghị của nhà thầu được kết luận là không đúng",
             "C": "(3) Nhà thầu rút đơn kiến nghị trong quá trình giải quyết kiến nghị",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2008,7 +2008,7 @@
             "A": "(1) Cá nhân quan tâm đến gói thầu",
             "B": "(2) Nhà thầu tham dự thầu",
             "C": "(3) Cơ quan, tổ chức quan tâm đến gói thầu",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -2118,7 +2118,7 @@
             "A": "(1) Tách phần đó ra thành gói thầu riêng biệt để tổ chức lựa chọn nhà thầu theo quy định",
             "B": "(2) Hủy thầu",
             "C": "(3) Đàm phán với nhà thầu trúng thầu của phần khác để thực hiện",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -2316,7 +2316,7 @@
             "A": "(1) Không tịch thu giá trị bảo đảm thực hiện hợp đồng của nhà thầu A-B",
             "B": "(2) Tịch thu giá trị bảo đảm thực hiện hợp đồng của tất cả thành viên liên danh trong trường hợp phần công việc còn lại của các thành viên liên danh vi phạm hợp đồng được tách thành gói thầu riêng để lựa chọn nhà thầu",
             "C": "(3) Chỉ tịch thu giá trị bảo đảm thực hiện hợp đồng của nhà thầu B nếu nhà thầu A có đủ năng lực, kinh nghiệm đảm nhận phần công việc còn lại của nhà thầu B",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -2778,7 +2778,7 @@
             "A": "(1) Gói thầu mua sắm hàng hóa, dịch vụ thuộc dự toán mua sắm có giá gói thầu không quá 500 triệu đồng; gói thầu mua sắm hàng hóa, dịch vụ thuộc dự án có giá gói thầu không quá 01 tỷ đồng",
             "B": "(2) Gói thầu xây lắp thuộc dự toán mua sắm có giá gói thầu không quá 01 tỷ đồng; gói thầu xây lắp thuộc dự án có giá gói thầu không quá 02 tỷ đồng",
             "C": "(3) Gói thầu mua sắm hàng hóa, cung cấp dịch vụ phi tư vấn thuộc dự án có giá gói thầu không quá 05 tỷ đồng",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
@@ -2800,7 +2800,7 @@
             "A": "(1) Đánh giá nhà thầu không đạt yêu cầu về hợp đồng tương tự",
             "B": "(2) Yêu cầu nhà thầu làm rõ E-HSDT trên Hệ thống mạng đấu thầu quốc gia",
             "C": "(3) Yêu cầu nhà thầu gửi bổ sung hợp đồng tương tự bằng bản giấy để đánh giá",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -2987,7 +2987,7 @@
             "A": "(1) Bảng dữ liệu được số hóa dưới dạng webform trên Hệ thống mạng đấu thầu quốc gia",
             "B": "(2) Tiêu chuẩn đánh giá về tính hợp lệ được đính kèm trên Hệ thống mạng đấu thầu quốc gia",
             "C": "(3) Yêu cầu về năng lực, kinh nghiệm được đính kèm trên Hệ thống mạng đấu thầu quốc gia",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "D"
     },
@@ -3427,7 +3427,7 @@
             "A": "(1) Nhà thầu được quyền từ chối hoàn thiện hợp đồng trong mọi trường hợp",
             "B": "(2) Khi chủ đầu tư đưa ra các yêu cầu khi hoàn thiện hợp đồng không phù hợp với nội dung hồ sơ mời thầu, hồ sơ dự thầu",
             "C": "(3) Khi nhà thầu đề nghị điều chỉnh đơn giá hạng mục mà nhà thầu đã chào theo yêu cầu của hồ sơ mời thầu nhưng chủ đầu tư không chấp nhận",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "B"
     },
@@ -3493,7 +3493,7 @@
             "A": "(1) Báo cáo đánh giá E-HSDT có chữ ký của tất cả thành viên trong tổ chuyên gia",
             "B": "(2) Báo cáo đánh giá E-HSDT chỉ cần có chữ ký của tổ trưởng tổ chuyên gia",
             "C": "(3) Báo cáo đánh giá E-HSDT (đăng tải báo cáo đánh giá tổng hợp, không cần kèm theo các phiếu chấm của thành viên trong tổ chuyên gia)",
-            "D": "Phương án B và C đều đúng"
+            "D": "Phương án (2) và (3) đều đúng"
         },
         "correctAnswer": "A"
     },
