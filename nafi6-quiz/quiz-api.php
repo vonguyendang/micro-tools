@@ -1,5 +1,7 @@
 <?php
 // Bắt đầu session để lưu trữ đáp án bí mật trên server
+ini_set('session.gc_maxlifetime', 14400);
+session_set_cookie_params(14400);
 session_start();
 
 header('Content-Type: application/json');
