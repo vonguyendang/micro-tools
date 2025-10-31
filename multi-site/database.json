@@ -1,0 +1,17 @@
+{
+    "dangvo": {
+        "password": "$2y$12$.d7cEUI9L4tL5FeTrsGFcerVuLUTClES0RhqrD3\/8O\/RCIEcT3OcW",
+        "configurations": {
+            "hay d\u00f9ng": {
+                "rows": "1",
+                "cols": "2",
+                "urlMode": "multiple",
+                "singleUrl": "https:\/\/smoney.vodang2702.workers.dev\/phan-tich-ky-thuat",
+                "urls": [
+                    "fb.com",
+                    "youtu.be"
+                ]
+            }
+        }
+    }
+}

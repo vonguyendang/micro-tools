@@ -1,0 +1,150 @@
+/* Thiết lập tổng thể */
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+/* NÚT BẬT/TẮT BẢNG ĐIỀU KHIỂN */
+#toggle-controls-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 200;
+    width: 45px;
+    height: 45px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+#toggle-controls-btn:hover {
+    transform: scale(1.1) rotate(45deg);
+}
+
+/* BẢNG ĐIỀU KHIỂN NỔI */
+.controls {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translate(-50%, -150%);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 500px;
+}
+
+.controls.visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.control-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.controls label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+.controls input[type="number"] {
+    width: 50px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+}
+.controls button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+.controls button:hover {
+    background-color: #0056b3;
+}
+#max-btn {
+    background-color: #28a745;
+}
+#max-btn:hover {
+    background-color: #218838;
+}
+
+/* Vùng chứa các iframes */
+#iframe-container {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+.panel {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Styling for URL controls */
+#url-controls {
+    flex-direction: column;
+    align-items: stretch;
+}
+#single-url-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+#single-url-input input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+#multi-url-inputs {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+#multi-url-inputs input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styling for new management UI */
+.hidden { display: none !important; }
+
+.auth-section { flex-direction: column; align-items: stretch !important; }
+#auth-form, #user-status { display: flex; flex-direction: column; gap: 10px; }
+.welcome-area, .config-management, .save-area { display: flex; align-items: center; gap: 8px; width: 100%; }
+.config-management select, .save-area input { flex-grow: 1; }
+#welcome-message { font-weight: bold; margin-right: auto; }

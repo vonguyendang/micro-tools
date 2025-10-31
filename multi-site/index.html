@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Chart Dashboard</title>
+    <link rel="shortcut icon" href="favicon_io/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toggle-controls-btn">⚙️</div>
+
+    <div class="controls">
+        <div class="control-section">
+            <label for="rows">Hàng:</label>
+            <input type="number" id="rows" value="1" min="1" max="8">
+            <label for="cols">Cột:</label>
+            <input type="number" id="cols" value="2" min="1" max="8">
+            <button id="update-btn">Cập nhật</button>
+            <button id="max-btn">Tối đa (8x8)</button>
+        </div>
+
+        <div class="control-section" id="url-mode-selector">
+            <label><input type="radio" name="url-mode" value="single" checked> Một link</label>
+            <label><input type="radio" name="url-mode" value="multiple"> Nhiều link</label>
+        </div>
+        <div class="control-section" id="url-controls">
+            <div id="single-url-input">
+                <label for="single-url">URL:</label>
+                <input type="text" id="single-url" value="https://smoney.vodang2702.workers.dev/phan-tich-ky-thuat">
+            </div>
+            <div id="multi-url-inputs"></div>
+        </div>
+        
+        <div class="control-section auth-section">
+            <div id="auth-form">
+                 <input type="text" id="username" placeholder="Tên đăng nhập">
+                 <input type="password" id="password" placeholder="Mật khẩu">
+                 <button id="register-btn">Đăng ký</button>
+                 <button id="login-btn">Đăng nhập</button>
+            </div>
+            <div id="user-status" class="hidden">
+                <div class="welcome-area">
+                    <span id="welcome-message"></span>
+                    <button id="logout-btn">Đăng xuất</button>
+                </div>
+                <div class="config-management">
+                    <label for="config-select">Cấu hình đã lưu:</label>
+                    <select id="config-select"></select>
+                    <button id="load-btn">Tải</button>
+                    <button id="delete-btn">Xóa</button>
+                </div>
+                <div class="save-area">
+                    <input type="text" id="config-name" placeholder="Nhập tên cấu hình mới...">
+                    <button id="save-btn">Lưu cấu hình</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="iframe-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
