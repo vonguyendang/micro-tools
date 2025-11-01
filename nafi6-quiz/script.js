@@ -1,12 +1,13 @@
-// script.js (đã cập nhật để cho phép chọn đề khác sau khi nộp bài)
+// script.js (đã cập nhật với localStorage để tự động lưu)
 
 const QUIZ_DURATION = 40 * 60; 
 
 let selectedQuestions = [];
+let userAnswers = {}; // Đối tượng lưu câu trả lời của người dùng
 let timeLeft = -1;
 let timerInterval;
 let quizSubmitted = false;
-let currentDeckNumber = 0; // Biến để lưu đề hiện tại
+let currentDeckNumber = 0;
 
 // Khai báo các thành phần DOM
 const quizForm = document.getElementById('quiz-form');
@@ -22,6 +23,63 @@ const resultsSection = document.getElementById('results');
 
 const DISPLAY_KEYS = ['A', 'B', 'C', 'D'];
 
+// --- BỔ SUNG CÁC HÀM XỬ LÝ LOCALSTORAGE ---
+
+/**
+ * Lấy key để lưu vào localStorage dựa trên số hiệu đề.
+ * @param {number} deckNumber - Số hiệu của đề thi.
+ * @returns {string} Key dùng cho localStorage.
+ */
+function getStorageKey(deckNumber) {
+    return `quizProgress_deck_${deckNumber}`;
+}
+
+/**
+ * Lưu trạng thái hiện tại của bài thi vào localStorage.
+ */
+function saveQuizState() {
+    if (quizSubmitted || !currentDeckNumber) return;
+    
+    const state = {
+        deckNumber: currentDeckNumber,
+        questions: selectedQuestions,
+        answers: userAnswers,
+        time: timeLeft,
+    };
+    
+    localStorage.setItem(getStorageKey(currentDeckNumber), JSON.stringify(state));
+}
+
+/**
+ * Tải trạng thái bài thi từ localStorage.
+ * @param {number} deckNumber - Số hiệu của đề thi.
+ * @returns {object|null} Trạng thái đã lưu hoặc null nếu không có.
+ */
+function loadQuizState(deckNumber) {
+    const savedState = localStorage.getItem(getStorageKey(deckNumber));
+    if (savedState) {
+        try {
+            return JSON.parse(savedState);
+        } catch (e) {
+            console.error("Lỗi khi đọc dữ liệu từ localStorage:", e);
+            clearQuizState(deckNumber); // Xóa dữ liệu lỗi
+            return null;
+        }
+    }
+    return null;
+}
+
+/**
+ * Xóa trạng thái bài thi khỏi localStorage.
+ * @param {number} deckNumber - Số hiệu của đề thi.
+ */
+function clearQuizState(deckNumber) {
+    localStorage.removeItem(getStorageKey(deckNumber));
+}
+
+
+// --- CÁC HÀM GỐC ĐƯỢC CẬP NHẬT ---
+
 // Hàm xáo trộn mảng
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -31,7 +89,7 @@ function shuffleArray(array) {
     return array;
 }
 
-// Hàm tải danh sách các đề thi
+// Hàm tải danh sách các đề thi (giữ nguyên)
 async function listDecks() {
     try {
         const response = await fetch('quiz-api.php?action=list_decks');
@@ -60,6 +118,7 @@ function resetUIForNewQuiz() {
     clearInterval(timerInterval);
     timeLeft = -1;
     timerInterval = null;
+    userAnswers = {};
 
     quizForm.innerHTML = '';
     document.getElementById('review-area').innerHTML = '';
@@ -79,42 +138,83 @@ function returnToDeckSelection() {
     deckSelectionSection.classList.remove('hidden');
 }
 
-// Hàm khởi tạo bài thi
-async function initializeQuiz(deckNumber) {
+/**
+ * CẬP NHẬT: Hàm khởi tạo bài thi, ưu tiên tải từ localStorage.
+ * @param {number} deckNumber - Số hiệu đề thi cần bắt đầu.
+ * @param {boolean} forceNew - Bắt buộc tạo đề mới, bỏ qua localStorage.
+ */
+async function initializeQuiz(deckNumber, forceNew = false) {
     resetUIForNewQuiz();
     currentDeckNumber = deckNumber;
+
+    // Xóa dữ liệu cũ nếu người dùng chọn "Làm lại đề này"
+    if (forceNew) {
+        clearQuizState(deckNumber);
+    }
 
     deckSelectionSection.classList.add('hidden');
     quizMainSection.classList.remove('hidden');
 
-    try {
-        const response = await fetch(`quiz-api.php?action=start&de=${deckNumber}`);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Lỗi không xác định từ server.');
+    const savedState = loadQuizState(deckNumber);
+
+    if (savedState) {
+        // Khôi phục từ localStorage
+        console.log(`Đã tìm thấy bài làm đang dang dở cho Đề ${deckNumber}. Đang khôi phục...`);
+        selectedQuestions = savedState.questions;
+        userAnswers = savedState.answers || {};
+        timeLeft = savedState.time;
+
+        renderQuiz(); // Hiển thị câu hỏi
+        restoreUserAnswers(); // Điền lại các đáp án đã chọn
+        
+        // Khôi phục trạng thái timer
+        if (timeLeft > 0) {
+            startTimer(timeLeft);
+        } else {
+            updateTimerDisplay();
         }
-        selectedQuestions = await response.json();
 
-        selectedQuestions.forEach(q => {
-            const answersContent = Object.keys(q.answers).map(key => ({ originalKey: key, text: q.answers[key] }));
-            const shuffledContent = shuffleArray(answersContent);
-            q.shuffledAnswers = shuffledContent.map((item, index) => ({
-                displayKey: DISPLAY_KEYS[index],
-                originalKey: item.originalKey,
-                text: item.text
-            }));
-        });
+    } else {
+        // Tải mới từ server
+        try {
+            const response = await fetch(`quiz-api.php?action=start&de=${deckNumber}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                // Hiển thị lỗi từ API (ví dụ: session hết hạn)
+                const isSessionError = (errorData.error || '').includes('hết hạn');
+                if (isSessionError) {
+                     alert("Phiên làm việc trên server đã hết hạn. Vui lòng tải lại trang (F5) và chọn lại đề.");
+                     returnToDeckSelection();
+                     return;
+                }
+                throw new Error(errorData.error || 'Lỗi không xác định từ server.');
+            }
+            selectedQuestions = await response.json();
 
-        renderQuiz();
-    } catch (error) {
-        console.error(`Lỗi khi khởi tạo Đề ${deckNumber}:`, error);
-        quizForm.innerHTML = `<p style='color:red;'>Lỗi: ${error.message}. Vui lòng thử lại.</p>`;
-        document.getElementById('timer-controls').classList.add('hidden');
-        document.getElementById('submit-btn').classList.add('hidden');
+            // Xáo trộn đáp án cho từng câu hỏi
+            selectedQuestions.forEach(q => {
+                const answersContent = Object.keys(q.answers).map(key => ({ originalKey: key, text: q.answers[key] }));
+                const shuffledContent = shuffleArray(answersContent);
+                q.shuffledAnswers = shuffledContent.map((item, index) => ({
+                    displayKey: DISPLAY_KEYS[index],
+                    originalKey: item.originalKey,
+                    text: item.text
+                }));
+            });
+
+            renderQuiz();
+            saveQuizState(); // Lưu trạng thái ban đầu ngay khi tải xong
+        } catch (error) {
+            console.error(`Lỗi khi khởi tạo Đề ${deckNumber}:`, error);
+            quizForm.innerHTML = `<p style='color:red;'>Lỗi: ${error.message}. Vui lòng thử lại.</p>`;
+            document.getElementById('timer-controls').classList.add('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+        }
     }
 }
 
-// Hàm hiển thị câu hỏi
+
+// Hàm hiển thị câu hỏi (cập nhật để thêm event listener)
 function renderQuiz() {
     let htmlContent = selectedQuestions.map((q, index) => {
         const answerOptions = q.shuffledAnswers.map(ans => `
@@ -132,28 +232,52 @@ function renderQuiz() {
         `;
     }).join('');
     quizForm.innerHTML = htmlContent;
+    
+    // Thêm event listener để tự động lưu khi người dùng chọn đáp án
+    quizForm.addEventListener('change', (event) => {
+        if (event.target.type === 'radio') {
+            const qId = parseInt(event.target.name.split('_')[1]);
+            userAnswers[qId] = event.target.value;
+            saveQuizState();
+        }
+    });
 }
 
-// Hàm nộp bài
+/**
+ * BỔ SUNG: Hàm khôi phục các đáp án người dùng đã chọn.
+ */
+function restoreUserAnswers() {
+    for (const qId in userAnswers) {
+        const selectedValue = userAnswers[qId];
+        const radioInput = document.getElementById(`q${qId}_${selectedValue}`);
+        if (radioInput) {
+            radioInput.checked = true;
+        }
+    }
+}
+
+
+// CẬP NHẬT: Hàm nộp bài, có xóa localStorage
 async function submitQuiz() {
     if (quizSubmitted) return;
     if (!confirm('Bạn có chắc chắn muốn nộp bài không?')) return;
 
     quizSubmitted = true;
     clearInterval(timerInterval);
-
-    const userAnswers = {};
+    
+    // Lấy câu trả lời lần cuối từ form (để chắc chắn)
+    const finalAnswers = {};
     const formData = new FormData(quizForm);
     for (const [key, value] of formData.entries()) {
         const qId = parseInt(key.split('_')[1]);
-        userAnswers[qId] = value;
+        finalAnswers[qId] = value;
     }
 
     try {
         const response = await fetch('quiz-api.php?action=submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userAnswers)
+            body: JSON.stringify(finalAnswers)
         });
 
         if (!response.ok) {
@@ -162,16 +286,20 @@ async function submitQuiz() {
         }
 
         const result = await response.json();
-        displayResults(result.score, result.reviewData, userAnswers);
+        
+        clearQuizState(currentDeckNumber); // Xóa dữ liệu sau khi nộp bài thành công
+        
+        displayResults(result.score, result.reviewData, finalAnswers);
 
     } catch (error) {
         console.error("Lỗi:", error);
         alert(error.message);
-        quizSubmitted = false;
+        quizSubmitted = false; // Cho phép thử lại nếu nộp bài thất bại
     }
 }
 
-// Hàm hiển thị kết quả
+
+// Hàm hiển thị kết quả (cập nhật sự kiện cho nút "Làm lại")
 function displayResults(score, reviewData, userAnswers) {
     let reviewHtml = '';
     const questionMap = new Map(selectedQuestions.map(q => [q.id, q]));
@@ -204,8 +332,8 @@ function displayResults(score, reviewData, userAnswers) {
     document.getElementById('total-quiz-questions').textContent = reviewData.length;
     document.getElementById('review-area').innerHTML = reviewHtml;
     
-    // Gán sự kiện cho các nút mới
-    document.getElementById('redo-deck-btn').onclick = () => initializeQuiz(currentDeckNumber);
+    // Gán sự kiện cho các nút, truyền `true` để bắt đầu đề mới hoàn toàn
+    document.getElementById('redo-deck-btn').onclick = () => initializeQuiz(currentDeckNumber, true);
     document.getElementById('choose-another-deck-btn').onclick = returnToDeckSelection;
     
     quizForm.classList.add('hidden');
@@ -230,15 +358,22 @@ function updateStartTimerButton(durationSeconds) {
     startTimerBtn.onclick = () => startTimer(durationSeconds);
 }
 
+// CẬP NHẬT: Hàm startTimer, có lưu thời gian vào localStorage
 function startTimer(durationSeconds) {
     if (quizSubmitted || timerInterval) return;
     timeLeft = durationSeconds;
     startTimerBtn.disabled = true;
     setTimerBtn.disabled = true;
     updateTimerDisplay();
+    
+    // Lưu trạng thái ngay khi bắt đầu timer
+    saveQuizState();
+
     timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
+        saveQuizState(); // Lưu thời gian còn lại mỗi giây
+        
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             timerDisplay.textContent = 'Hết giờ';
