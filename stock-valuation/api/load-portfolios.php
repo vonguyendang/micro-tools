@@ -1,7 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
-$filePath = '../data/portfolios.json';
+// SỬ DỤNG __DIR__ ĐỂ CÓ ĐƯỜNG DẪN TUYỆT ĐỐI
+$filePath = __DIR__ . '/../data/portfolios.json';
 $data = [];
 
 if (file_exists($filePath)) {

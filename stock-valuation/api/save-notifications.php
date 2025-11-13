@@ -5,8 +5,8 @@ header('Content-Type: application/json; charset=utf-8');
 $json_str = file_get_contents('php://input');
 $data = json_decode($json_str, true);
 
-// Đường dẫn chính xác đến file JSON
-$filePath = '../data/notifications.json';
+// SỬ DỤNG __DIR__ ĐỂ CÓ ĐƯỜNG DẪN TUYỆT ĐỐI
+$filePath = __DIR__ . '/../data/notifications.json';
 
 // Kiểm tra xem dữ liệu có hợp lệ không (phải là một mảng)
 if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {

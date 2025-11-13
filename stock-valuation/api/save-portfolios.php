@@ -5,7 +5,8 @@ header('Content-Type: application/json');
 $json_str = file_get_contents('php://input');
 $data = json_decode($json_str, true);
 
-$filePath = '../data/portfolios.json';
+// SỬ DỤNG __DIR__ ĐỂ CÓ ĐƯỜNG DẪN TUYỆT ĐỐI
+$filePath = __DIR__ . '/../data/portfolios.json';
 
 // Kiểm tra xem dữ liệu có hợp lệ không
 if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
