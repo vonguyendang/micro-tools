@@ -53,6 +53,9 @@ wedding-invitation-website-v1/
 ├── wedding-music.mp3   # File nhạc nền
 ├── README.md           # Tài liệu hướng dẫn này
 └── _downloads.html     # (File hệ thống/tải về)
+
+Lưu ý file index.formatted.js là phiên bản dễ đọc của index-50h5nyuS.js.
+Có vẻ như file index-50h5nyuS.js gốc đã bị revert về trạng thái minified (nén), nên tôi đã tạo lại bản format từ file gốc đó.
 ```
 
 ## 🤝 Đóng góp
