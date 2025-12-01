@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coming Soon | NAFI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="bg-orbit"></div>
+  <div class="particles"></div>
+
+  <main class="shell">
+    <section class="card">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Đang hoàn thiện • Online soon
+      </div>
+      <h1>
+        <span class="highlight">Coming&nbsp;Soon</span>
+      </h1>
+      <p class="subtitle">
+        Website mới của chúng tôi đang được tinh chỉnh những bước cuối cùng.
+        Hãy quay lại trong thời gian ngắn nữa để trải nghiệm phiên bản hoàn chỉnh.
+      </p>
+
+      <div class="pill-row">
+        <div class="pill">
+          <div class="pill-label">Days</div>
+          <div class="pill-value" id="days">60</div>
+        </div>
+        <div class="pill">
+          <div class="pill-label">Hours</div>
+          <div class="pill-value" id="hours">00</div>
+        </div>
+        <div class="pill">
+          <div class="pill-label">Minutes</div>
+          <div class="pill-value" id="minutes">00</div>
+        </div>
+        <div class="pill">
+          <div class="pill-label">Seconds</div>
+          <div class="pill-value" id="seconds">00</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary">
+          Notify me when live
+        </button>
+        <span class="small-note">Không spam, chỉ gửi khi ra mắt.</span>
+        <div class="socials">
+          <a class="social-btn" href="#" aria-label="Facebook">f</a>
+          <a class="social-btn" href="#" aria-label="X/Twitter">x</a>
+          <a class="social-btn" href="#" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="notifyModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-content card">
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+      <h2>Get Notified</h2>
+      <p class="modal-desc">Enter your email address to get notified when we launch.</p>
+      <form id="notifyForm" class="notify-form">
+        <input type="email" id="email" placeholder="Enter your email" required class="input-field">
+        <button type="submit" class="btn-primary btn-submit">Subscribe</button>
+      </form>
+      <div id="successMessage" class="success-message" hidden>
+        <div class="success-icon">✓</div>
+        <p id="successText">Thanks! We'll notify you when we're live.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
