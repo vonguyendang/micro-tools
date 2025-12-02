@@ -3,7 +3,9 @@ import sys
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml.ns import qn
 import random
+import re
 
 INPUT_FILE = "NGAN_HANG_CAU_HOI.docx"
 
@@ -16,22 +18,27 @@ def load_questions(filename):
     while i < len(paragraphs):
         text = paragraphs[i].text.strip()
         if text.startswith("Câu "):
-            question_text = text.split(". ", 1)[-1]
+            # Sử dụng regex để loại bỏ phần "Câu X." hoặc "Câu X:" một cách triệt để
+            question_text = re.sub(r"^Câu\s+\d+[\.\:]\s*", "", text, flags=re.IGNORECASE).strip()
             current = {"question": question_text, "answers": []}
             for j in range(1, 5):
                 if i + j >= len(paragraphs): break
                 para = paragraphs[i + j]
                 answer_text = para.text.strip()
 
-                # ✅ Đáp án đúng là in đậm
-                is_correct = any(run.bold for run in para.runs)
+                # ✅ Đáp án đúng là in đậm hoặc có highlight
+                is_correct = any(run.bold or (run.font.highlight_color is not None) for run in para.runs)
 
                 current["answers"].append({
                     "text": answer_text,
                     "is_correct": is_correct
                 })
+            has_correct = any(ans["is_correct"] for ans in current["answers"])
             if len(current["answers"]) == 4:
-                questions.append(current)
+                if has_correct:
+                    questions.append(current)
+                else:
+                    print(f"⚠️  Cảnh báo: Câu hỏi '{question_text[:50]}...' không có đáp án đúng (in đậm). Đã bỏ qua.")
             i += 5
         else:
             i += 1
@@ -48,18 +55,32 @@ def generate_exam(questions, num_questions, seed=None):
         shuffled = q["answers"].copy()
         random.shuffle(shuffled)
 
-        exam.append({
-            "index": idx,
-            "question": q["question"],
-            "answers": shuffled,
-            "correct_letter": chr(65 + next(i for i, ans in enumerate(shuffled) if ans["is_correct"]))
-        })
-        answer_key.append(f"Câu {idx}: {exam[-1]['correct_letter']}")
+        try:
+            correct_index = next(i for i, ans in enumerate(shuffled) if ans["is_correct"])
+            exam.append({
+                "index": idx,
+                "question": q["question"],
+                "answers": shuffled,
+                "correct_letter": chr(65 + correct_index)
+            })
+            answer_key.append(f"Câu {idx}: {exam[-1]['correct_letter']}")
+        except StopIteration:
+            print(f"❌ Lỗi: Câu hỏi '{q['question'][:50]}...' bị mất đáp án đúng khi tạo đề.")
+            continue
     
     return exam, answer_key
 
 def export_exam_to_word(exam_data, answer_lines, filename, code):
     doc = Document()
+    
+    # Cài đặt font Times New Roman cho toàn bộ văn bản
+    style = doc.styles['Normal']
+    font = style.font
+    font.name = 'Times New Roman'
+    font.size = Pt(12)
+    # Cài đặt font cho các ký tự đặc biệt/tiếng Việt
+    style.element.rPr.rFonts.set(qn('w:eastAsia'), 'Times New Roman')
+    
     title = doc.add_heading(f'ĐỀ THI - MÃ ĐỀ {code:03}', level=1)
     title.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
