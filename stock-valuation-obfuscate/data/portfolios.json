@@ -3,22 +3,28 @@
         "passwordHash": "a054fce99351f5894fea786050e29d31",
         "stocks": [
             {
-                "code": "NLG",
-                "volume": 600,
-                "price": 40800,
-                "marketPrice": 42050
+                "code": "CTG",
+                "volume": 400,
+                "price": 49577,
+                "marketPrice": 48450
             },
             {
                 "code": "BID",
-                "volume": 521,
-                "price": 40562,
-                "marketPrice": 39750
+                "volume": 621,
+                "price": 39636,
+                "marketPrice": 37500
+            },
+            {
+                "code": "BSR",
+                "volume": 1615,
+                "price": 17520,
+                "marketPrice": 15800
             },
             {
                 "code": "MBS",
                 "volume": 345,
                 "price": 31527,
-                "marketPrice": 33700
+                "marketPrice": 29100
             }
         ]
     },
@@ -27,21 +33,27 @@
         "stocks": [
             {
                 "code": "MBS",
-                "volume": 60,
-                "price": 31527,
-                "marketPrice": 33700
+                "volume": 48,
+                "price": 30852,
+                "marketPrice": 29200
             },
             {
-                "code": "NLG",
-                "volume": 900,
-                "price": 40646,
-                "marketPrice": 42050
+                "code": "LPB",
+                "volume": 62,
+                "price": 49977,
+                "marketPrice": 49300
             },
             {
-                "code": "LCG",
-                "volume": 245,
-                "price": 12242,
-                "marketPrice": 12300
+                "code": "BSR",
+                "volume": 1515,
+                "price": 17520,
+                "marketPrice": 15800
+            },
+            {
+                "code": "HDC",
+                "volume": 336,
+                "price": 30937,
+                "marketPrice": 27550
             }
         ]
     }

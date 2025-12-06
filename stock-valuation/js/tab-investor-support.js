@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     addAvgPriceRow();
     document.getElementById('profit-loss-table').addEventListener('input', calculateTotalProfitLoss);
     document.getElementById('avg-price-table').addEventListener('input', calculateAveragePrice);
-    
+
     const feeToggle = document.getElementById('fee-toggle');
     feeToggle.addEventListener('change', () => {
-        toggleFeeColumn(feeToggle.checked); 
+        toggleFeeColumn(feeToggle.checked);
         calculateTotalProfitLoss();
     });
     toggleFeeColumn(feeToggle.checked);
@@ -31,7 +31,7 @@ function showInvestorSubTab(subTabId) {
     document.getElementById(subTabId).classList.add('active');
     document.querySelectorAll('#tab7 .period-tab').forEach(b => b.classList.remove('active'));
     document.querySelector(`#tab7 .period-tab[onclick="showInvestorSubTab('${subTabId}')"]`).classList.add('active');
-    
+
     if (subTabId === 'investor-portfolio') {
         checkLoginState();
     }
@@ -112,7 +112,7 @@ async function updateLivePricesAndCalculate() {
 
     const priceRequests = rows.map(row => {
         const sellPriceInput = row.querySelector('.sell-price');
-        
+
         if (sellPriceInput.disabled) {
             return Promise.resolve();
         }
@@ -127,7 +127,7 @@ async function updateLivePricesAndCalculate() {
                         sellPriceInput.value = data.data.matchedPrice;
                         sellPriceInput.style.backgroundColor = '#e8f5e9';
                     } else {
-                         sellPriceInput.style.backgroundColor = '#fff3f3';
+                        sellPriceInput.style.backgroundColor = '#fff3f3';
                     }
                 }).catch(err => {
                     console.error(`Lỗi lấy giá ${stockCode}:`, err);
@@ -136,9 +136,9 @@ async function updateLivePricesAndCalculate() {
         }
         return Promise.resolve();
     });
-    
+
     await Promise.all(priceRequests);
-    
+
     updateButton.innerHTML = originalButtonText;
     updateButton.disabled = false;
     calculateTotalProfitLoss();
@@ -146,7 +146,7 @@ async function updateLivePricesAndCalculate() {
 
 function calculateTotalProfitLoss() {
     const rows = document.getElementById('profit-loss-table').querySelectorAll('tbody tr');
-    const feeEnabled = document.getElementById('fee-toggle').checked; 
+    const feeEnabled = document.getElementById('fee-toggle').checked;
     let totalProfitLoss = 0;
 
     rows.forEach(row => {
@@ -154,7 +154,7 @@ function calculateTotalProfitLoss() {
         const buyPrice = parseFloat(row.querySelector('.buy-price').value) || 0;
         const sellPrice = parseFloat(row.querySelector('.sell-price').value) || 0;
         const feePercent = feeEnabled ? (parseFloat(row.querySelector('.fee').value) || 0) : 0;
-        
+
         const resultCell = row.querySelector('.profit-loss-result');
         const percentCell = row.querySelector('.profit-loss-percent-result');
 
@@ -165,10 +165,10 @@ function calculateTotalProfitLoss() {
             const sellFee = sellValue * (feePercent / 100);
             const profitLoss = sellValue - buyValue - buyFee - sellFee;
             totalProfitLoss += profitLoss;
-            
+
             resultCell.textContent = formatNumber(profitLoss, 0);
             resultCell.className = `profit-loss-result ${profitLoss >= 0 ? 'price-up' : 'price-down'}`;
-            
+
             const profitLossPercent = buyValue > 0 ? (profitLoss / buyValue) * 100 : 0;
             percentCell.textContent = `${profitLossPercent.toFixed(2)}%`;
             percentCell.className = `profit-loss-percent-result ${profitLoss >= 0 ? 'price-up' : 'price-down'}`;
@@ -184,14 +184,14 @@ function calculateTotalProfitLoss() {
     const profitClass = totalProfitLoss >= 0 ? 'total-profit' : 'total-loss';
     const toggleHTML = summaryDiv.querySelector('.fee-toggle-container')?.outerHTML || '';
     summaryDiv.innerHTML = `${toggleHTML}<p><strong>Tổng Lãi/Lỗ:</strong> <span class="${profitClass}">${formatNumber(totalProfitLoss, 0)} VNĐ</span></p>`;
-    
+
     const newToggle = document.getElementById('fee-toggle');
     if (newToggle && !newToggle.dataset.listenerAttached) {
-         newToggle.addEventListener('change', () => {
+        newToggle.addEventListener('change', () => {
             toggleFeeColumn(newToggle.checked);
             calculateTotalProfitLoss();
-         });
-         newToggle.dataset.listenerAttached = 'true';
+        });
+        newToggle.dataset.listenerAttached = 'true';
     }
 }
 
@@ -221,7 +221,7 @@ function calculateAveragePrice() {
 // =================================================================
 // CHỨC NĂNG 3: THEO DÕI DANH MỤC (Cập nhật với PHP)
 // =================================================================
-const ADMIN_PASS_HASH = "db49afcfc0a6eac0199be1e781f13d63"; 
+const ADMIN_PASS_HASH = "db49afcfc0a6eac0199be1e781f13d63";
 let portfolios = {};
 let activePortfolio = null;
 let loggedInAs = null;
@@ -229,7 +229,7 @@ let loggedInAs = null;
 async function initializePortfolioTab() {
     await loadPortfoliosFromServer();
     checkLoginState();
-    
+
     const passwordInput = document.getElementById('portfolio-password');
     passwordInput.addEventListener('keyup', (event) => {
         if (event.key === "Enter") loginPortfolio();
@@ -237,16 +237,29 @@ async function initializePortfolioTab() {
 }
 
 async function loadPortfoliosFromServer() {
-    try {
-        const response = await fetch('api/load-portfolios.php', { cache: "no-store" }); // no-store để tránh cache
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    const maxRetries = 3;
+    let attempt = 0;
+    let loaded = false;
+
+    while (attempt < maxRetries && !loaded) {
+        try {
+            attempt++;
+            const response = await fetch('api/load-portfolios.php', { cache: "no-store" });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            portfolios = await response.json();
+            loaded = true;
+        } catch (error) {
+            console.error(`Lỗi tải danh mục (Lần thử ${attempt}/${maxRetries}):`, error);
+            if (attempt >= maxRetries) {
+                alert('Lỗi kết nối đến máy chủ để tải dữ liệu danh mục. Vui lòng kiểm tra lại môi trường server hoặc tải lại trang.');
+                portfolios = {};
+            } else {
+                // Chờ một chút trước khi thử lại (Exponential backoff: 500ms, 1000ms, ...)
+                await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt - 1)));
+            }
         }
-        portfolios = await response.json();
-    } catch (error) {
-        console.error('Lỗi tải danh mục:', error);
-        alert('Lỗi kết nối đến máy chủ để tải dữ liệu danh mục. Vui lòng kiểm tra lại môi trường server.');
-        portfolios = {};
     }
 }
 
@@ -258,8 +271,8 @@ async function savePortfoliosToServer() {
             body: JSON.stringify(portfolios),
         });
         if (!response.ok) {
-             const errData = await response.json();
-             throw new Error(errData.message || 'Lỗi không xác định từ server.');
+            const errData = await response.json();
+            throw new Error(errData.message || 'Lỗi không xác định từ server.');
         }
         const result = await response.json();
         console.log('Server response:', result.message);
@@ -272,7 +285,7 @@ async function savePortfoliosToServer() {
 function checkLoginState() {
     loggedInAs = sessionStorage.getItem('portfolio_loggedInAs');
     activePortfolio = sessionStorage.getItem('portfolio_active');
-    
+
     if (loggedInAs) {
         document.getElementById('portfolio-login-view').style.display = 'none';
         document.getElementById('portfolio-main-view').style.display = 'block';
@@ -291,7 +304,7 @@ function loginPortfolio() {
     if (!password) { alert("Vui lòng nhập mật khẩu."); return; }
 
     const passHash = md5(password);
-    console.log("Mật khẩu bạn nhập là: ",password)
+    console.log("Mật khẩu bạn nhập là: ", password)
     console.log("Hash MD5 của mật khẩu là: ", passHash);
     console.log("Hash MD5 của admin là: ", ADMIN_PASS_HASH);
 
@@ -341,11 +354,11 @@ async function createPortfolio() {
     if (portfolios[name]) { alert("Tên danh mục này đã tồn tại."); return; }
 
     portfolios[name] = { passwordHash: md5(password), stocks: [] };
-    await savePortfoliosToServer(); 
+    await savePortfoliosToServer();
 
     alert(`Đã tạo danh mục "${name}" thành công.`);
     closeModal('create-portfolio-modal');
-    
+
     loggedInAs = 'user';
     activePortfolio = name;
     sessionStorage.setItem('portfolio_loggedInAs', 'user');
@@ -357,9 +370,9 @@ function renderPortfolioSelector() {
     const selector = document.getElementById('portfolio-selector');
     selector.innerHTML = '';
     let availablePortfolios = (loggedInAs === 'admin') ? Object.keys(portfolios) : (loggedInAs === 'user' && activePortfolio) ? [activePortfolio] : [];
-    
+
     selector.style.display = availablePortfolios.length > 1 ? 'inline-block' : 'none';
-    
+
     availablePortfolios.forEach(name => {
         const option = document.createElement('option');
         option.value = name;
@@ -383,7 +396,7 @@ function renderPortfolio() {
         document.querySelector('.delete-portfolio-btn').style.display = 'none';
         return;
     }
-    
+
     document.querySelector('.delete-portfolio-btn').style.display = 'inline-flex';
     document.getElementById('portfolio-name-display').textContent = `Danh mục: ${activePortfolio}`;
     const tableBody = document.getElementById('portfolio-table').querySelector('tbody');
@@ -403,7 +416,7 @@ function renderPortfolio() {
         const profitLoss = marketValue > 0 ? marketValue - totalCost : 0;
         const profitLossPercent = totalCost > 0 ? (profitLoss / totalCost) * 100 : 0;
 
-        row.innerHTML = `<td>${stock.code.toUpperCase()}</td><td>${formatNumber(stock.volume)}</td><td>${formatNumber(stock.price)}</td><td>${formatNumber(totalCost)}</td><td class="market-price-cell">${stock.marketPrice?formatNumber(stock.marketPrice):'N/A'}</td><td class="market-value-cell">${marketValue>0?formatNumber(marketValue):'N/A'}</td><td class="profit-loss-cell ${profitLoss>=0?'price-up':'price-down'}">${marketValue>0?formatNumber(profitLoss):'N/A'}</td><td class="profit-percent-cell ${profitLoss>=0?'price-up':'price-down'}">${marketValue>0?profitLossPercent.toFixed(2)+'%':'N/A'}</td><td><button class="edit-btn" onclick="showEditStockModal(${index})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteStock(${index})"><i class="fas fa-trash-alt"></i></button></td>`;
+        row.innerHTML = `<td>${stock.code.toUpperCase()}</td><td>${formatNumber(stock.volume)}</td><td>${formatNumber(stock.price)}</td><td>${formatNumber(totalCost)}</td><td class="market-price-cell">${stock.marketPrice ? formatNumber(stock.marketPrice) : 'N/A'}</td><td class="market-value-cell">${marketValue > 0 ? formatNumber(marketValue) : 'N/A'}</td><td class="profit-loss-cell ${profitLoss >= 0 ? 'price-up' : 'price-down'}">${marketValue > 0 ? formatNumber(profitLoss) : 'N/A'}</td><td class="profit-percent-cell ${profitLoss >= 0 ? 'price-up' : 'price-down'}">${marketValue > 0 ? profitLossPercent.toFixed(2) + '%' : 'N/A'}</td><td><button class="edit-btn" onclick="showEditStockModal(${index})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteStock(${index})"><i class="fas fa-trash-alt"></i></button></td>`;
     });
     updatePortfolioSummary();
 }
@@ -425,7 +438,7 @@ async function updatePortfolioPrices() {
             .catch(err => { console.error(`Lỗi lấy giá ${stock.code}:`, err); return { code: stock.code, marketPrice: stock.marketPrice || null }; })
     });
     const updatedPrices = await Promise.all(priceRequests);
-    
+
     let hasChanged = false;
     updatedPrices.forEach(update => {
         const stockIndex = portfolios[activePortfolio].stocks.findIndex(s => s.code === update.code);
@@ -438,14 +451,14 @@ async function updatePortfolioPrices() {
     if (hasChanged) {
         await savePortfoliosToServer();
     }
-    
+
     renderPortfolio();
     updateButton.innerHTML = originalButtonHTML;
     updateButton.disabled = false;
 }
 
 function updatePortfolioSummary() {
-     if (!activePortfolio || !portfolios[activePortfolio]) { document.getElementById('portfolio-summary').innerHTML = ''; return; }
+    if (!activePortfolio || !portfolios[activePortfolio]) { document.getElementById('portfolio-summary').innerHTML = ''; return; }
     const stocks = portfolios[activePortfolio].stocks;
     let totalInvestment = stocks.reduce((sum, s) => sum + s.volume * s.price, 0);
     let totalMarketValue = stocks.reduce((sum, s) => sum + (s.marketPrice ? s.volume * s.marketPrice : 0), 0);
@@ -453,7 +466,7 @@ function updatePortfolioSummary() {
     const totalProfitLossPercent = totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0;
     const profitClass = totalProfitLoss >= 0 ? 'total-profit' : 'total-loss';
 
-    document.getElementById('portfolio-summary').innerHTML = `<p><strong>Tổng vốn đầu tư:</strong> ${formatNumber(totalInvestment)} VNĐ</p><p><strong>Giá trị thị trường:</strong> ${totalMarketValue>0?formatNumber(totalMarketValue):'N/A'} VNĐ</p><p><strong>Tổng Lãi/Lỗ:</strong> <span class="${profitClass}">${totalMarketValue>0?formatNumber(totalProfitLoss):'N/A'} VNĐ (${totalMarketValue>0?totalProfitLossPercent.toFixed(2)+'%':'N/A'})</span></p>`;
+    document.getElementById('portfolio-summary').innerHTML = `<p><strong>Tổng vốn đầu tư:</strong> ${formatNumber(totalInvestment)} VNĐ</p><p><strong>Giá trị thị trường:</strong> ${totalMarketValue > 0 ? formatNumber(totalMarketValue) : 'N/A'} VNĐ</p><p><strong>Tổng Lãi/Lỗ:</strong> <span class="${profitClass}">${totalMarketValue > 0 ? formatNumber(totalProfitLoss) : 'N/A'} VNĐ (${totalMarketValue > 0 ? totalProfitLossPercent.toFixed(2) + '%' : 'N/A'})</span></p>`;
 }
 
 function showAddStockModal() {
@@ -490,7 +503,7 @@ async function saveStock() {
     } else {
         portfolios[activePortfolio].stocks.push(newStock);
     }
-    
+
     await savePortfoliosToServer();
     renderPortfolio();
     closeModal('add-stock-modal');
@@ -505,11 +518,11 @@ async function deleteStock(index) {
 }
 
 async function deleteCurrentPortfolio() {
-    if(!activePortfolio) return;
+    if (!activePortfolio) return;
     if (confirm(`!!! CẢNH BÁO !!!\nBạn có chắc chắn muốn XÓA vĩnh viễn danh mục "${activePortfolio}" không? Hành động này không thể hoàn tác.`)) {
         delete portfolios[activePortfolio];
         await savePortfoliosToServer();
-        
+
         if (loggedInAs === 'admin') {
             const portfolioKeys = Object.keys(portfolios);
             activePortfolio = portfolioKeys.length > 0 ? portfolioKeys[0] : null;
@@ -555,21 +568,21 @@ async function calculateTargetProfitSessions() {
         if (!response.ok) throw new Error('Không tìm thấy mã cổ phiếu.');
         const data = await response.json();
         if (data.error || !data?.data?.matchedPrice || !data?.data?.exchange) throw new Error('Không lấy được dữ liệu giá hoặc sàn.');
-        
+
         exchange = data.data.exchange.toLowerCase();
-        currentPriceForProfit = data.data.matchedPrice; 
+        currentPriceForProfit = data.data.matchedPrice;
         startPriceForRoadmap = (exchange === 'upcom' && data.data.avgPrice) ? data.data.avgPrice : data.data.matchedPrice;
 
     } catch (error) {
         summaryDiv.innerHTML = `<p class="error-text">Lỗi: ${error.message}</p>`;
         return;
     }
-    
+
     if (targetPrice <= currentPriceForProfit) {
         summaryDiv.innerHTML = `<p>Giá hiện tại (${formatNumber(currentPriceForProfit, 0)} VNĐ) đã cao hơn hoặc bằng giá mục tiêu của bạn.</p>`;
         return;
     }
-    
+
     let maxChange = (exchange === 'hnx') ? 0.10 : (exchange === 'upcom') ? 0.15 : 0.07;
 
     const profitLossPercent = ((currentPriceForProfit / buyPrice) - 1) * 100;
@@ -597,7 +610,7 @@ async function calculateTargetProfitSessions() {
     let summaryMessage = `<p class="target-summary-header">Từ giá hiện tại <strong>${formatNumber(currentPriceForProfit, 0)} VNĐ</strong> (Sàn: ${exchange.toUpperCase()}), ${profitLossString}. `;
     summaryMessage += (currentPriceForProfit < buyPrice) ? `Cần ${breakEvenSessions > 20 ? 'hơn 20' : `khoảng <strong>${breakEvenSessions}</strong>`} phiên tăng trần để hòa vốn và ` : `Bạn đã hòa vốn. Cần `;
     summaryMessage += `${targetSessions > 20 ? 'hơn 20' : `<strong>${targetSessions}</strong>`} phiên tăng trần liên tiếp để đạt giá <span class="breakeven-highlight">${formatNumber(targetPrice, 0)} VNĐ</span> (ước tính lợi nhuận mục tiêu đạt ${targetProfitPercent.toFixed(2)}%).</p>`;
-    
+
     summaryDiv.innerHTML = summaryMessage + `<ul class="target-roadmap">${roadmapHTML}</ul>`;
 }
 
